@@ -1,0 +1,105 @@
+.headerStyle {
+  color: beige;
+  background-color: #001529;
+  width: 100%;
+  /* height: 75px; */
+}
+.contentStyle {
+  color: white;
+  background-color: #ffffff;
+  width: 100%;
+  /* height: 400px; */
+}
+.footerStyle {
+  color: beige;
+  background-color: rgb(8, 8, 8);
+  width: 100%;
+  /* height: 200px; */
+}
+.submitButton {
+  width: 150px;
+  /* background-color: rgb(1, 54, 6); */
+  border-radius: 10px;
+  /* font-size: medium; */
+  color: white;
+}
+.imagestyle {
+  /* background-color: rgb(200, 204, 202); */
+}
+
+/* .ant-menu-dark {
+  background: red !important;
+} */
+.welcome {
+  color: black;
+  font-size: 50px;
+  text-align: center;
+}
+.imagecard {
+  border-radius: 4px;
+  /* box-shadow: 1px 1px 1px black; */
+}
+
+.p12 {
+  padding: 12px;
+}
+.placeOrder {
+  /* background-color: #092401; */
+  margin: 20px;
+}
+/* .wrapper {
+  border: 1px solid black;
+} */
+.dressName {
+  text-transform: capitalize;
+}
+.dressType {
+  text-transform: capitalize;
+  font-weight: bolder;
+}
+.dressPrice {
+  font-weight: 500;
+  color: rgb(1, 41, 1);
+}
+.rowpadding {
+  padding: 5px;
+}
+.trackOrder {
+  text-transform: capitalize;
+  font-size: 15px;
+  font-weight: bold;
+}
+.allButtons {
+  width: 100px;
+  /* background-color: rgb(80, 2, 76); */
+}
+.dateCard {
+  width: 180px;
+  margin-bottom: 8px;
+  /* color: #ffffff; */
+  /* background-color: rgb(80, 2, 76); */
+  height: 120px;
+}
+.currentStock {
+  /* width: 200px; */
+  background-color: rgb(79, 184, 216);
+  height: 130px;
+  /* color: #ffffff; */
+}
+.febStock {
+  /* width: 200px; */
+  background-color: rgb(226, 94, 5);
+  height: 130px;
+}
+.revenue {
+  /* width: 200px; */
+  background-color: rgb(17, 109, 40);
+  height: 130px;
+  /* color: #ffffff; */
+}
+.clothItems {
+  /* width: 200px; */
+  background-color: rgb(228, 50, 124);
+  height: 130px;
+  /* color: #ffffff; */
+}
