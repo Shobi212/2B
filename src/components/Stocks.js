@@ -109,7 +109,6 @@ const Stocks = () => {
   const { Dragger } = Upload;
   const { Option } = Select;
   // const [fileList, setFileList] = useState([]);
-  // const [uploading, setUploading] = useState(false);
 
   const handleEdit = (record) => {
     // form.setFieldsValue(record);
