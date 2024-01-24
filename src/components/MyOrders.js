@@ -9,6 +9,7 @@ import {
   Row,
   Space,
   Table,
+  Tag,
   Timeline,
 } from "antd";
 import { MY_ORDERS, DETAILS } from "../common/OrderDetails";
@@ -22,6 +23,7 @@ const MyOrders = () => {
       title: "Item",
       dataIndex: "imageSrc",
       key: "Item",
+      align: "center",
       render: (text, record) => (
         <Image
           src={text}
@@ -34,57 +36,78 @@ const MyOrders = () => {
       title: "Tracking Id",
       dataIndex: "trackingId",
       key: "Tracking Id",
+      align: "center",
     },
     {
       title: "Date Of Purchase",
       dataIndex: "date",
       key: "Date Of Purchase",
+      align: "center",
     },
     {
       title: "Name",
       dataIndex: "productName",
       key: "Name",
+      align: "center",
     },
     {
       title: "Amount",
       dataIndex: "amount",
       key: "Amount",
+      align: "center",
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
       key: "Quantity",
+      align: "center",
     },
     {
       title: "Color",
       dataIndex: "color",
       key: "Color",
+      align: "center",
     },
     {
       title: "Size",
       dataIndex: "size",
       key: "Size",
+      align: "center",
     },
     {
       title: "Status",
-      dataIndex: "status",
+      // dataIndex: "status",
       key: "status",
+      align: "center",
+      render: (record) => (
+        <>
+          {record.status === "confirmed" ? (
+            <Tag color="green">{record.status}</Tag>
+          ) : record.status === "cancel" ? (
+            <Tag color="red">{record.status}</Tag>
+          ) : (
+            <Tag color="blue">{record.status}</Tag>
+          )}
+        </>
+      ),
     },
     {
       title: "Action",
       key: "Action",
+      align: "center",
       render: (record) => (
         <>
           {record.status === "confirmed" ? (
             <Button
-              style={{ backgroundColor: "green" }}
+              type="primary"
+              // style={{ backgroundColor: "green" }}
               onClick={() => handleTrackingOrder(record)}
             >
               View
             </Button>
           ) : record.status === "ordered" ? (
             <Button type="primary" onClick={() => handleTrackingOrder(record)}>
-              Track
+              View
             </Button>
           ) : (
             <Button

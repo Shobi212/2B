@@ -85,7 +85,7 @@ const ForgetComponent = ({ setShowForgetPassword }) => {
     <>
       <Drawer
         open={() => setShowForgetPassword(true)}
-        // onCancel={() => setIsForgetPassword(false)}
+        title="Forget Password"
         closable={false}
         footer={null}
         width={450}
@@ -94,7 +94,7 @@ const ForgetComponent = ({ setShowForgetPassword }) => {
           form={form}
           onFinish={handleForgetPassword}
           labelCol={{ span: 8 }}
-          wrapperCol={{ span:16 }}
+          wrapperCol={{ span: 16 }}
           autoComplete="off"
         >
           <Form.Item

@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import "../design/HomePage.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
@@ -34,6 +34,16 @@ const LayoutPage = () => {
   const role = "customer";
   const signIn = useSelector((state) => state.login.userDetail);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
+  const userDetails = JSON.parse(localStorage.getItem("user"));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Check if the user is logged in on page load
+    // const userDetails = JSON.parse(localStorage.getItem("user"));
+    if (userDetails) {
+      dispatch(login(userDetails));
+    }
+  }, [dispatch]);
 
   return (
     <>
@@ -45,10 +55,11 @@ const LayoutPage = () => {
                 <Menu.Item key="1">
                   <Link to="/HomePage">Home</Link>
                 </Menu.Item>
-                <Menu.Item key="2">
-                  <Link to="/DashBoard">Dash Board</Link>
-                </Menu.Item>
-
+                {signIn && role == "customer" && (
+                  <Menu.Item key="2">
+                    <Link to="/DashBoard">Dash Board</Link>
+                  </Menu.Item>
+                )}
                 <Menu.Item key="3">
                   <Link to="/WomensCollections">Womens Collections</Link>
                 </Menu.Item>
@@ -60,13 +71,13 @@ const LayoutPage = () => {
                 <Menu.Item key="5">
                   <Link to="/kidsCollections">Kids Collections</Link>
                 </Menu.Item>
-                {signIn && true && (
+                {signIn && role == "customer" && (
                   <Menu.Item key="6">
                     <Link to="/MyOrders">My Orders</Link>
                   </Menu.Item>
                 )}
-                {signIn && true && (
-                  <Menu.Item key="7">
+                {signIn && role == "admin" && (
+                  <Menu.Item key="6">
                     <Link to="/Stocks">Stocks</Link>
                   </Menu.Item>
                 )}

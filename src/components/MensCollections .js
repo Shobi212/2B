@@ -73,25 +73,19 @@ const MensCollections = () => {
       <Row gutter={[8, 8]} className="imagestyle">
         {mensDetails.map((item, index) => (
           <Col span={6} key={index}>
-            <Badge.Ribbon text="Free delivery" color="cyan">
+            <Badge.Ribbon
+              text={
+                item.deliveryCharge > 10
+                  ? `delivery ₹${item.deliveryCharge}`
+                  : "Free delivery"
+              }
+              color={item.deliveryCharge > 10 ? "#054e42" : "cyan"}
+            >
               <Card onClick={() => showMensModal(item)} className="cardStyle">
-                <Image
-                  src={item.src}
-                  preview={{
-                    visible,
-                  }}
-                  width={250}
-                  height={250}
-                ></Image>
+                <img src={item.src} width={250} height={250}></img>
                 <div>
-                  {/* <p>{item.name}</p> */}
                   <p className="dressType">{item.type}</p>
                 </div>
-                {/* {item.colors.map((colorItem, index) => (
-                <Tag key={index} color={COLORS_WITH_EXCODES[colorItem]}>
-                  {colorItem}
-                </Tag>
-              ))} */}
                 <p>{`₹${item.price}`}</p>
                 <p>{item.shop}</p>
                 <Space>
@@ -109,8 +103,9 @@ const MensCollections = () => {
         title="MENS'S SHIRT"
         open={modalOpen}
         onCancel={closeMensModal}
-        width={650}
+        width={700}
         footer={null}
+        closable={false}
       >
         {selectedMensCollection && (
           <Row>
@@ -122,95 +117,97 @@ const MensCollections = () => {
               ></Image>
             </Col>
             <Col span={12}>
-              <div>
-                <Row className="rowpadding">
-                  <Space>
-                    <span>Type:</span>
-                    <span className="dressType">
-                      {selectedMensCollection.type}
-                    </span>
-                  </Space>
-                </Row>
-                <Row className="rowpadding">
-                  <Space>
-                    <span>Price:</span>
-                    <span className="dressPrice">
-                      {`₹${selectedMensCollection.price}`}
-                    </span>
-                  </Space>
-                </Row>
-              </div>
-              {/* {selectedMensCollection.colors.map((colorItem, index) => (
-                <CheckableTag key={index} color={colorItem}>
-                  {colorItem}
-                </CheckableTag>
-              ))} */}
               <Row className="rowpadding">
-                <span>Colors: </span>
-                <Radio.Group
-                  defaultValue={selectedMensCollection.colors[1]}
-                  buttonStyle="solid"
-                  size="small"
-                >
-                  <Row>
-                    {selectedMensCollection.colors.map((color, index) => (
-                      <Radio.Button key={index} value={color}>
-                        {color}
-                      </Radio.Button>
-                    ))}
-                  </Row>
-                </Radio.Group>
+                {/* <Space> */}
+                <Col span={4}>
+                  <span>Type:</span>
+                </Col>
+                <Col span={20}>
+                  <span className="dressType">
+                    {selectedMensCollection.type}
+                  </span>
+                </Col>
+                {/* </Space> */}
               </Row>
-
-              {/* <p>{selectedMensCollection.shop}</p>
-              {selectedMensCollection.sizes.map(({ size, value }) => (
-                <Tag key={size}>{size}</Tag>
-              ))} */}
-              <span style={{ paddingLeft: "5px" }}>Sizes:</span>
-              <Radio.Group
-                defaultValue={selectedMensCollection.sizes[0].size}
-                buttonStyle="solid"
-                size="small"
-                style={{ marginTop: 16 }}
-              >
-                <Row className="rowpadding">
-                  {selectedMensCollection.sizes.map((size, index) => (
-                    <Radio.Button key={index} value={size.size}>
-                      {size.size}
-                    </Radio.Button>
-                  ))}
-                </Row>
-              </Radio.Group>
-              <Row className="rowpadding" justify="start">
-                <Space>
-                  <Col>
-                    <span>Quantity:</span>
-                    <Select
-                      defaultValue={0}
-                      style={{ width: 80 }}
-                      onChange={handleQuantityChanges}
-                    >
-                      {/* {[...quantity.keys()].map((num) => (
-                        <Option key={num} value={num}>
-                          {num}
-                        </Option>
-                      ))} */}
-                      {[...Array(10).keys()].map((num) => (
-                        <Option key={num} value={num}>
-                          {num}
-                        </Option>
+              <Row className="rowpadding">
+                {/* <Space> */}
+                <Col span={4}>
+                  <span>Price:</span>
+                </Col>
+                <Col span={20}>
+                  <span className="dressPrice">
+                    {`₹${selectedMensCollection.price}`}
+                  </span>
+                </Col>
+                {/* </Space> */}
+              </Row>
+              <Row className="rowpadding">
+                <Col span={4}>
+                  <span>Colors: </span>
+                </Col>
+                <Col span={20}>
+                  <Radio.Group
+                    defaultValue={selectedMensCollection.colors[1]}
+                    buttonStyle="solid"
+                    size="small"
+                  >
+                    <Row>
+                      {selectedMensCollection.colors.map((color, index) => (
+                        <Radio.Button key={index} value={color}>
+                          {color}
+                        </Radio.Button>
                       ))}
-                    </Select>
-                  </Col>
-                  <Col>
-                    <p>
-                      Total:₹
-                      {selectedMensCollection.price * quantity}
-                    </p>
-                  </Col>
-                </Space>
+                    </Row>
+                  </Radio.Group>
+                </Col>
               </Row>
-              <Row justify="end">
+              <Row className="rowpadding">
+                <Col span={4}>
+                  <span>Sizes:</span>
+                </Col>
+                <Col span={20}>
+                  <Radio.Group
+                    defaultValue={selectedMensCollection.sizes[0].size}
+                    buttonStyle="solid"
+                    size="small"
+                  >
+                    <Row>
+                      {selectedMensCollection.sizes.map((size, index) => (
+                        <Radio.Button key={index} value={size.size}>
+                          {size.size}
+                        </Radio.Button>
+                      ))}
+                    </Row>
+                  </Radio.Group>
+                </Col>
+              </Row>
+              <Row className="rowpadding" justify="start">
+                {/* <Space> */}
+                <Col span={16}>
+                  <span>Quantity:</span>
+                  {/* </Col>
+                <Col span={8}> */}
+                  <Select
+                    defaultValue={0}
+                    style={{ width: 80 }}
+                    onChange={handleQuantityChanges}
+                  >
+                    {[...Array(10).keys()].map((num) => (
+                      <Option key={num} value={num}>
+                        {num}
+                      </Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col span={4}>
+                  <span>
+                    Total:₹
+                    {selectedMensCollection.price * quantity}
+                  </span>
+                </Col>
+                {/* </Space> */}
+              </Row>
+              <Row justify="end" style={{ marginTop: "40px" }}>
                 <Space>
                   <Col>
                     <Button onClick={closeMensModal} className="allButtons">

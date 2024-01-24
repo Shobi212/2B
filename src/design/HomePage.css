@@ -23,10 +23,6 @@
   /* font-size: medium; */
   color: white;
 }
-.imagestyle {
-  /* background-color: rgb(200, 204, 202); */
-}
-
 /* .ant-menu-dark {
   background: red !important;
 } */
@@ -36,15 +32,15 @@
   text-align: center;
 }
 .imagecard {
-  border-radius: 4px;
-  /* box-shadow: 1px 1px 1px black; */
+  /* border-radius: 4px; */
+  cursor: pointer;
 }
 
 .p12 {
   padding: 12px;
 }
 .placeOrder {
-  /* background-color: #092401; */
+  /* background-color: #05566e; */
   margin: 20px;
 }
 /* .wrapper {
@@ -55,14 +51,15 @@
 }
 .dressType {
   text-transform: capitalize;
-  font-weight: bolder;
+  /* font-weight: bolder; */
 }
 .dressPrice {
-  font-weight: 500;
+  /* font-weight: 500; */
   color: rgb(1, 41, 1);
 }
 .rowpadding {
-  padding: 5px;
+  /* padding: 5px; */
+  margin: 15px;
 }
 .trackOrder {
   text-transform: capitalize;
@@ -102,4 +99,9 @@
   background-color: rgb(228, 50, 124);
   height: 130px;
   /* color: #ffffff; */
+}
+.ant-drawer-close {
+  position: absolute;
+  top: 10px;
+  right: 0;
 }

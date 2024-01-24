@@ -6,6 +6,7 @@ import {
   Form,
   Input,
   Modal,
+  Popconfirm,
   Row,
   Select,
   Space,
@@ -38,20 +39,23 @@ const Stocks = () => {
       title: "Name",
       dataIndex: "name",
       key: "Name",
+      align: "center",
     },
     {
       title: "Type",
       dataIndex: "type",
       key: "Type",
+      align: "center",
     },
     {
       title: "Colors",
       dataIndex: "colors",
       key: "Colors",
+      align: "center",
       render: (colors) => (
         <>
           {(colors || []).map((color, index) => (
-            <Tag key={index} color={COLORS_WITH_EXCODES[color]}>
+            <Tag key={index} color={color}>
               {color}
             </Tag>
           ))}
@@ -63,6 +67,7 @@ const Stocks = () => {
       title: "Sizes",
       dataIndex: "sizes",
       key: "Sizes",
+      align: "center",
       render: (sizes) => (
         <>
           {(sizes || []).map(({ size, value }) => (
@@ -77,21 +82,33 @@ const Stocks = () => {
       title: "Price",
       dataIndex: "price",
       key: "Price",
+      align: "center",
     },
     {
       title: "Stock Count",
       dataIndex: "stockCount",
       key: "Stock Count",
+      align: "center",
     },
 
     {
       title: "Action",
       key: "Action",
+      align: "center",
       render: (record) => (
         <>
           <Space>
             <EditOutlined onClick={() => handleEdit(record)} />
-            <DeleteOutlined onClick={() => handleDelete(record)} />
+            <Popconfirm
+              title="Delete stock item"
+              description="Are you sure to delete this item?"
+              onConfirm={() => handleDelete(record)}
+              // onCancel={cancel}
+              okText="Yes"
+              cancelText="No"
+            >
+              <DeleteOutlined />
+            </Popconfirm>
           </Space>
         </>
       ),
@@ -276,16 +293,10 @@ const Stocks = () => {
     setIsEditing(false);
   };
   const handleDelete = (record) => {
-    Modal.confirm({
-      title: "are you sure, you want to delete this file?",
-      okText: "yes",
-      onOk: () => {
-        const deleteData = allStocksDetail.filter(
-          (item) => item.type != record.type
-        );
-        setallStocksDetail(deleteData);
-      },
-    });
+    const deleteData = allStocksDetail.filter(
+      (item) => item.type != record.type
+    );
+    setallStocksDetail(deleteData);
 
     console.log("delete successfully");
   };
@@ -409,7 +420,11 @@ const Stocks = () => {
   return (
     <>
       <Row justify="end">
-        <Button onClick={handleAdd} type="primary">
+        <Button
+          onClick={handleAdd}
+          type="primary"
+          style={{ marginBottom: "15px" }}
+        >
           Add New Stocks
         </Button>
       </Row>

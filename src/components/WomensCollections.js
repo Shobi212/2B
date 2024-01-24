@@ -76,16 +76,16 @@ const WomensCollections = ({ isLogin, setIsLogin }) => {
       <Row gutter={[8, 8]} className="imagestyle">
         {womensDetails.map((Item, index) => (
           <Col span={6} key={index} className="cardStyle">
-            <Badge.Ribbon text="Free delivery" color="cyan">
+            <Badge.Ribbon
+              text={
+                Item.deliveryCharge > 10
+                  ? `delivery ₹${Item.deliveryCharge}`
+                  : "Free delivery"
+              }
+              color={Item.deliveryCharge > 10 ? "#054e42" : "#05566e"}
+            >
               <Card onClick={() => showModal(Item)} className="imagecard">
-                <Image
-                  src={Item.src}
-                  width={250}
-                  height={250}
-                  preview={{
-                    visible,
-                  }}
-                ></Image>
+                <img src={Item.src} width={250} height={250}></img>
                 <div>
                   <p className="dressName">{Item.title}</p>
                   <p className="dressType">{Item.type}</p>
@@ -122,87 +122,100 @@ const WomensCollections = ({ isLogin, setIsLogin }) => {
                 src={selectedWomensCollection.src}
                 width={300}
                 height={300}
-                preview={{
-                  visible,
-                }}
+                // preview={{
+                //   visible,
+                // }}
               ></Image>
             </Col>
             <Col span={12}>
               <Row className="rowpadding">
-                <Space>
+                <Col span={4}>
                   <span>Type:</span>
+                </Col>
+                <Col span={18}>
                   <span className="dressType">
                     {selectedWomensCollection.type}
                   </span>
-                </Space>
+                </Col>
               </Row>
 
               <Row className="rowpadding">
-                <Space>
+                {/* <Space> */}
+                <Col span={4}>
                   <span>Price:</span>
+                </Col>
+                <Col span={12}>
                   <span className="dressPrice">
                     {`₹${selectedWomensCollection.price}`}
                   </span>
-                </Space>
+                </Col>
+                {/* </Space> */}
               </Row>
               <Row className="rowpadding">
-                <span>Colors: </span>
-                <Radio.Group
-                  defaultValue={selectedWomensCollection.colors[1]}
-                  buttonStyle="solid"
-                  size="small"
-                >
-                  <Row>
-                    {selectedWomensCollection.colors.map((color, index) => (
-                      <Radio.Button key={index} value={color}>
-                        {color}
-                      </Radio.Button>
-                    ))}
-                  </Row>
-                </Radio.Group>
-              </Row>
-
-              <span style={{ paddingLeft: "5px" }}>Sizes:</span>
-              <Radio.Group
-                defaultValue={selectedWomensCollection.sizes[0].size}
-                buttonStyle="solid"
-                size="small"
-                style={{ marginTop: 16 }}
-              >
-                <Row className="rowpadding">
-                  {selectedWomensCollection.sizes.map((size, index) => (
-                    <Radio.Button key={index} value={size.size}>
-                      {size.size}
-                    </Radio.Button>
-                  ))}
-                </Row>
-              </Radio.Group>
-
-              <Row className="rowpadding" justify="start">
-                <Space>
-                  <Col>
-                    <span>Quantity:</span>
-                    <Select
-                      defaultValue={0}
-                      style={{ width: 80 }}
-                      onChange={handleQuantityChanges}
-                    >
-                      {[...Array(10).keys()].map((num) => (
-                        <Option key={num} value={num}>
-                          {num}
-                        </Option>
+                <Col span={4}>
+                  <span>Colors: </span>
+                </Col>
+                <Col span={20}>
+                  <Radio.Group
+                    defaultValue={selectedWomensCollection.colors[1]}
+                    buttonStyle="solid"
+                    size="small"
+                  >
+                    <Row>
+                      {selectedWomensCollection.colors.map((color, index) => (
+                        <Radio.Button key={index} value={color}>
+                          {color}
+                        </Radio.Button>
                       ))}
-                    </Select>
-                  </Col>
-                  <Col>
-                    <p>
-                      Total:₹
-                      {selectedWomensCollection.price * quantity}
-                    </p>
-                  </Col>
-                </Space>
+                    </Row>
+                  </Radio.Group>
+                </Col>
               </Row>
-              <Row justify="end">
+              <Row className="rowpadding">
+                <Col span={4}>
+                  <span>Sizes:</span>
+                </Col>
+                <Col span={20}>
+                  <Radio.Group
+                    defaultValue={selectedWomensCollection.sizes[0].size}
+                    buttonStyle="solid"
+                    size="small"
+                  >
+                    <Row>
+                      {selectedWomensCollection.sizes.map((size, index) => (
+                        <Radio.Button key={index} value={size.size}>
+                          {size.size}
+                        </Radio.Button>
+                      ))}
+                    </Row>
+                  </Radio.Group>
+                </Col>
+              </Row>
+              <Row className="rowpadding" justify="start">
+                {/* <Space> */}
+                <Col span={16}>
+                  <span>Quantity:</span>
+                  <Select
+                    defaultValue={0}
+                    style={{ width: 80 }}
+                    onChange={handleQuantityChanges}
+                  >
+                    {[...Array(10).keys()].map((num) => (
+                      <Option key={num} value={num}>
+                        {num}
+                      </Option>
+                    ))}
+                  </Select>
+                </Col>
+                <Col span={6}>
+                  <span>
+                    Total:₹
+                    {selectedWomensCollection.price * quantity}
+                  </span>
+                </Col>
+                {/* </Space> */}
+              </Row>
+              <Row justify="end" style={{ marginTop: "40px" }}>
                 <Space>
                   <Col>
                     <Button onClick={womensModalClose} className="allButtons">
@@ -230,16 +243,16 @@ const WomensCollections = ({ isLogin, setIsLogin }) => {
               >
                 <Result
                   status="warning"
-                  title="you are continue the process please login first!"
+                  title="Please Login To Continue The Process"
                   extra={
                     <>
-                      <LoginComponent />
                       <Button
                         onClick={() => setLoginModal(false)}
                         className="allButtons"
                       >
                         Back
                       </Button>
+                      <LoginComponent setLoginModal={setLoginModal} />
                     </>
                   }
                 />

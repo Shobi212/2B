@@ -2,7 +2,7 @@ import { Button, Col, Drawer, Form, Input, Row, message } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 const SignupComponent = () => {
   const [form] = Form.useForm();
   const [isSignUp, setIsSignUp] = useState(false);
@@ -72,7 +72,14 @@ const SignupComponent = () => {
           Sign Up
         </Button>
       )}
-      <Drawer title="Sign Up" open={isSignUp} onClose={drawerClose} width={500}>
+      <Drawer
+        title="Sign Up"
+        open={isSignUp}
+        onClose={drawerClose}
+        width={500}
+        placement="right"
+        closeIcon={<CloseOutlined className="ant-drawer-close" />}
+      >
         <Form
           form={form}
           onFinish={handleSignUp}
@@ -164,7 +171,7 @@ const SignupComponent = () => {
 
           {/* <Form.Item> */}
           <Row justify="end">
-            <Col span={4}>
+            <Col span={6}>
               <Button htmlType="submit" type="primary" className="allButtons">
                 Sign Up
               </Button>
