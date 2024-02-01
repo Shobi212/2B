@@ -55,9 +55,20 @@ const Stocks = () => {
       render: (colors) => (
         <>
           {(colors || []).map((color, index) => (
-            <Tag key={index} color={color}>
-              {color}
-            </Tag>
+            // <Tag key={index} color={color}>
+            //   {color}
+            // </Tag>
+            <div
+              key={index}
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: color,
+                // borderRadius: "50%",
+                display: "inline-block",
+                marginRight: "8px",
+              }}
+            ></div>
           ))}
         </>
       ),
@@ -83,6 +94,7 @@ const Stocks = () => {
       dataIndex: "price",
       key: "Price",
       align: "center",
+      render: (text) => <span>₹{text}</span>,
     },
     {
       title: "Stock Count",
@@ -100,6 +112,7 @@ const Stocks = () => {
           <Space>
             <EditOutlined onClick={() => handleEdit(record)} />
             <Popconfirm
+              placement="leftTop"
               title="Delete stock item"
               description="Are you sure to delete this item?"
               onConfirm={() => handleDelete(record)}
@@ -527,7 +540,7 @@ const Stocks = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row justify="start">
+          <Row justify="center">
             <Col span={22}>
               <Form.Item>
                 <Upload.Dragger

@@ -3,7 +3,7 @@ export const MENS_DETAILS = [
     stockId: 1,
     category: "mens",
     name: "Mens shirt",
-    src: "https://toppng.com/uploads/preview/mens-fashion-png-image-mens-wear-11563641203cmrdzizcrd.png",
+    src: "https://media.gq.com/photos/5665ecd2408d33024d5dae98/master/w_320%2Cc_limit/blackshirt_0004_1109-GQ-TL06.02.jpg",
     type: "casual  shirt",
     colors: ["blue", "grey", "skyblue", "black"],
     sizes: [
@@ -22,7 +22,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 2,
     category: "mens",
     name: "Mens shirt",
     src: "https://img.freepik.com/free-photo/young-handsome-hipster-man-trendy-style-outfit-denim-shirt-trousers-sunglasses-hat-isolated-jumping-cheerful-pointing-finger_285396-1517.jpg?size=626&ext=jpg&ga=GA1.1.2091009926.1696475451&semt=ais",
@@ -37,14 +37,14 @@ export const MENS_DETAILS = [
       { size: "XXXL", value: 9 },
     ],
     price: 800,
-    deliveryCharge: 0,
+    deliveryCharge: 10,
     quantity: 30,
     cost: 2000,
     date: "10-jan-2023",
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 3,
     category: "mens",
     name: "Mens shirt",
     src: "https://img.freepik.com/free-photo/man-portrait_1296-626.jpg?size=626&ext=jpg&ga=GA1.1.2091009926.1696475451&semt=ais",
@@ -66,7 +66,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 4,
     category: "mens",
     name: "Mens shirt",
     src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg_rT4xeJLsz0DGf6s8y8D2OacS4w8vxJmIw&usqp=CAU",
@@ -88,10 +88,10 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 5,
     category: "mens",
     name: "Mens shirt",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3iOX4vjfOSZYpY6mJLATfL-7tyM8ro80HQg&usqp=CAU",
+    src: "https://rukminim2.flixcart.com/image/850/1000/kwv0djk0/shirt/3/h/i/m-checked-shirt-design-14-m-varnique-original-imag9fvhe6xxwd44.jpeg?q=20&crop=true",
     type: "casual shirt",
     colors: ["blue", "grey", "skyblue", "black"],
     sizes: [
@@ -110,10 +110,10 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 6,
     category: "mens",
     name: "Mens shirt",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7GUh25vnAW_4ghF1IbPQDsYXcHyWK68EOCQ&usqp=CAU",
+    src: "https://rukminim2.flixcart.com/image/850/1000/l51d30w0/shirt/c/p/x/39-vxsfcslpw77262-van-heusen-original-imagfsrzzcbpywh9.jpeg?q=90",
     type: "formal shirt",
     colors: ["blue", "grey", "skyblue", "black"],
     sizes: [
@@ -124,7 +124,7 @@ export const MENS_DETAILS = [
       { size: "XXL", value: 10 },
       { size: "XXXL", value: 9 },
     ],
-    price: 750,
+    price: 790,
     deliveryCharge: 0,
     quantity: 30,
     cost: 2000,
@@ -132,7 +132,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 7,
     category: "mens",
     name: "Mens shirt",
     src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJC7a-nS0osq8CfwcxZC0CqGXQ6ubBFgfOJw&usqp=CAU",
@@ -154,7 +154,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 8,
     category: "mens",
     name: "Mens jeans",
     src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyFXHJQEkM5kOSX7hhrZKeuf7Wnpna4KOC-jqRuwsoJ_FqeqomIMD42bcYelnTeqCL9yg&usqp=CAU",
@@ -176,7 +176,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 9,
     category: "mens",
     name: "Mens jeans",
     src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCyxEXhH6Tn3ndPIa19sZLa5vJU9hrGSse26WF3li80qa_8UrYNGXv0dxTtD5TzKUbokI&usqp=CAU",
@@ -198,7 +198,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 10,
     category: "mens",
     name: "Mens jeans",
     src: "https://media.istockphoto.com/id/527236518/photo/mans-legs.jpg?s=612x612&w=0&k=20&c=lczyG0ZkWelpn_o-I_VpjAMo_sA3WpdWHMlgZjCSE-k=",
@@ -220,7 +220,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 11,
     category: "mens",
     name: "Mens jeans",
     src: "https://rukminim1.flixcart.com/image/850/1000/xif0q/jean/a/y/a/-original-imagcapdtcyxh6aj-bb.jpeg?q=20",
@@ -242,7 +242,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 12,
     category: "mens",
     name: "Mens jeans",
     src: "https://rukminim2.flixcart.com/image/850/1000/xif0q/jean/r/b/e/36-men-s-jeans-turkey-imported-original-imagmhh5tnnhce8f.jpeg?q=20",
@@ -264,7 +264,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 13,
     category: "mens",
     name: "Mens jeans",
     src: "https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/16047022/2021/11/10/4af4fdf5-bc0d-4ace-9170-6ef30f9e97e31636525511211JohnPrideMenGreyHeavyFadeStretchableJeans1.jpg",
@@ -286,7 +286,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 14,
     category: "mens",
     name: "Mens jeans",
     src: "https://www.trigger.in/cdn/shop/products/0W2A6094.jpg?v=1673518256",
@@ -308,7 +308,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 15,
     category: "mens",
     name: "Mens jeans",
     src: "https://c.bflcdn.com/t_pm/f_auto,q_auto/products/23/12/196122180901_BTM_1.JPG",
@@ -330,7 +330,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 16,
     category: "mens",
     name: "Mens jeans",
     src: "https://www.sportsdirect.com/images/products/68424918_h.jpg",
@@ -352,7 +352,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 17,
     category: "mens",
     name: "Mens T-shirt",
     src: "https://4.imimg.com/data4/AA/HC/MY-26596027/men-s-fancy-t-shirt.jpg",
@@ -374,7 +374,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 18,
     category: "mens",
     name: "Mens T-shirt",
     src: "https://images-na.ssl-images-amazon.com/images/I/61-jBuhtgZL._UL1500_.jpg",
@@ -396,7 +396,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 19,
     category: "mens",
     name: "Mens T-shirt",
     src: "https://www.myshopstore.in/wp-content/uploads/2021/08/100-Cotton-Regular-Fit-Polo-Neck-Full-Sleeve-Mens-T-Shirt-A.jpg",
@@ -418,7 +418,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 20,
     category: "mens",
     name: "Mens T-shirt",
     src: "https://5.imimg.com/data5/KT/DY/SH/ANDROID-106477818/ms-1-512-3260982-jpg.jpg",
@@ -432,7 +432,7 @@ export const MENS_DETAILS = [
       { size: "XXL", value: 10 },
       { size: "XXXL", value: 9 },
     ],
-    price: 750,
+    price: 549,
     deliveryCharge: 0,
     quantity: 30,
     cost: 2000,
@@ -440,7 +440,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 21,
     category: "mens",
     name: "Mens T-shirt",
     src: "https://www.jiomart.com/images/product/original/rvx8lkd05o/lewel-men-s-hooded-stylish-checkered-full-sleeve-t-shirt-product-images-rvx8lkd05o-0-202212151421.jpg?im=Resize=(500,630)",
@@ -462,7 +462,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 22,
     category: "mens",
     name: "Mens T-shirt",
     src: "https://rukminim2.flixcart.com/image/850/1000/xif0q/t-shirt/q/s/g/s-t14-t2-autna-original-imagqnchhwzgwuzw.jpeg?q=90",
@@ -484,7 +484,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 23,
     category: "mens",
     name: "Mens T-shirt",
     src: "https://rukminim1.flixcart.com/image/850/850/xif0q/shopsy-t-shirt/7/h/1/l-blk-all-lining-full-l-2-ruggstar-original-imagh2gz5zkxyy6s.jpeg?q=90",
@@ -506,7 +506,7 @@ export const MENS_DETAILS = [
     shop: "@2B Boutique",
   },
   {
-    stockId: 1,
+    stockId: 24,
     category: "mens",
     name: "Mens t-shirt",
     src: "https://i.pinimg.com/236x/ab/d1/c1/abd1c1c50981a7dd553d9b59ddf0a727.jpg",

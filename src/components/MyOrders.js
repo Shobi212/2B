@@ -33,7 +33,7 @@ const MyOrders = () => {
       ),
     },
     {
-      title: "Tracking Id",
+      title: "Tracking ID",
       dataIndex: "trackingId",
       key: "Tracking Id",
       align: "center",
@@ -81,12 +81,12 @@ const MyOrders = () => {
       align: "center",
       render: (record) => (
         <>
-          {record.status === "confirmed" ? (
-            <Tag color="green">{record.status}</Tag>
-          ) : record.status === "cancel" ? (
-            <Tag color="red">{record.status}</Tag>
+          {record.status === "Delivered" ? (
+            <Tag color="#52c41a">{record.status}</Tag>
+          ) : record.status === "cancelled" ? (
+            <Tag color="#ff4d4f">{record.status}</Tag>
           ) : (
-            <Tag color="blue">{record.status}</Tag>
+            <Tag color="#1677ff">{record.status}</Tag>
           )}
         </>
       ),
@@ -97,7 +97,7 @@ const MyOrders = () => {
       align: "center",
       render: (record) => (
         <>
-          {record.status === "confirmed" ? (
+          {record.status === "Delivered" ? (
             <Button
               type="primary"
               // style={{ backgroundColor: "green" }}
@@ -110,12 +110,8 @@ const MyOrders = () => {
               View
             </Button>
           ) : (
-            <Button
-              type="primary"
-              onClick={() => handleTrackingOrder(record)}
-              disabled
-            >
-              Cancelled
+            <Button type="primary" onClick={() => handleTrackingOrder(record)}>
+              View
             </Button>
           )}
         </>
@@ -137,7 +133,11 @@ const MyOrders = () => {
 
   return (
     <>
-      <Table dataSource={orderDetails} columns={orderDetailColumns}></Table>
+      <Table
+        dataSource={orderDetails}
+        columns={orderDetailColumns}
+        title={() => "My Orders"}
+      ></Table>
 
       <Drawer
         open={showTrackingDrawer}
@@ -155,8 +155,12 @@ const MyOrders = () => {
                   <Timeline.Item key={index} color="green">
                     {shipment.shipments.map((step, stepIndex) => (
                       <div key={stepIndex}>
-                        <p className="trackOrder">{step.children}</p>
-                        <p>{`${step.time}:${step.label}`}</p>
+                        <p className="trackOrder">
+                          {step.children == "shipped"
+                            ? `${step.children} expected by Tue`
+                            : step.children}
+                        </p>
+                        <p>{`${step.label} . ${step.time}`}</p>
                       </div>
                     ))}
                   </Timeline.Item>
@@ -168,90 +172,5 @@ const MyOrders = () => {
       </Drawer>
     </>
   );
-  // const [orderDetail, setOrderDetails] = useState(MY_ORDERS);
-  // const [selectedTrackingId, setSelectedTrackingId] = useState(null);
-  // const [isModal, setIsModal] = useState(false);
-  // const [trackingDetails, setTrackingDetails] = useState(DETAILS);
-
-  // const closeModal = () => {
-  //   setIsModal(false);
-  // };
-  // return (
-  //   <>
-  //     <Divider orientation="left">Your Orders</Divider>
-
-  //     {orderDetail.map((item, index) => (
-  //       <Card key={index} width={500} height={300}>
-  //         <Row gutter={[8, 8]}>
-  //           <Col span={24}>
-  //             <Button type="primary">0115653725005</Button>
-  //           </Col>
-  //         </Row>
-  //         <Row>
-  //           <Col span={12}>
-  //             <img src={item.imageSrc} width={150} height={150}></img>
-  //           </Col>
-  //           <Col span={12}>
-  //             <div>{item.productName}</div>
-  //             <div>{item.productStatus}</div>
-  //             <div>{item.deliveryDate}</div>
-  //             <Button onClick={() => showOrderDetails(item)}>Track</Button>
-  //           </Col>
-  //         </Row>
-  //       </Card>
-  //     ))}
-
-  //     {/* <List
-  //       // key={index}
-  //       // grid={{
-  //       //   gutter: 16,
-  //       //   column: 4,
-  //       // }}
-  //       dataSource={orderDetail}
-  //       renderItem={(item) => (
-  //         <List.Item>
-  //           <div style={{ width: "100%" }}>
-  //             <Row justify="center">
-  //               <Col span={8}>
-  //                 <Image src={item.imageSrc} width={150} height={150}></Image>
-  //               </Col>
-  //               <Col span={8}>
-  //                 <div>{item.productName}</div>
-  //                 <div> {item.deliveryDate}</div>
-  //                 <div>{item.productStatus}</div>
-  //               </Col>
-  //               <Col span={8}>
-  //                 <Button onClick={() => showOrderDetails(item)}>track</Button>
-  //               </Col>
-  //             </Row>
-  //             <Row>
-  //               <Col>
-  //                 <div>{item.orderId}</div>
-  //               </Col>
-  //             </Row>
-  //           </div>
-  //         </List.Item>
-  //       )}
-  //     /> */}
-
-  //     {/* <div>
-  //       {MY_ORDERS.map((order) => (
-  //         <div
-  //           key={order.trackingId}
-  //           onClick={() => showOrderDetails(order.trackingId)}
-  //         >
-  //           <h3>{order.productName}</h3>
-  //           <img src={order.imageSrc} alt={order.productName} />
-  //         </div>
-  //       ))}
-
-  //     <OrderDetailsDrawer
-  //         visible={drawerVisible}
-  //         onClose={closeDrawer}
-  //         trackingId={selectedTrackingId}
-  //       />
-  //     </div> */}
-  //   </>
-  // );
 };
 export default MyOrders;

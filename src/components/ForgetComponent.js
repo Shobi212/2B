@@ -12,10 +12,9 @@ import {
 import axios from "axios";
 import { useState } from "react";
 
-const ForgetComponent = ({ setShowForgetPassword }) => {
+const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
   const { form } = Form.useForm();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
 
   const handleForgetPassword = (values) => {
     if (values.email) {
@@ -55,15 +54,12 @@ const ForgetComponent = ({ setShowForgetPassword }) => {
           });
       }
     }
-    //  setIsForgetPassword(false);
   };
 
-  // const handlePasswordModal = (values) => {}
   const closeForgetPassword = () => {
     setShowForgetPassword(false);
   };
   const validateEmail = (_, value) => {
-    // Regular expression for email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!value || emailRegex.test(value)) {
@@ -84,7 +80,7 @@ const ForgetComponent = ({ setShowForgetPassword }) => {
   return (
     <>
       <Drawer
-        open={() => setShowForgetPassword(true)}
+        open={showForgetPassword}
         title="Forget Password"
         closable={false}
         footer={null}
@@ -157,7 +153,7 @@ const ForgetComponent = ({ setShowForgetPassword }) => {
                       onClick={closeForgetPassword}
                       className="allButtons"
                     >
-                      Back
+                      Cancel
                     </Button>
                   </Col>
                   <Col>
@@ -182,7 +178,7 @@ const ForgetComponent = ({ setShowForgetPassword }) => {
                     onClick={() => setShowForgetPassword(false)}
                     className="allButtons"
                   >
-                    Back
+                    Cancel
                   </Button>
                 </Col>
                 <Col>
@@ -200,41 +196,6 @@ const ForgetComponent = ({ setShowForgetPassword }) => {
           )}
         </Form>
       </Drawer>
-
-      {/* <Modal open={isPasswordModal} closable={false} footer={null}>
-        <Form form={form} onFinish={handlePasswordModal}>
-          <Form.Item
-            label="assword"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "enter your password",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Confirm Password"
-            name="confirmPassword"
-            rules={[
-              {
-                required: true,
-                message: "re-enter your password",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Button onClick={closeForgetPassword}>Back</Button>
-            <Button type="primary" htmlType="submit">
-              Continue
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal> */}
     </>
   );
 };

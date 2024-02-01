@@ -2,7 +2,7 @@
 import { Bar, Column } from "@ant-design/charts";
 import BarChart from "@ant-design/charts/es/bar";
 import PieChart from "@ant-design/charts/es/pie";
-import { Card, Col, DatePicker, Row, Statistic } from "antd";
+import { Card, Col, DatePicker, Row, Space, Statistic } from "antd";
 import "../design/HomePage.css";
 import { useState } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
@@ -77,7 +77,7 @@ const DashBoard = () => {
     colorField: "type",
     radius: 0.6,
     label: false,
-    color: ["#ff7f50", "#87cefa","#da70d6", "#6495ed", "#ff69b4"],
+    color: ["#ff7f50", "#87cefa", "#da70d6", "#6495ed", "#ff69b4"],
 
     // label: {
     //   type: "outer",
@@ -142,7 +142,7 @@ const DashBoard = () => {
 
   return (
     <>
-      <Row justify="end">
+      <Row justify="end" style={{ height: "50px" }}>
         <Col span={4}>
           {/* <Card title="Filter By Date" className="dateCard"> */}
           <div style={{ height: "100px" }}>
@@ -156,71 +156,81 @@ const DashBoard = () => {
           {/* </Card> */}
         </Col>
       </Row>
-      <Row justify="space-evenly" gutter={[8, 8]}>
-        <Col span={6}>
-          <Card className="currentStock" title="Stocks">
-            {/* <p>Current Stock :150</p> */}
-            <Row>
-              <Col>Overall Stocks :150</Col>
+      <Row justify="space-between" gutter={[8]} style={{ marginBottom: "8px" }}>
+        <Col span={12}>
+          <Card title="Yearly Reports" align="center">
+            <Row justify="space-between">
+              <Col span={12}>
+                <Card className="currentStock" title="Stocks">
+                  <Row>
+                    <Col span={12}>
+                      <Row>Intack :</Row>
+                      <Row>Sold Out :</Row>
+                    </Col>
+                    <Col span={12}>
+                      <Row>1000</Row>
+                      <Row>560</Row>
+                    </Col>
+                  </Row>
+                  {/* {selectedDate && (
+                <Row>{selectedDate.format("YYYY")} Anual Stock:8000</Row>
+              )} */}
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card className="febStock" title="Revenue">
+                  <Row>
+                    <Col span={12}>
+                      <Row>Spent :</Row>
+                      <Row>Revenue :</Row>
+                    </Col>
+                    <Col span={12}>
+                      <Row>1000</Row>
+                      <Row>560</Row>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
             </Row>
+          </Card>
+        </Col>
 
-            {selectedDate && (
-              <Row>{selectedDate.format("MMM")} Month Stock:120</Row>
-            )}
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card className="febStock" title="Feb Stocks">
-            {/* <Row justify="center">
-              <Col span={24}>Stocks</Col>
-            </Row> */}
-            <Row>
+        <Col span={12}>
+          <Card title="Monthly Reports" align="center">
+            <Row justify="space-between">
               <Col span={12}>
-                <Row>Intake :</Row>
-                <Row>Sold Out :</Row>
+                <Card className="revenue" title="Stocks">
+                  <Row>
+                    <Col span={12}>
+                      <Row>Intack :</Row>
+                      <Row>Sold Out:</Row>
+                    </Col>
+                    <Col span={12}>
+                      <Row>18,000</Row>
+                      <Row>13,000</Row>
+                    </Col>
+                  </Row>
+                </Card>
               </Col>
               <Col span={12}>
-                <Row>100</Row>
-                <Row>50</Row>
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card className="revenue" title="Revenue">
-            {/* <Row justify="center">
-              <Col span={24}>Revenue</Col>
-            </Row> */}
-            <Row>
-              <Col span={12}>
-                <Row>Spent :</Row>
-                <Row>Sold Out:</Row>
-              </Col>
-              <Col span={12}>
-                <Row>100</Row>
-                <Row>50</Row>
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card className="clothItems" title="Overall Sales">
-            <Row>
-              <Col span={12}>
-                <Row>Womens :</Row>
-                <Row>Mens :</Row>
-                <Row>Kids :</Row>
-              </Col>
-              <Col span={12}>
-                <Row>50%</Row>
-                <Row>65%</Row>
-                <Row>30%</Row>
+                <Card className="clothItems" title="Revenue">
+                  <Row>
+                    <Col span={12}>
+                      <Row>spent :</Row>
+                      <Row>Income:</Row>
+                    </Col>
+                    <Col span={12}>
+                      <Row>18,000</Row>
+                      <Row>13,000</Row>
+                    </Col>
+                  </Row>
+                </Card>
               </Col>
             </Row>
           </Card>
         </Col>
       </Row>
-      <Row gutter={[8, 8]}>
+      <Row gutter={[8, 8]} style={{ marginBottom: "8px" }}>
         <Col span={8}>
           <Card title="Mens Data">
             <PieChart
@@ -246,9 +256,9 @@ const DashBoard = () => {
           </Card>
         </Col>
       </Row>
-      <Row>
+      <Row gutter={[8, 8]}>
         <Col span={12}>
-          <Card>
+          <Card style={{ height: "450px" }}>
             <Column
               {...interestedConfigure}
               style={{ width: "100%", height: "300px" }}
@@ -266,3 +276,19 @@ const DashBoard = () => {
   );
 };
 export default DashBoard;
+{
+  /* <Col span={6}>   
+            <Card className="clothItems" title="Monthly Revenue">
+              <Row>
+                <Col span={12}>
+                  <Row>Spent:</Row>
+                  <Row>Income:</Row>
+                </Col>
+                <Col span={12}>
+                  <Row>1,50,000</Row>
+                  <Row>1,20,000</Row>
+                </Col>
+              </Row>
+            </Card>
+            <Col> */
+}
