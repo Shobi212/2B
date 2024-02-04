@@ -83,6 +83,9 @@ const ContactModal = () => {
           <TextArea />
         </Form.Item>
         <Row justify="end">
+          <Col>
+            <Button>Cancel</Button>
+          </Col>
           <Col span={6}>
             <Button type="primary" htmlType="submit">
               Submit

@@ -117,7 +117,7 @@ const LoginComponent = ({ setShowForgetPassword }) => {
                     alignItems: "center",
                   }}
                 >
-                  <Popover content={<MyProfilePage />} trigger="click">
+                  <Popover content={<MyProfilePage />} trigger="hover">
                     <Avatar
                       size="default"
                       style={{ backgroundColor: "#265735", cursor: "pointer" }}

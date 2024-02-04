@@ -15,6 +15,7 @@ import { useState } from "react";
 const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
   const { form } = Form.useForm();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(false);
 
   const handleForgetPassword = (values) => {
     if (values.email) {
@@ -27,6 +28,7 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
             (user) => user.email === values.email
           );
           if (userDetail) {
+            setFormDisabled(true);
             setShowPasswordForm(true);
           } else {
             message.error("Email not found. Please enter a valid email.");
@@ -96,6 +98,7 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
           <Form.Item
             label="Email"
             name="email"
+            disabled={formDisabled}
             rules={[
               {
                 required: true,

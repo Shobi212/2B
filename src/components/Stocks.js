@@ -446,8 +446,9 @@ const Stocks = () => {
         title="Edit Stock Details"
         open={isEditing}
         onCancel={closeEditModal}
-        onOk={form.submit}
-        okText="save"
+        // onOk={form.submit}
+        // okText="save"
+        footer={null}
         width={900}
         style={{ top: 15 }}
       >
@@ -472,10 +473,10 @@ const Stocks = () => {
                 <Input className="wrapper" />
               </Form.Item>
               <Form.Item label="Quantity" name="quantity">
-                <Input className="wrapper" />
+                <Input className="wrapper" readOnly />
               </Form.Item>
               <Form.Item label="Total cost" name="Total cost">
-                <Input className="wrapper" />
+                <Input className="wrapper" readOnly />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -541,24 +542,30 @@ const Stocks = () => {
             </Col>
           </Row>
           <Row justify="center">
-            <Col span={22}>
-              <Form.Item>
-                <Upload.Dragger
-                  fileList={[]}
-                  customRequest={customRequest}
-                  style={{
-                    uploadContainer: {
-                      height: "40px", // Set your desired height
-                    },
-                  }}
-                >
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p>Click or drag file to this area to upload</p>
-                </Upload.Dragger>
-              </Form.Item>
+            <Col>
+              <Upload.Dragger
+                fileList={[]}
+                customRequest={customRequest}
+                
+              >
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p>Click or drag file to this area to upload</p>
+              </Upload.Dragger>
             </Col>
+          </Row>
+          <Row justify="end">
+            <Space>
+              <Col>
+                <Button onClick={closeEditModal}>Cancel</Button>
+              </Col>
+              <Col>
+                <Button type="primary" htmlType="submit">
+                  Save
+                </Button>
+              </Col>
+            </Space>
           </Row>
         </Form>
       </Modal>

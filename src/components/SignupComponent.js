@@ -44,7 +44,9 @@ const SignupComponent = () => {
   //   return Promise.resolve();
   // };
   const validatePassword = (_, value) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordRegex =
+      "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+
     if (!value || value.match(passwordRegex)) {
       return Promise.resolve();
     }
@@ -96,7 +98,6 @@ const SignupComponent = () => {
             name="username"
             rules={[
               {
-                type: "text",
                 required: true,
                 message: "Please enter username",
               },

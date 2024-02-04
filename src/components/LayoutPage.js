@@ -37,7 +37,7 @@ const LayoutPage = () => {
   const role = "customer";
   const signIn = useSelector((state) => state.login.userDetail);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
-  const userDetails = JSON.parse(localStorage.getItem("user"));
+  // const userDetails = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   const loginAlertModalVisibility = useSelector(
     (state) => state.modal.isLoginAlertVisible
@@ -46,12 +46,20 @@ const LayoutPage = () => {
   const twitterURL = "https://twitter.com/your_twitter_handle";
   const instagramURL = "https://www.instagram.com/your_instagram_handle";
 
-  useEffect(() => {
-    // const userDetails = JSON.parse(localStorage.getItem("user"));
-    if (userDetails) {
-      dispatch(login(userDetails));
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const userDetails = JSON.parse(localStorage.getItem("user"));
+  //   if (userDetails) {
+  //     dispatch(login(userDetails));
+  //   }
+  // }, [dispatch]);
+  // useEffect(() => {
+  //   const userDetailsString = JSON.parse(localStorage.getItem("user"));
+
+  //   if (userDetailsString) {
+  //     // const userDetails = JSON.parse(userDetailsString);
+  //     dispatch(login(userDetails));
+  //   }
+  // }, [dispatch]);
 
   return (
     <>
@@ -126,9 +134,7 @@ const LayoutPage = () => {
             </Col>
 
             <Col span={6}>
-              <span style={{ alignItems: "center" }}>
-                Follow :
-              </span>
+              <span style={{ alignItems: "center" }}>Follow :</span>
               {/* <span> */}
               <Link
                 to={twitterURL}
