@@ -51,23 +51,7 @@ const CollectionModal = ({
           );
         })
         .catch((error) => {
-          // message.success("successfully purchased");
-          messageApi.open({
-            type: "success",
-            key: "msg-key",
-            content: (
-              <div className="msg-container">
-                Successfully Purchased
-                <p>Order ID : 2017182818828182881</p>
-              </div>
-            ),
-            // icon:<CheckOutlined />,
-            className: "custom-success-msg",
-            style: {
-              marginTop: "3vh",
-            },
-          });
-          // setShowPurchaseSuccessMsg(true);
+          setShowPurchaseSuccessMsg(true);
           setIsModalOpen(false);
         });
     } else {
@@ -221,19 +205,19 @@ const CollectionModal = ({
         )}
       </Modal>
       <div>{contextHolder}</div>
-      {/* <Modal
+      <Modal
         open={showPurchaseSuccessMsg}
         onCancel={() => setShowPurchaseSuccessMsg(false)}
         style={{ top: 20 }}
-        width={200}
+        width={350}
         footer={null}
       >
         <Result
           status="success"
           title={<span>Successfully Purchased</span>}
-          subTitle={<span>Order number: 2017182818828182881</span>}
+          subTitle={<span>Order ID: 2017182818828182881</span>}
         />
-      </Modal> */}
+      </Modal>
     </>
   );
 };

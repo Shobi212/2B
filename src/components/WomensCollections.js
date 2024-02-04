@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { WOMENS_DETAILS } from "../common/Constant";
 import { Badge, Card, Col, Row, Space } from "antd";
-import "../design/HomePage.css";
+// import "../design/HomePage.scss";
 import CollectionModal from "./CollectionModal";
 
 const WomensCollections = () => {
@@ -25,7 +25,7 @@ const WomensCollections = () => {
                   ? `delivery @ ₹${Item.deliveryCharge}`
                   : "Free delivery"
               }
-              color={Item.deliveryCharge > 10 ? "#faad14" : "#52c41a"}
+              color={Item.deliveryCharge > 10 ? "#faad14" : " #a0d911"}
             >
               <Card onClick={() => showModal(Item)} className="imagecard">
                 <img src={Item.src} width={250} height={250}></img>

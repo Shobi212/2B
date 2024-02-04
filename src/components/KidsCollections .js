@@ -24,7 +24,7 @@ const KidsCollections = () => {
                   ? `delivery ₹${item.deliveryCharge}`
                   : "Free delivery"
               }
-              color={item.deliveryCharge > 10 ? "#faad14" : "#52c41a"}
+              color={item.deliveryCharge > 10 ? "#faad14" : " #a0d911"}
             >
               <Card
                 onClick={() => showModal(item)}

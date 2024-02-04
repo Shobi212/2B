@@ -14,12 +14,15 @@ import {
   Tag,
   Upload,
   message,
+  InputNumber,
 } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
   UploadOutlined,
   InboxOutlined,
+  PlusOutlined,
+  CloudUploadOutlined,
 } from "@ant-design/icons";
 import { MENS_DETAILS } from "../common/MensConstant";
 // import { storage, storageRef } from "../FireBase";
@@ -61,8 +64,8 @@ const Stocks = () => {
             <div
               key={index}
               style={{
-                width: "20px",
-                height: "20px",
+                width: "30px",
+                height: "15px",
                 backgroundColor: color,
                 // borderRadius: "50%",
                 display: "inline-block",
@@ -186,6 +189,9 @@ const Stocks = () => {
     { value: "Kids", label: "Kids" },
   ];
   const handleFinish = async (values) => {
+    console.log("Values");
+    console.log(values);
+
     const stockDetail = {
       stockId: 1,
       category: "mens",
@@ -209,7 +215,7 @@ const Stocks = () => {
       shop: "@2B Boutique",
     };
 
-    console.log(stockDetail);
+    // console.log(stockDetail);
 
     // const updatedSizes = values.sizes.map((size) => ({
     //   ...size,
@@ -430,6 +436,7 @@ const Stocks = () => {
       });
     }
   }, [editAllStocks, form]);
+
   return (
     <>
       <Row justify="end">
@@ -446,10 +453,8 @@ const Stocks = () => {
         title="Edit Stock Details"
         open={isEditing}
         onCancel={closeEditModal}
-        // onOk={form.submit}
-        // okText="save"
         footer={null}
-        width={900}
+        width={750}
         style={{ top: 15 }}
       >
         <Form
@@ -458,33 +463,33 @@ const Stocks = () => {
           onFinish={handleFinish}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 12 }}
+
           // onValuesChange={onValuesChange}
         >
           <Row>
             <Col span={12}>
               <Form.Item label="Category" name="category">
                 <Select placeholder="Select category" options={category} />
-                {/* <Input className="wrapper" /> */}
               </Form.Item>
               <Form.Item label="Name" name="name">
-                <Input className="wrapper" />
+                <Input />
               </Form.Item>
               <Form.Item label="Price" name="price">
-                <Input className="wrapper" />
+                <InputNumber />
               </Form.Item>
               <Form.Item label="Quantity" name="quantity">
-                <Input className="wrapper" readOnly />
+                <InputNumber />
               </Form.Item>
               <Form.Item label="Total cost" name="Total cost">
-                <Input className="wrapper" readOnly />
+                <InputNumber />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item label="Seller" name="shop">
-                <Input className="wrapper" />
+                <Input />
               </Form.Item>
               <Form.Item label="Delivery Charge" name="deliveryCharge">
-                <Input className="wrapper" />
+                <InputNumber />
               </Form.Item>
               <Form.Item label="Type" name="type">
                 <Select placeholder="Select a type" options={options} />
@@ -496,26 +501,19 @@ const Stocks = () => {
                   placeholder="select color"
                   options={colorOptions}
                 />
-                {/* <Input className="wrapper" /> */}
+                {/* <Input  /> */}
               </Form.Item>
             </Col>
           </Row>
           <Row>
             <Col span={20}>
               <Form.Item
-                label="Sizes"
+                label="Size"
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 12 }}
               >
                 <Form.List>
                   {(fields, { add, remove }) => (
-                    // <Space
-                    //   style={{
-                    //     display: "flex",
-                    //     marginBottom: 8,
-                    //   }}
-                    //   align="baseline"
-                    // >
                     <>
                       <Space>
                         {sizes.map((size, index) => (
@@ -524,48 +522,89 @@ const Stocks = () => {
                             key={index}
                             name={["sizes", size]}
                           >
-                            <Input
+                            <InputNumber
                               addonBefore={size}
                               autoComplete="off"
                               // onChange={onValuesChange}
                               // placeholder={size}
-                              className="wrapper"
                             />
                           </Form.Item>
                         ))}
                       </Space>
                     </>
-                    // </Space>
                   )}
                 </Form.List>
               </Form.Item>
             </Col>
           </Row>
-          <Row justify="center">
-            <Col>
-              <Upload.Dragger
-                fileList={[]}
-                customRequest={customRequest}
-                
+          <Row
+          // justify="center"
+          >
+            <Col span={20}>
+              <Form.Item
+                label="Upload"
+                valuePropName="fileList"
+                labelCol={{ span: 5 }}
+                wrapperCol={{ span: 12 }}
+                // getValueFromEvent={normFile}
               >
-                <p className="ant-upload-drag-icon">
-                  <InboxOutlined />
-                </p>
-                <p>Click or drag file to this area to upload</p>
-              </Upload.Dragger>
+                <Upload
+                  listType="picture-card"
+                  fileList={[]}
+                  customRequest={customRequest}
+                >
+                  <button
+                    style={{
+                      border: 0,
+                      background: "none",
+                    }}
+                    type="button"
+                  >
+                    <PlusOutlined />
+                    <div
+                      style={{
+                        marginTop: 8,
+                      }}
+                    >
+                      Upload
+                    </div>
+                  </button>
+                </Upload>
+              </Form.Item>
             </Col>
+
+            {/* <Col span={24} offset={12}>
+              <Form.Item>
+                <Upload.Dragger
+                  fileList={[]}
+                  customRequest={customRequest}
+                  style={{
+                    uploadContainer: {
+                      height: "40px",
+                    },
+                  }}
+                >
+                  <p className="ant-upload-drag-icon">
+                    <InboxOutlined />
+                  </p>
+                  <p>Click or drag file to this area to upload</p>
+                </Upload.Dragger>
+              </Form.Item>
+            </Col> */}
           </Row>
           <Row justify="end">
-            <Space>
-              <Col>
-                <Button onClick={closeEditModal}>Cancel</Button>
-              </Col>
-              <Col>
-                <Button type="primary" htmlType="submit">
+            <Col>
+              <Space>
+                <Button onClick={closeEditModal} className="allButtons">
+                  Cancel
+                </Button>
+                {/* </Col>
+            <Col span={4}> */}
+                <Button type="primary" className="allButtons" htmlType="submit">
                   Save
                 </Button>
-              </Col>
-            </Space>
+              </Space>
+            </Col>
           </Row>
         </Form>
       </Modal>

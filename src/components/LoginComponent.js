@@ -22,13 +22,17 @@ import {
   showLoginModal,
 } from "../store/slice/ModalSlice";
 import MyProfilePage from "./MyProfilePage";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../FireBase";
+import "../design/Styles.scss";
 
 const LoginComponent = ({ setShowForgetPassword }) => {
   const [messageApi, contextHolder] = message.useMessage();
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
   const [isLogin, setIsLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const signIn = useSelector((state) => state.login.userDetail);
+  const loggedInUserInfo = useSelector((state) => state.login.userDetail);
   const isLoginModalVisible = useSelector(selectLoginModalVisibility);
 
   const handleShowLoginModal = () => {
@@ -39,22 +43,24 @@ const LoginComponent = ({ setShowForgetPassword }) => {
     dispatch(hideLoginModal());
   };
 
-
   const handleLogin = (values) => {
-    axios
-      .get("https://sampleap3b-default-rtdb.firebaseio.com/users.json")
-      .then((response) => {
-        let userDetailsArray = Object.values(response.data);
-        console.log("user details", userDetailsArray);
+    const userDetailsArray = [];
+    setLoading(true);
+    getDocs(collection(db, "users"))
+      .then((docSnap) => {
+        docSnap.forEach((doc) => {
+          userDetailsArray.push(doc.data());
+        });
 
         let userDetail = userDetailsArray.find(
           (user) =>
             user.email === values.usernameOrEmail ||
             user.username === values.usernameOrEmail
         );
-        localStorage.setItem("user", JSON.stringify(userDetail));
+
         if (userDetail) {
           if (userDetail.password === values.password) {
+            localStorage.setItem("user", JSON.stringify(userDetail));
             messageApi.open({
               type: "success",
               key: "msg-key",
@@ -69,34 +75,49 @@ const LoginComponent = ({ setShowForgetPassword }) => {
                 marginTop: "3vh",
               },
             });
+            setLoading(false);
             dispatch(login(userDetail));
             dispatch(hideLoginModal());
           } else {
             messageApi.open({
               type: "error",
               key: "msg-key",
-              content: (
-                <div className="msg-error-container">
-                  Invalid password or username
-                </div>
-              ),
+              content: <div className="msg-container">Invalid password</div>,
               icon: <></>,
-              className: "custom-success-msg",
+              className: "custom-error-msg",
               style: {
                 marginTop: "3vh",
               },
             });
-            dispatch(showLoginModal());
+            setLoading(false);
           }
         } else {
-          message.error("user not found");
-          dispatch(showLoginModal());
+          messageApi.open({
+            type: "error",
+            key: "msg-key",
+            content: <div className="msg-container">User not found</div>,
+            icon: <></>,
+            className: "custom-error-msg",
+            style: {
+              marginTop: "3vh",
+            },
+          });
+          setLoading(false);
         }
       })
       .catch((error) => {
-        message.error(error, "Network error");
-        dispatch(showLoginModal());
+        messageApi.open({
+          type: "error",
+          key: "msg-key",
+          content: <div className="msg-container">Something went wrong</div>,
+          icon: <></>,
+          className: "custom-error-msg",
+          style: {
+            marginTop: "3vh",
+          },
+        });
       });
+    setLoading(false);
   };
 
   const openForgetPassword = () => {
@@ -106,28 +127,37 @@ const LoginComponent = ({ setShowForgetPassword }) => {
 
   return (
     <>
-      {signIn ? (
+      {contextHolder}
+      {loggedInUserInfo ? (
         <Row justify="end">
           <Col span={4}>
-            {signIn.username && (
-              <>
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                  }}
+            <>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                }}
+              >
+                {loggedInUserInfo.username && (
+                  <span>{loggedInUserInfo.username}</span>
+                )}
+                <Popover
+                  content={<MyProfilePage />}
+                  trigger="click"
+                  placement="bottomRight"
                 >
-                  <Popover content={<MyProfilePage />} trigger="hover">
-                    <Avatar
-                      size="default"
-                      style={{ backgroundColor: "#265735", cursor: "pointer" }}
-                      icon={<UserOutlined />}
-                    />
-                  </Popover>
-                  <span style={{ marginLeft: "15px" }}>{signIn.username}</span>
-                </span>
-              </>
-            )}
+                  <Avatar
+                    size="default"
+                    style={{
+                      backgroundColor: "#1c4139",
+                      cursor: "pointer",
+                      marginLeft: "10px",
+                    }}
+                    icon={<UserOutlined />}
+                  />
+                </Popover>
+              </span>
+            </>
           </Col>
         </Row>
       ) : (
@@ -139,83 +169,87 @@ const LoginComponent = ({ setShowForgetPassword }) => {
           Login
         </Button>
       )}
-      <div>{contextHolder}</div>
 
-      <Modal
-        title="LOGIN"
-        open={isLoginModalVisible}
-        onCancel={handleHideLoginModal}
-        footer={null}
-        closable={false}
-        width={570}
-      >
-        <Form
-          form={form}
-          onFinish={handleLogin}
-          labelCol={{
-            span: 6,
+      {isLoginModalVisible && (
+        <Modal
+          title="Log In"
+          open
+          style={{
+            top: 150,
           }}
-          wrapperCol={{
-            span: 18,
-          }}
-          autoComplete="off"
+          onCancel={handleHideLoginModal}
+          footer={null}
+          closable={false}
+          width={500}
         >
-          <Form.Item
-            label="Username or Email"
-            name="usernameOrEmail"
-            rules={[
-              {
-                required: true,
-                message: "Please enter Username or Email",
-              },
-            ]}
+          <Form
+            name="loginForm"
+            onFinish={handleLogin}
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+            autoComplete="off"
           >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            style={{ marginBottom: "0px" }}
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please enter password",
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Row style={{ marginBottom: "20px" }}>
-            <Col span={6} offset={18}>
-              <Button type="link" onClick={openForgetPassword}>
-                Forgot Password?
-              </Button>
-            </Col>
-          </Row>
-          <Row justify="end">
-            <Space>
-              <Col span={4}>
-                <Button
-                  onClick={handleHideLoginModal}
-                  style={{ width: "100px" }}
-                >
-                  Cancel
+            <Form.Item
+              label="Username or Email"
+              name="usernameOrEmail"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter username or email",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              style={{ marginBottom: "0px" }}
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter password",
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+            <Row style={{ margin: "6px 0px 20px 0px" }}>
+              <Col span={6} offset={17}>
+                <Button type="link" onClick={openForgetPassword}>
+                  Forgot Password?
                 </Button>
               </Col>
-              <Col span={4}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{ width: "100px" }}
-                >
-                  Login
-                </Button>
-              </Col>
-            </Space>
-          </Row>
-          {/* </Form.Item> */}
-        </Form>
-      </Modal>
+            </Row>
+            <Row justify="end">
+              <Space>
+                <Col span={4}>
+                  <Button
+                    onClick={handleHideLoginModal}
+                    style={{ width: "100px" }}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+                <Col span={4}>
+                  <Button
+                    loading={loading}
+                    type="primary"
+                    htmlType="submit"
+                    style={{ width: "100px" }}
+                  >
+                    Login
+                  </Button>
+                </Col>
+              </Space>
+            </Row>
+          </Form>
+        </Modal>
+      )}
     </>
   );
 };

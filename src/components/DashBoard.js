@@ -3,7 +3,7 @@ import { Bar, Column } from "@ant-design/charts";
 import BarChart from "@ant-design/charts/es/bar";
 import PieChart from "@ant-design/charts/es/pie";
 import { Card, Col, DatePicker, Row, Space, Statistic } from "antd";
-import "../design/HomePage.css";
+import "../design/Styles.scss";
 import { useState } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import LineChart from "@ant-design/charts/es/line";
@@ -143,9 +143,9 @@ const DashBoard = () => {
   return (
     <>
       <Row justify="end" style={{ height: "50px" }}>
-        <Col span={4}>
+        <Col>
           {/* <Card title="Filter By Date" className="dateCard"> */}
-          <div style={{ height: "100px" }}>
+          <div>
             <DatePicker
               onChange={handleDateChange}
               picker="month"
@@ -158,8 +158,8 @@ const DashBoard = () => {
       </Row>
       <Row justify="space-between" gutter={[8]} style={{ marginBottom: "8px" }}>
         <Col span={12}>
-          <Card title="Yearly Reports" align="center">
-            <Row justify="space-between">
+          <Card title="Yearly Reports">
+            <Row justify="space-between" gutter={[8]}>
               <Col span={12}>
                 <Card className="currentStock" title="Stocks">
                   <Row>
@@ -196,8 +196,8 @@ const DashBoard = () => {
         </Col>
 
         <Col span={12}>
-          <Card title="Monthly Reports" align="center">
-            <Row justify="space-between">
+          <Card title="Monthly Reports">
+            <Row justify="space-between" gutter={[8]}>
               <Col span={12}>
                 <Card className="revenue" title="Stocks">
                   <Row>

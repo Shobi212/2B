@@ -13,7 +13,7 @@ import {
   message,
 } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
-import "../design/HomePage.css";
+import "../design/Styles.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ import { Route, Routes } from "react-router-dom";
 import WomensCollections from "./WomensCollections";
 import MensCollections from "./MensCollections ";
 import KidsCollections from "./KidsCollections ";
-import HomePage from "./HomePage";
+// import HomePage from "./HomePage";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../store/slice/LoginSlice";
 import MyOrders from "./MyOrders";
@@ -35,9 +35,10 @@ import LoginAlertModal from "../common/LoginAlertModal";
 
 const LayoutPage = () => {
   const role = "customer";
-  const signIn = useSelector((state) => state.login.userDetail);
+  const loggedInUserInfo = useSelector((state) => state.login.userDetail);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
-  // const userDetails = JSON.parse(localStorage.getItem("user"));
+  const userDetails = JSON.parse(localStorage.getItem("user"));
+  const [showContactPopover, setShowContactPopover] = useState(false);
   const dispatch = useDispatch();
   const loginAlertModalVisibility = useSelector(
     (state) => state.modal.isLoginAlertVisible
@@ -46,20 +47,12 @@ const LayoutPage = () => {
   const twitterURL = "https://twitter.com/your_twitter_handle";
   const instagramURL = "https://www.instagram.com/your_instagram_handle";
 
-  // useEffect(() => {
-  //   const userDetails = JSON.parse(localStorage.getItem("user"));
-  //   if (userDetails) {
-  //     dispatch(login(userDetails));
-  //   }
-  // }, [dispatch]);
-  // useEffect(() => {
-  //   const userDetailsString = JSON.parse(localStorage.getItem("user"));
-
-  //   if (userDetailsString) {
-  //     // const userDetails = JSON.parse(userDetailsString);
-  //     dispatch(login(userDetails));
-  //   }
-  // }, [dispatch]);
+  useEffect(() => {
+    // const userDetails = JSON.parse(localStorage.getItem("user"));
+    if (userDetails) {
+      dispatch(login(userDetails));
+    }
+  }, [dispatch]);
 
   return (
     <>
@@ -68,10 +61,10 @@ const LayoutPage = () => {
           <Row justify="space-between">
             <Col span={20}>
               <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
-                <Menu.Item key="1">
+                {/* <Menu.Item key="1">
                   <Link to="/HomePage">Home</Link>
-                </Menu.Item>
-                {signIn && true && (
+                </Menu.Item> */}
+                {loggedInUserInfo && true && (
                   <Menu.Item key="2">
                     <Link to="/DashBoard">Dash Board</Link>
                   </Menu.Item>
@@ -87,12 +80,12 @@ const LayoutPage = () => {
                 <Menu.Item key="5">
                   <Link to="/kidsCollections">Kids Collections</Link>
                 </Menu.Item>
-                {signIn && true && (
+                {loggedInUserInfo && true && (
                   <Menu.Item key="6">
                     <Link to="/MyOrders">My Orders</Link>
                   </Menu.Item>
                 )}
-                {signIn && true && (
+                {loggedInUserInfo && true && (
                   <Menu.Item key="7">
                     <Link to="/Stocks">Stocks</Link>
                   </Menu.Item>
@@ -118,7 +111,8 @@ const LayoutPage = () => {
         </Header>
         <Content className="contentStyle" style={{ padding: "12px" }}>
           <Routes>
-            <Route path="/HomePage" element={<HomePage />} />
+            {/* <Route path="/HomePage" element={<HomePage />} /> */}
+            <Route path="/" element={<WomensCollections />} />
             <Route path="/DashBoard" element={<DashBoard />} />
             <Route path="/WomensCollections" element={<WomensCollections />} />
             <Route path="/MensCollections" element={<MensCollections />} />
@@ -167,8 +161,13 @@ const LayoutPage = () => {
                 <Popover
                   className="contactStyle"
                   overlayStyle={{ width: "400px" }}
-                  content={<ContactModal />}
+                  content={
+                    <ContactModal
+                      setShowContactPopover={setShowContactPopover}
+                    />
+                  }
                   trigger="click"
+                  // onClick={() => setShowContactPopover(true)}
                 >
                   Contact Us
                 </Popover>

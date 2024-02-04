@@ -11,7 +11,7 @@ import {
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 
-const ContactModal = () => {
+const ContactModal = (setShowContactPopover) => {
   const { form } = Form.useForm();
   const [showMsgResponseModal, setShowMsgResponseModal] = useState(false);
 
@@ -28,6 +28,7 @@ const ContactModal = () => {
   }, []);
   return (
     <>
+      <h3>Contact Us</h3>
       <Form
         form={form}
         layout="vertical"
@@ -83,7 +84,7 @@ const ContactModal = () => {
           <TextArea />
         </Form.Item>
         <Row justify="end">
-          <Col>
+          <Col span={6}>
             <Button>Cancel</Button>
           </Col>
           <Col span={6}>

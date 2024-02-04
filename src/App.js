@@ -1,13 +1,21 @@
-import { Route, Routes } from "react-router-dom";
+import { ConfigProvider } from "antd";
 import "./App.css";
-import HomePage from "./components/LayoutPage";
 import LayoutPage from "./components/LayoutPage";
 
-
-function App() {           
+function App() {
   return (
     <>
-      <LayoutPage />
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#00b96b",
+            borderRadius: 4,
+            // colorBgContainer: "#f6ffed",
+          },
+        }}
+      >
+        <LayoutPage />
+      </ConfigProvider>
     </>
   );
 }

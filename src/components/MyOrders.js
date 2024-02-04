@@ -1,21 +1,11 @@
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Drawer,
-  Image,
-  List,
-  Row,
-  Space,
-  Table,
-  Tag,
-  Timeline,
-} from "antd";
+import { Button, Drawer, Image, Table, Tag, Timeline } from "antd";
 import { MY_ORDERS, DETAILS } from "../common/OrderDetails";
 import { useState } from "react";
-import { COLORS_WITH_EXCODES } from "../common/Constant";
-import DashBoard from "./DashBoard";
+import {
+  ClockCircleOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 
 const MyOrders = () => {
   const orderDetailColumns = [
@@ -82,11 +72,25 @@ const MyOrders = () => {
       render: (record) => (
         <>
           {record.status === "Delivered" ? (
-            <Tag color="#52c41a">{record.status}</Tag>
+            // <Tag color="#52c41a">
+            <span style={{ color: "green" }}>
+              <CheckOutlined />
+              {record.status}
+            </span>
           ) : record.status === "cancelled" ? (
-            <Tag color="#ff4d4f">{record.status}</Tag>
+            // <Tag color="#ff4d4f"></Tag>
+            <span style={{ color: "red" }}>
+              <CloseOutlined />
+              {record.status}
+            </span>
           ) : (
-            <Tag color="#1677ff">{record.status}</Tag>
+            // <Tag>
+            <span style={{ color: "orange" }}>
+              <ClockCircleOutlined
+              // style={{ fontSize: "15px", color: "#1890ff" }}
+              />
+              {record.status}
+            </span>
           )}
         </>
       ),
