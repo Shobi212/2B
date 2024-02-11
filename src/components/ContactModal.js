@@ -11,21 +11,26 @@ import {
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 
-const ContactModal = (setShowContactPopover) => {
-  const { form } = Form.useForm();
+const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
+  const [form] = Form.useForm();
   const [showMsgResponseModal, setShowMsgResponseModal] = useState(false);
 
   const handleFormSubmit = () => {
     setShowMsgResponseModal(true);
     form.resetFields();
   };
+  const closeContactPopover = () => {
+    setShowContactPopover(false);
+  };
   useEffect(() => {
-    // form.setFieldsValue({
-    //   name: "priya",
-    //   email: "priya@gmail.com",
-    //   phoneNo: 8967452345,
-    // });
-  }, []);
+    if (showContactPopover) {
+      form?.setFieldsValue({
+        name: "priya",
+        email: "priya@gmail.com",
+        phoneNo: 8967452345,
+      });
+    }
+  }, [showContactPopover]);
   return (
     <>
       <h3>Contact Us</h3>
@@ -85,7 +90,7 @@ const ContactModal = (setShowContactPopover) => {
         </Form.Item>
         <Row justify="end">
           <Col span={6}>
-            <Button>Cancel</Button>
+            <Button onClick={closeContactPopover}>Cancel</Button>
           </Col>
           <Col span={6}>
             <Button type="primary" htmlType="submit">

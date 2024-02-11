@@ -101,13 +101,12 @@ const SignupComponent = () => {
   };
 
   const validatePassword = (_, value) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordRegex =
+      "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
     if (!value || value.match(passwordRegex)) {
       return Promise.resolve();
     }
-    return Promise.reject(
-      "Password must contain at least 8 characters, including letters and numbers."
-    );
+    return Promise.reject("Password must contain at least 8 characters.");
   };
   const validateEmail = (_, value) => {
     // Regular expression for email validation
@@ -201,12 +200,7 @@ const SignupComponent = () => {
                   required: true,
                   message: "Please enter password",
                 },
-                {
-                  pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                  message:
-                    "Password must contain at least 8 characters, including letters and numbers",
-                },
-                // { validator: validatePassword },
+                { validator: validatePassword },
               ]}
             >
               <Input.Password />

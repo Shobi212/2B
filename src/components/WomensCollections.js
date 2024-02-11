@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { WOMENS_DETAILS } from "../common/Constant";
-import { Badge, Card, Col, Row, Space } from "antd";
+import { Badge, Card, Col, Rate, Row, Space } from "antd";
 // import "../design/HomePage.scss";
 import CollectionModal from "./CollectionModal";
 
@@ -35,7 +35,27 @@ const WomensCollections = () => {
                 </div>
 
                 <p className="dressPrice">{`₹${Item.price}`}</p>
-
+                <p
+                  style={{
+                    backgroundColor: "rgb(4, 101, 51)",
+                    width: "50px",
+                    padding: "5px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <span style={{ color: "white", fontSize: "13px" }}>4.2</span>
+                  <span>
+                    <Rate
+                      allowHalf
+                      count={1}
+                      style={{
+                        color: "white",
+                        fontSize: "16px",
+                        backgroundColor: "rgb(4, 101, 51)",
+                      }}
+                    />
+                  </span>
+                </p>
                 <p>{Item.shop}</p>
                 <div>
                   <Space>

@@ -47,6 +47,9 @@ const LayoutPage = () => {
   const twitterURL = "https://twitter.com/your_twitter_handle";
   const instagramURL = "https://www.instagram.com/your_instagram_handle";
 
+  const handlePopoverChange = (newVisible) => {
+    setShowContactPopover(newVisible);
+  };
   useEffect(() => {
     // const userDetails = JSON.parse(localStorage.getItem("user"));
     if (userDetails) {
@@ -163,11 +166,13 @@ const LayoutPage = () => {
                   overlayStyle={{ width: "400px" }}
                   content={
                     <ContactModal
+                      showContactPopover={showContactPopover}
                       setShowContactPopover={setShowContactPopover}
                     />
                   }
                   trigger="click"
-                  // onClick={() => setShowContactPopover(true)}
+                  open={showContactPopover}
+                  onOpenChange={handlePopoverChange}
                 >
                   Contact Us
                 </Popover>

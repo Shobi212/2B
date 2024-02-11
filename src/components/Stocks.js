@@ -58,16 +58,12 @@ const Stocks = () => {
       render: (colors) => (
         <>
           {(colors || []).map((color, index) => (
-            // <Tag key={index} color={color}>
-            //   {color}
-            // </Tag>
             <div
               key={index}
               style={{
                 width: "30px",
                 height: "15px",
                 backgroundColor: color,
-                // borderRadius: "50%",
                 display: "inline-block",
                 marginRight: "8px",
               }}
@@ -119,7 +115,6 @@ const Stocks = () => {
               title="Delete stock item"
               description="Are you sure to delete this item?"
               onConfirm={() => handleDelete(record)}
-              // onCancel={cancel}
               okText="Yes"
               cancelText="No"
             >
@@ -138,9 +133,10 @@ const Stocks = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [form] = Form.useForm();
-
+  const [sum, setSum] = useState(0);
   const { Dragger } = Upload;
   const { Option } = Select;
+  const [loading, setLoading] = useState(false);
   // const [fileList, setFileList] = useState([]);
 
   const handleEdit = (record) => {
@@ -150,24 +146,24 @@ const Stocks = () => {
   };
   const options = [
     {
-      value: "formal shirt",
-      label: "formal shirt",
+      value: "Formal shirt",
+      label: "Formal shirt",
     },
     {
-      value: "casual shirt",
-      label: "casual shirt",
+      value: "Casual shirt",
+      label: "Casual shirt",
     },
     {
-      value: "jeans",
-      label: "jeans",
+      value: "Jeans",
+      label: "Jeans",
     },
     {
-      value: "skinny fit",
-      label: "skinny fit ",
+      value: "Skinny fit",
+      label: "Skinny fit ",
     },
     {
-      value: "umberella chudithar",
-      label: "umberella chudithar",
+      value: "Umberella chudithar",
+      label: "Umberella chudithar",
     },
     {
       value: "Emberiod Kurtis",
@@ -175,19 +171,37 @@ const Stocks = () => {
     },
   ];
   const colorOptions = [
-    { value: "red", label: "red" },
-    { value: "green", label: "green" },
-    { value: "orange", label: "orange" },
-    { value: "grey", label: "grey" },
-    { value: "blue", label: "blue" },
-    { value: "yellow", label: "yellow" },
-    { value: "skyblue", label: "skyblue" },
+    { value: "Red", label: "Red" },
+    { value: "Green", label: "Green" },
+    { value: "Orange", label: "Orange" },
+    { value: "Grey", label: "Grey" },
+    { value: "Blue", label: "Blue" },
+    { value: "Yellow", label: "Yellow" },
+    { value: "Skyblue", label: "Skyblue" },
   ];
   const category = [
-    { value: "Mens", label: "mens" },
+    { value: "Mens", label: "Mens" },
     { value: "Womens", label: "Womens" },
     { value: "Kids", label: "Kids" },
   ];
+
+  const onValuesChange = (_, values) => {
+    // const quantity = sum(values.size || []);
+    const sizeSum = (values.size || []).reduce(
+      (acc, val) => acc + (val || 0),
+      0
+    );
+
+    form.setFieldsValue({
+      quantity: sizeSum,
+    });
+
+    const totalCost = values.price * values.quantity;
+    // const quantity = sizeSum;
+    form.setFieldsValue({
+      totalCost: totalCost,
+    });
+  };
   const handleFinish = async (values) => {
     console.log("Values");
     console.log(values);
@@ -310,6 +324,7 @@ const Stocks = () => {
 
   const closeEditModal = () => {
     setIsEditing(false);
+    form.resetFields();
   };
   const handleDelete = (record) => {
     const deleteData = allStocksDetail.filter(
@@ -349,11 +364,6 @@ const Stocks = () => {
       }
       return isImage;
     };
-
-    // const customRequest = ({ file, onSuccess, onError }) => {
-    //   console.log("File uploaded:", file);
-    //   onSuccess();
-    // };
   };
   const customRequest = ({ file, onSuccess, onError }) => {
     setUploadingFile(true);
@@ -368,11 +378,6 @@ const Stocks = () => {
       });
 
     const uploadTask = uploadBytesResumable(storageRef, file);
-
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -426,7 +431,13 @@ const Stocks = () => {
   useEffect(() => {
     if (editAllStocks) {
       form.setFieldsValue({
-        title: editAllStocks.title,
+        category:editAllStocks.category,
+        name: editAllStocks.name,
+        price:editAllStocks.price,
+        quantity:editAllStocks.quantity,
+        totalCost:editAllStocks.totalCost,
+        shop:editAllStocks.shop,
+        deliveryCharge:editAllStocks.deliveryCharge,
         type: editAllStocks.type,
         color: editAllStocks.colors,
         sizes: editAllStocks.sizes.map((size) => ({
@@ -456,6 +467,7 @@ const Stocks = () => {
         footer={null}
         width={750}
         style={{ top: 15 }}
+        closable="false"
       >
         <Form
           form={form}
@@ -463,8 +475,7 @@ const Stocks = () => {
           onFinish={handleFinish}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 12 }}
-
-          // onValuesChange={onValuesChange}
+          onValuesChange={onValuesChange}
         >
           <Row>
             <Col span={12}>
@@ -478,10 +489,10 @@ const Stocks = () => {
                 <InputNumber />
               </Form.Item>
               <Form.Item label="Quantity" name="quantity">
-                <InputNumber />
+                <InputNumber readOnly />
               </Form.Item>
-              <Form.Item label="Total cost" name="Total cost">
-                <InputNumber />
+              <Form.Item label="Total cost" name="totalCost">
+                <InputNumber readOnly />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -501,7 +512,6 @@ const Stocks = () => {
                   placeholder="select color"
                   options={colorOptions}
                 />
-                {/* <Input  /> */}
               </Form.Item>
             </Col>
           </Row>
@@ -509,6 +519,7 @@ const Stocks = () => {
             <Col span={20}>
               <Form.Item
                 label="Size"
+                name="size"
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 12 }}
               >
@@ -525,7 +536,7 @@ const Stocks = () => {
                             <InputNumber
                               addonBefore={size}
                               autoComplete="off"
-                              // onChange={onValuesChange}
+                              onChange={onValuesChange}
                               // placeholder={size}
                             />
                           </Form.Item>
@@ -537,9 +548,7 @@ const Stocks = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Row
-          // justify="center"
-          >
+          <Row>
             <Col span={20}>
               <Form.Item
                 label="Upload"
@@ -572,25 +581,6 @@ const Stocks = () => {
                 </Upload>
               </Form.Item>
             </Col>
-
-            {/* <Col span={24} offset={12}>
-              <Form.Item>
-                <Upload.Dragger
-                  fileList={[]}
-                  customRequest={customRequest}
-                  style={{
-                    uploadContainer: {
-                      height: "40px",
-                    },
-                  }}
-                >
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p>Click or drag file to this area to upload</p>
-                </Upload.Dragger>
-              </Form.Item>
-            </Col> */}
           </Row>
           <Row justify="end">
             <Col>
@@ -598,8 +588,6 @@ const Stocks = () => {
                 <Button onClick={closeEditModal} className="allButtons">
                   Cancel
                 </Button>
-                {/* </Col>
-            <Col span={4}> */}
                 <Button type="primary" className="allButtons" htmlType="submit">
                   Save
                 </Button>

@@ -1,4 +1,4 @@
-import { Badge, Card, Col, Row, Space } from "antd";
+import { Badge, Card, Col, Rate, Row, Space } from "antd";
 import { MENS_DETAILS } from "../common/MensConstant";
 import { useState } from "react";
 import CollectionModal from "./CollectionModal";
@@ -36,6 +36,27 @@ const MensCollections = () => {
                   <p className="dressType">{item.type}</p>
                 </div>
                 <p>{`₹${item.price}`}</p>
+                <p
+                  style={{
+                    backgroundColor: "rgb(4, 101, 51)",
+                    width: "50px",
+                    padding: "5px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <span style={{ color: "white", fontSize: "13px" }}>4.2</span>
+                  <span>
+                    <Rate
+                      allowHalf
+                      count={1}
+                      style={{
+                        color: "white",
+                        fontSize: "16px",
+                        backgroundColor: "rgb(4, 101, 51)",
+                      }}
+                    />
+                  </span>
+                </p>
                 <p>{item.shop}</p>
                 <Space>
                   <span>Sizes: </span>

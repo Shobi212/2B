@@ -136,6 +136,7 @@ const LoginComponent = ({ setShowForgetPassword }) => {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
+                  right: "0",
                 }}
               >
                 {loggedInUserInfo.username && (
@@ -143,7 +144,7 @@ const LoginComponent = ({ setShowForgetPassword }) => {
                 )}
                 <Popover
                   content={<MyProfilePage />}
-                  trigger="click"
+                  trigger="hover"
                   placement="bottomRight"
                 >
                   <Avatar
