@@ -225,11 +225,11 @@ const CollectionModal = ({
                   </Col>
                   <Col span={4}>
                     <Select
-                      defaultValue={0}
+                      defaultValue={1}
                       style={{ width: "80px", height: "20px" }}
                       onChange={handleQuantityChanges}
                     >
-                      {[...Array(10).keys()].map((num) => (
+                      {[...Array(11).keys()].map((num) => (
                         <Option key={num} value={num}>
                           {num}
                         </Option>
@@ -242,7 +242,7 @@ const CollectionModal = ({
             </Row>
             <Card title="">
               <Row>
-                <h2>product Ratings & Reviews</h2>
+                <h2>Product Ratings & Reviews</h2>
               </Row>
               <Row>
                 <Col span={12}>

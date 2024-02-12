@@ -41,7 +41,7 @@ const MyProfilePage = () => {
   const handleOk = () => {
     localStorage.removeItem("user");
     setShowLogoutModal(false);
-    
+
     dispatch(logout());
   };
   const handleProfileChanges = (values) => {
@@ -135,19 +135,20 @@ const MyProfilePage = () => {
         onCancel={() => setShowLogoutModal(false)}
         closable={false}
         centered
-        width={450}
+        width={300}
         footer={null}
+        maskClosable={false}
         style={{ borderRadius: "15px" }}
       >
         <Result
           icon={<ExclamationCircleOutlined style={{ color: "green" }} />}
           title={
             <>
-              <span style={{ fontSize: "20px" }}>
+              <span style={{ fontSize: "15px" }}>
                 Hi,{loggedInUserInfo.username}
               </span>
               <br />
-              <span style={{ fontSize: "20px" }}>
+              <span style={{ fontSize: "15px" }}>
                 Are you sure do you want to logout?
               </span>
             </>

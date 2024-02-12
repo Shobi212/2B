@@ -26,7 +26,7 @@ const WomensCollections = () => {
           tmpStocksArray.push(doc.data());
         });
         const activeStocks = tmpStocksArray.filter(
-          (stock) => stock.isActive && stock.category == "Womens"
+          (stock) => stock.isActive && stock.category == "womens"
         );
         setWomensStocks(activeStocks);
       })

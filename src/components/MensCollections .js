@@ -24,7 +24,7 @@ const MensCollections = () => {
           tmpStocksArray.push(doc.data());
         });
         const activeStocks = tmpStocksArray.filter(
-          (stock) => stock.isActive && stock.category == "Mens"
+          (stock) => stock.isActive && stock.category == "mens"
         );
         setMensStocks(activeStocks);
       })
