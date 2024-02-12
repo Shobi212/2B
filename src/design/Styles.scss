@@ -166,9 +166,13 @@
   }
 }
 .logoutStyle {
-  background: linear-gradient(to right, yellow, green);
+  background: linear-gradient(to right, #97ac3c, #06843f);
   width: 80px;
 }
+// .logoutStyle:hover {
+//   color: white;
+//   background: linear-gradient(to right, #97ac3c, #06843f);
+// }
 .logoutArrowStyle {
   animation-name: arrow;
   animation-iteration-count: infinite;
@@ -183,4 +187,24 @@
   100% {
     transform: translateX(100%);
   }
+}
+.customCard {
+  border-bottom: none;
+}
+
+.custom_scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom_scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom_scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.custom_scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

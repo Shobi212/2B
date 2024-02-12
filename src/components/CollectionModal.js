@@ -9,50 +9,95 @@ import {
   Select,
   Space,
   message,
+  Progress,
+  Rate,
+  Card,
+  Avatar,
+  Descriptions,
+  Typography,
 } from "antd";
 import axios from "axios";
+import dayjs from "dayjs";
+import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { db } from "../FireBase";
 import { showLoginAlertModal } from "../store/slice/ModalSlice";
+import ReviewComponent from "./ReviewComponent";
+
+const { Option } = Select;
 
 const CollectionModal = ({
-  showCollectionModal,
-  isModalOpen,
-  setIsModalOpen,
+  selectedStock,
+  showDetailModal,
+  setShowDetailModal,
 }) => {
-  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(0);
-  const { Option } = Select;
-  const dispatch = useDispatch();
+  const [color, setColor] = useState(selectedStock.colors[0]);
+  const [size, setSize] = useState(
+    Object.entries(selectedStock.sizes || {})[0][0]
+  );
+  const [totalAmount, setTotalAmount] = useState(selectedStock.price);
   const [showPurchaseSuccessMsg, setShowPurchaseSuccessMsg] = useState(false);
+  const [purchaseDetail, setPurchaseDetail] = useState(null);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const userDetail = useSelector((state) => state.login.userDetail);
+  const dispatch = useDispatch();
 
   const handleQuantityChanges = (newQuantity) => {
     setQuantity(newQuantity);
+    setTotalAmount(selectedStock.price * newQuantity);
   };
+
+  const handleColorChange = (e) => {
+    setColor(e.target.value);
+  };
+
+  const handleSizeChange = (e) => {
+    setSize(e.target.value);
+  };
+
   const womensModalClose = () => {
-    setIsModalOpen(false);
+    setShowDetailModal(false);
   };
 
   const handlePurchase = () => {
     if (isLoggedIn) {
-      const purchaseDetails = {
-        name: showCollectionModal.name,
-        type: showCollectionModal.type,
-        price: showCollectionModal.price,
-        shop: showCollectionModal.shop,
-        size: showCollectionModal.sizes.map((size) => size.size),
+      setLoading(true);
+      const purchaseData = {
+        order_id: Number(userDetail.user_id + dayjs().valueOf()),
+        user_id: userDetail.user_id,
+        totalAmount: totalAmount,
+        color: color,
+        quantity: quantity,
+        size: size,
+        stock: selectedStock,
+        status: "ordered",
+        dateTime: dayjs().format("YYYY-MM-DD HH:mm:ss"),
       };
-      axios
-        .post("https//@2b_boutique.com/purchase.details", purchaseDetails)
-        .then((res) => {
-          message.error(
-            "Failed to complete the purchase. Please try again later"
-          );
+      const ordersPath = `orders/${purchaseData.order_id}`;
+      setDoc(doc(db, ordersPath), purchaseData)
+        .then(() => {
+          setPurchaseDetail(purchaseData);
+          setShowPurchaseSuccessMsg(true);
+          setShowDetailModal(false);
+          setLoading(false);
         })
         .catch((error) => {
-          setShowPurchaseSuccessMsg(true);
-          setIsModalOpen(false);
+          setLoading(false);
+          messageApi.open({
+            type: "error",
+            key: "msg-key",
+            content: <div className="msg-container">Something went wrong</div>,
+            icon: <></>,
+            className: "custom-error-msg",
+            style: {
+              marginTop: "3vh",
+            },
+          });
         });
     } else {
       dispatch(showLoginAlertModal());
@@ -62,161 +107,255 @@ const CollectionModal = ({
     <>
       <Modal
         title="WOMEN'S KURTIS"
-        open={isModalOpen}
+        open={showDetailModal}
         onCancel={womensModalClose}
         footer={null}
-        closable={false}
         width={800}
+        style={{ top: 15 }}
+        bodyStyle={{
+          maxHeight: "calc(100vh - 200px)",
+          overflowY: "auto",
+          marginRight: "0px",
+        }}
+        className="custom_scrollbar"
+        maskClosable={false}
       >
-        {showCollectionModal && (
-          <Row>
-            <Col span={12}>
-              <Image
-                src={showCollectionModal.src}
-                width={300}
-                height={300}
-              ></Image>
-            </Col>
-            <Col span={12}>
-              <Row className="rowpadding">
-                <Col span={4}>
-                  <span>Type</span>
-                </Col>
-                <Col span={2}>
-                  <span>:</span>
-                </Col>
-                <Col span={18}>
-                  <span className="dressType">{showCollectionModal.type}</span>
-                </Col>
+        {selectedStock && (
+          <>
+            <Row>
+              <Col span={12}>
+                <Image src={selectedStock.src} width={300} height={300}></Image>
+              </Col>
+              <Col span={12}>
+                <Row className="rowpadding">
+                  <Col span={4}>
+                    <span>Type</span>
+                  </Col>
+                  <Col span={2}>
+                    <span>:</span>
+                  </Col>
+                  <Col span={18}>
+                    <span className="dressType">{selectedStock.type}</span>
+                  </Col>
+                </Row>
+                <Row className="rowpadding">
+                  {/* <Space> */}
+                  <Col span={4}>
+                    <span>Price</span>
+                  </Col>
+                  <Col span={2}>
+                    <span>:</span>
+                  </Col>
+                  <Col span={18}>
+                    <span className="dressPrice">
+                      {`₹${selectedStock.price}`}
+                    </span>
+                  </Col>
+                  {/* </Space> */}
+                </Row>
+                <Row className="rowpadding">
+                  <Col span={4}>
+                    <span>Colors</span>
+                  </Col>
+                  <Col span={2}>
+                    <span>:</span>
+                  </Col>
+                  <Col span={18}>
+                    <Radio.Group
+                      defaultValue={selectedStock.colors[1]}
+                      buttonStyle="solid"
+                      size="small"
+                      onChange={handleColorChange}
+                    >
+                      <Row>
+                        {selectedStock.colors.map((color, index) => (
+                          <Radio.Button key={index} value={color}>
+                            {color}
+                          </Radio.Button>
+                        ))}
+                      </Row>
+                    </Radio.Group>
+                  </Col>
+                </Row>
+                <Row className="rowpadding">
+                  <Col span={4}>
+                    <span>Sizes</span>
+                  </Col>
+                  <Col span={2}>
+                    <span>:</span>
+                  </Col>
+                  <Col span={18}>
+                    <Radio.Group
+                      // defaultValue={selectedStock.sizes[0].size}
+                      onChange={handleSizeChange}
+                      defaultValue={
+                        Object.entries(selectedStock.sizes || {})[0][0]
+                      }
+                      buttonStyle="solid"
+                      size="small"
+                    >
+                      <Row>
+                        {Object.entries(selectedStock.sizes || {}).map(
+                          ([size, value], index) => (
+                            <Radio.Button key={index} value={size}>
+                              {size}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Row>
+                    </Radio.Group>
+                  </Col>
+                </Row>
+                <Row className="rowpadding" justify="start">
+                  <Col span={4}>
+                    {/* <span>Total : ₹{selectedStock.price * quantity}</span> */}
+                    <span>Total </span>
+                  </Col>
+                  <Col span={2}>
+                    <span>:</span>
+                  </Col>
+                  <Col span={4}>
+                    <span>₹{totalAmount}</span>
+                  </Col>
+                  <Col span={4}>
+                    <span>Quantity</span>
+                  </Col>
+                  <Col span={2}>
+                    <span>:</span>
+                  </Col>
+                  <Col span={4}>
+                    <Select
+                      defaultValue={0}
+                      style={{ width: "80px", height: "20px" }}
+                      onChange={handleQuantityChanges}
+                    >
+                      {[...Array(10).keys()].map((num) => (
+                        <Option key={num} value={num}>
+                          {num}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Col>
+                </Row>
+              </Col>
+              {/* </Space> */}
+            </Row>
+            <Card title="">
+              <Row>
+                <h2>product Ratings & Reviews</h2>
               </Row>
-              <Row className="rowpadding">
-                {/* <Space> */}
-                <Col span={4}>
-                  <span>Price</span>
+              <Row>
+                <Col span={12}>
+                  <div align="center">
+                    <span style={{ color: "green", fontSize: "80px" }}>
+                      4.2
+                    </span>
+                    <span>
+                      <Rate
+                        defaultValue={1}
+                        count={1}
+                        style={{ color: "green" }}
+                      />
+                    </span>
+                    <p style={{ marginTop: "0px", color: "grey" }}>
+                      150 Ratings,
+                      <br />
+                      100 Reviews
+                    </p>
+                  </div>
                 </Col>
-                <Col span={2}>
-                  <span>:</span>
-                </Col>
-                <Col span={18}>
-                  <span className="dressPrice">
-                    {`₹${showCollectionModal.price}`}
+                <Col span={12}>
+                  <span>Excellent</span>
+                  <span>
+                    <Progress
+                      percent={70}
+                      size="small"
+                      strokeColor="darkGreen"
+                    />
+                  </span>
+                  <span>Very good</span>
+                  <span>
+                    <Progress percent={55} size="small" strokeColor="#06A759" />
+                  </span>
+                  <span>Good</span>
+                  <span>
+                    <Progress percent={40} size="small" strokeColor="#F4B743" />
+                  </span>
+                  <span>Average</span>
+                  <span>
+                    <Progress percent={30} size="small" strokeColor="#EC803D" />
+                  </span>
+                  <span>poor</span>
+                  <span>
+                    <Progress percent={20} size="small" strokeColor="red" />
                   </span>
                 </Col>
-                {/* </Space> */}
               </Row>
-              <Row className="rowpadding">
-                <Col span={4}>
-                  <span>Colors</span>
+            </Card>
+            <ReviewComponent />
+            <Row justify="end" style={{ marginTop: "40px" }}>
+              <Space>
+                <Col>
+                  <Button onClick={womensModalClose} className="allButtons">
+                    Cancel
+                  </Button>
                 </Col>
-                <Col span={2}>
-                  <span>:</span>
-                </Col>
-                <Col span={18}>
-                  <Radio.Group
-                    defaultValue={showCollectionModal.colors[1]}
-                    buttonStyle="solid"
-                    size="small"
+                <Col>
+                  <Button
+                    loading={loading}
+                    className="allButtons"
+                    type="primary"
+                    onClick={handlePurchase}
                   >
-                    <Row>
-                      {showCollectionModal.colors.map((color, index) => (
-                        <Radio.Button key={index} value={color}>
-                          {color}
-                        </Radio.Button>
-                      ))}
-                    </Row>
-                  </Radio.Group>
+                    Buy Now
+                  </Button>
                 </Col>
-              </Row>
-              <Row className="rowpadding">
-                <Col span={4}>
-                  <span>Sizes</span>
-                </Col>
-                <Col span={2}>
-                  <span>:</span>
-                </Col>
-                <Col span={18}>
-                  <Radio.Group
-                    defaultValue={showCollectionModal.sizes[0].size}
-                    buttonStyle="solid"
-                    size="small"
-                  >
-                    <Row>
-                      {showCollectionModal.sizes.map((size, index) => (
-                        <Radio.Button key={index} value={size.size}>
-                          {size.size}
-                        </Radio.Button>
-                      ))}
-                    </Row>
-                  </Radio.Group>
-                </Col>
-              </Row>
-              <Row className="rowpadding" justify="start">
-                <Col span={4}>
-                  {/* <span>Total : ₹{showCollectionModal.price * quantity}</span> */}
-                  <span>Total </span>
-                </Col>
-                <Col span={2}>
-                  <span>:</span>
-                </Col>
-                <Col span={4}>
-                  <span>₹{showCollectionModal.price * quantity}</span>
-                </Col>
-                <Col span={4}>
-                  <span>Quantity</span>
-                </Col>
-                <Col span={2}>
-                  <span>:</span>
-                </Col>
-                <Col span={4}>
-                  <Select
-                    defaultValue={0}
-                    style={{ width: "80px", height: "20px" }}
-                    onChange={handleQuantityChanges}
-                  >
-                    {[...Array(10).keys()].map((num) => (
-                      <Option key={num} value={num}>
-                        {num}
-                      </Option>
-                    ))}
-                  </Select>
-                </Col>
-              </Row>
-              <Row justify="end" style={{ marginTop: "40px" }}>
-                <Space>
-                  <Col>
-                    <Button onClick={womensModalClose} className="allButtons">
-                      Cancel
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      className="allButtons"
-                      type="primary"
-                      onClick={handlePurchase}
-                    >
-                      Buy Now
-                    </Button>
-                  </Col>
-                </Space>
-              </Row>
-            </Col>
-            {/* </Space> */}
-          </Row>
+              </Space>
+            </Row>
+          </>
         )}
       </Modal>
       <div>{contextHolder}</div>
       <Modal
         open={showPurchaseSuccessMsg}
         onCancel={() => setShowPurchaseSuccessMsg(false)}
-        style={{ top: 20 }}
-        width={350}
+        style={{ top: 120 }}
+        // width={350}
         footer={null}
       >
-        <Result
+        {/* <Result
           status="success"
           title={<span>Successfully Purchased</span>}
           subTitle={<span>Order ID: 2017182818828182881</span>}
-        />
+        /> */}
+
+        {purchaseDetail && (
+          <Descriptions
+            // title={}"Successful purchase!"
+            title={
+              <span style={{ color: "#52c41a" }}>Successful purchase!</span>
+            }
+            column={1}
+            bordered
+            labelStyle={{ width: "60%" }}
+            contentStyle={{ width: "40%" }}
+          >
+            <Descriptions.Item label="Item">
+              {purchaseDetail.stock.name}
+            </Descriptions.Item>
+            <Descriptions.Item label="Order ID">
+              <Typography.Paragraph copyable>
+                {purchaseDetail.order_id}
+              </Typography.Paragraph>
+            </Descriptions.Item>
+            <Descriptions.Item label="Transaction Date">
+              {purchaseDetail.dateTime}
+            </Descriptions.Item>
+            <Descriptions.Item label="Order Total">
+              {`₹ ${purchaseDetail.totalAmount}`}
+            </Descriptions.Item>
+          </Descriptions>
+        )}
       </Modal>
     </>
   );

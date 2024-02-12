@@ -1,23 +1,59 @@
-import { useState } from "react";
-import { WOMENS_DETAILS } from "../common/Constant";
-import { Badge, Card, Col, Rate, Row, Space } from "antd";
+import { useEffect, useState } from "react";
+import { WOMENS_DETAILS } from "../common/WomensConstant";
+import { Badge, Card, Col, message, Rate, Row, Space } from "antd";
 // import "../design/HomePage.scss";
 import CollectionModal from "./CollectionModal";
+import Item from "antd/es/list/Item";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../FireBase";
 
 const WomensCollections = () => {
-  const [womensDetails, setWomensDetails] = useState(WOMENS_DETAILS);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showCollectionModal, setShowCollectionModal] = useState(null);
+  const [womensStocks, setWomensStocks] = useState([]);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedStock, setSelectedStock] = useState(null);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const showModal = (Item) => {
-    setShowCollectionModal(Item);
-    setIsModalOpen(true);
+    setSelectedStock(Item);
+    setShowDetailModal(true);
   };
+
+  const getWomensStocks = () => {
+    const tmpStocksArray = [];
+    getDocs(collection(db, "stocks"))
+      .then((docSnap) => {
+        docSnap.forEach((doc) => {
+          tmpStocksArray.push(doc.data());
+        });
+        const activeStocks = tmpStocksArray.filter(
+          (stock) => stock.isActive && stock.category == "Womens"
+        );
+        setWomensStocks(activeStocks);
+      })
+      .catch((error) => {
+        console.group(error);
+        messageApi.open({
+          type: "error",
+          key: "msg-key",
+          content: <div className="msg-container">Something went wrong</div>,
+          icon: <></>,
+          className: "custom-error-msg",
+          style: {
+            marginTop: "3vh",
+          },
+        });
+      });
+  };
+
+  useEffect(() => {
+    getWomensStocks();
+  }, []);
 
   return (
     <>
+      {contextHolder}
       <Row gutter={[8, 8]} className="imagestyle">
-        {womensDetails.map((Item, index) => (
+        {womensStocks.map((Item, index) => (
           <Col span={6} key={index} className="cardStyle">
             <Badge.Ribbon
               text={
@@ -47,20 +83,19 @@ const WomensCollections = () => {
                   <span>
                     <Rate
                       allowHalf
+                      allowClear={false}
+                      disabled
                       count={1}
-                      style={{
-                        color: "white",
-                        fontSize: "16px",
-                        backgroundColor: "rgb(4, 101, 51)",
-                      }}
+                      defaultValue={1}
+                      style={{ color: "white", fontSize: "11px" }}
                     />
                   </span>
                 </p>
-                <p>{Item.shop}</p>
+                <p style={{ fontWeight: "bold" }}>{Item.shop}</p>
                 <div>
                   <Space>
                     <span>Size:</span>
-                    {Item.sizes.map(({ size, value }) => (
+                    {Object.entries(Item.sizes || {}).map(([size, value]) => (
                       <span key={size}>{`${size} ,`}</span>
                     ))}
                   </Space>
@@ -70,11 +105,11 @@ const WomensCollections = () => {
           </Col>
         ))}
       </Row>
-      {showCollectionModal && (
+      {selectedStock && (
         <CollectionModal
-          showCollectionModal={showCollectionModal}
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
+          selectedStock={selectedStock}
+          showDetailModal={showDetailModal}
+          setShowDetailModal={setShowDetailModal}
         />
       )}
     </>

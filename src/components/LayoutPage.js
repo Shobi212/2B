@@ -127,11 +127,15 @@ const LayoutPage = () => {
         <Footer className="footerStyle">
           <Row justify="space-between">
             <Col span={6}>
-              <span>Copyright-&copy; 2024 2B</span>
+              <span style={{ fontWeight: "500" }}>
+                Copyright-&copy; 2024 2B
+              </span>
             </Col>
 
-            <Col span={6}>
-              <span style={{ alignItems: "center" }}>Follow :</span>
+            <Col span={4}>
+              <span style={{ alignItems: "center", fontWeight: "500" }}>
+                Follow :
+              </span>
               {/* <span> */}
               <Link
                 to={twitterURL}
@@ -160,8 +164,9 @@ const LayoutPage = () => {
                 ></img>
               </Link>
 
-              <span style={{ marginLeft: "60px" }}>
+              <span style={{ margin: "0px 20px 0px 20px", fontWeight: "500" }}>
                 <Popover
+                  // title="Contact Us"
                   className="contactStyle"
                   overlayStyle={{ width: "400px" }}
                   content={

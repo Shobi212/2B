@@ -2,7 +2,7 @@ export const MY_ORDERS = [
   {
     orderId: "01122336785005",
     productName: "umberella type chudithar",
-    trackingId: "112233",
+    order_id: "112233",
     imageSrc:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZMe9hiUk9elh8I3lb1rD58RO74lCq8-12uA&usqp=CAU",
 
@@ -13,12 +13,12 @@ export const MY_ORDERS = [
     quantity: 2,
     size: "L",
     date: "11-August-23",
-    status: "ordered",
+    status: "Ordered",
   },
   {
     orderId: "01122336785010",
     productName: "chudithar metrial",
-    trackingId: "112244",
+    order_id: "112244",
     imageSrc:
       "https://i.pinimg.com/originals/e2/db/0f/e2db0f061923b852c6ba6f976c35edd1.jpg",
     deliveryDate: "arrival tommorrow",
@@ -33,7 +33,7 @@ export const MY_ORDERS = [
   {
     orderId: "01122336785015",
     productName: "checked casual shirt",
-    trackingId: "112255",
+    order_id: "112255",
     imageSrc:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3iOX4vjfOSZYpY6mJLATfL-7tyM8ro80HQg&usqp=CAU",
     deliveryDate: "arriving 12-jun 14",
@@ -43,13 +43,13 @@ export const MY_ORDERS = [
     quantity: 2,
     size: "M",
     date: "15-August-23",
-    status: "cancelled",
+    status: "Cancelled",
   },
 ];
 
 export const DETAILS = [
   {
-    trackingId: "112233",
+    order_id: "112233",
     shipmentDetails: [
       {
         date: "11-Aug-2023",
@@ -98,7 +98,7 @@ export const DETAILS = [
     ],
   },
   {
-    trackingId: "112244",
+    order_id: "112244",
     shipmentDetails: [
       {
         date: "15-Aug-2023",
@@ -147,7 +147,7 @@ export const DETAILS = [
     ],
   },
   {
-    trackingId: "112255",
+    order_id: "112255",
     shipmentDetails: [
       {
         date: "15-Aug-2023",

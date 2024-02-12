@@ -17,6 +17,7 @@ const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
 
   const handleFormSubmit = () => {
     setShowMsgResponseModal(true);
+    setShowContactPopover(false);
     form.resetFields();
   };
   const closeContactPopover = () => {
@@ -33,7 +34,7 @@ const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
   }, [showContactPopover]);
   return (
     <>
-      <h3>Contact Us</h3>
+      <h3 align="center">Contact Us</h3>
       <Form
         form={form}
         layout="vertical"
@@ -104,22 +105,23 @@ const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
         onCancel={() => setShowMsgResponseModal(false)}
         footer={null}
         style={{ textTransform: "capitalize", height: "500px" }}
-        width={250}
+        // width={250}
         closable={false}
       >
         <h2 style={{ fontFamily: "cursive" }} align="center">
           Thank you
         </h2>
         <p style={{ justifyContent: "center" }}>
-          We've received your message someone from our team will contact you
+          We've received your message, someone from our team will contact you
           soon
         </p>
         <Row justify="center">
           <Button
             onClick={() => setShowMsgResponseModal(false)}
-            style={{ width: "150px", border: "1px solid grey" }}
+            type="primary"
+            className="allButtons"
           >
-            ok,Close
+            Ok,Close
           </Button>
         </Row>
       </Modal>

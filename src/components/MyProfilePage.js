@@ -31,6 +31,7 @@ const MyProfilePage = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [profileForm] = Form.useForm();
   const { passwordForm } = Form.useForm();
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   const { TabPane } = Tabs;
   const handleLogout = () => {
@@ -40,8 +41,8 @@ const MyProfilePage = () => {
   const handleOk = () => {
     localStorage.removeItem("user");
     setShowLogoutModal(false);
+    
     dispatch(logout());
-    // form.resetFields();
   };
   const handleProfileChanges = (values) => {
     const profileChanges = {
@@ -76,6 +77,27 @@ const MyProfilePage = () => {
     setShowProfileModal(false);
     passwordForm?.resetFields();
   };
+
+  const validateEmail = (_, value) => {
+    // Regular expression for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!value || emailRegex.test(value)) {
+      return Promise.resolve();
+    }
+
+    return Promise.reject("Please enter a valid email address");
+  };
+
+  const validatePassword = (_, value) => {
+    const passwordRegex =
+      "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+    if (!value || value.match(passwordRegex)) {
+      return Promise.resolve();
+    }
+    return Promise.reject("Password must contain at least 8 characters.");
+  };
+
   useEffect(() => {
     if (showProfileModal && profileForm && loggedInUserInfo) {
       profileForm.setFieldsValue({
@@ -113,19 +135,22 @@ const MyProfilePage = () => {
         onCancel={() => setShowLogoutModal(false)}
         closable={false}
         centered
-        width={300}
+        width={450}
         footer={null}
+        style={{ borderRadius: "15px" }}
       >
         <Result
-          icon={
-            <ExclamationCircleOutlined
-              style={{ color: "green", fontSize: "40px" }}
-            />
-          }
+          icon={<ExclamationCircleOutlined style={{ color: "green" }} />}
           title={
-            <span style={{ fontSize: "15px" }}>
-              Are you sure do you want to logout?
-            </span>
+            <>
+              <span style={{ fontSize: "20px" }}>
+                Hi,{loggedInUserInfo.username}
+              </span>
+              <br />
+              <span style={{ fontSize: "20px" }}>
+                Are you sure do you want to logout?
+              </span>
+            </>
           }
           extra={[
             <>
@@ -139,8 +164,12 @@ const MyProfilePage = () => {
                       No
                     </Button>
                   </Col>
-                  <Col span={4} offset={20}>
-                    <Button className="logoutStyle" onClick={handleOk}>
+                  <Col span={4} offset={22}>
+                    <Button
+                      className="logoutStyle"
+                      onClick={handleOk}
+                      loading={logoutLoading}
+                    >
                       <span style={{ marginRight: "8px" }}>Yes</span>
                       <span>
                         <ArrowRightOutlined className="logoutArrowStyle" />
@@ -167,10 +196,35 @@ const MyProfilePage = () => {
                 <Form.Item label="Username" name="username">
                   <Input />
                 </Form.Item>
-                <Form.Item label="Email" name="email">
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    {
+                      required: true,
+                      message: " Please enter valid email",
+                    },
+                    {
+                      validator: validateEmail,
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
-                <Form.Item label="Mobile No" name="mobileno">
+                <Form.Item
+                  label="Mobile No"
+                  name="mobileno"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter mobile number",
+                    },
+                    {
+                      pattern: /^[0-9]{10}$/,
+                      message: "Please enter a valid 10-digit mobile number!",
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
                 <Form.Item label="Address" name="address">
@@ -207,16 +261,27 @@ const MyProfilePage = () => {
                 labelCol={{ span: 6 }}
                 wrapperCol={{ span: 18 }}
               >
-                <Form.Item label="Old Password" name="oldPassword">
-                  <Input />
+                <Form.Item
+                  label="Old Password"
+                  name="oldPassword"
+                  rules={[
+                    {
+                      required: true,
+                      message: " Please enter valid password",
+                    },
+
+                    { validator: validatePassword },
+                  ]}
+                >
+                  <Input.Password disabled={showChangePassword} />
                 </Form.Item>
                 {showChangePassword && (
                   <>
                     <Form.Item label="New Password" name="newPassword">
-                      <Input />
+                      <Input.Password />
                     </Form.Item>
                     <Form.Item label="Confirm Password" name="confirmPassword">
-                      <Input />
+                      <Input.Password />
                     </Form.Item>
                   </>
                 )}

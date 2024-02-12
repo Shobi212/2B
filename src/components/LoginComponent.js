@@ -129,39 +129,39 @@ const LoginComponent = ({ setShowForgetPassword }) => {
     <>
       {contextHolder}
       {loggedInUserInfo ? (
-        <Row justify="end">
-          <Col span={4}>
-            <>
-              <span
+        // <Row justify="end">
+        //   <Col span={4}>
+        <div style={{ marginLeft: "130px" }}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              right: "0",
+            }}
+          >
+            {loggedInUserInfo.username && (
+              <span>{loggedInUserInfo.username}</span>
+            )}
+            <Popover
+              content={<MyProfilePage />}
+              trigger="hover"
+              placement="bottomRight"
+            >
+              <Avatar
+                size="default"
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  right: "0",
+                  backgroundColor: "#1c4139",
+                  cursor: "pointer",
+                  marginLeft: "10px",
                 }}
-              >
-                {loggedInUserInfo.username && (
-                  <span>{loggedInUserInfo.username}</span>
-                )}
-                <Popover
-                  content={<MyProfilePage />}
-                  trigger="hover"
-                  placement="bottomRight"
-                >
-                  <Avatar
-                    size="default"
-                    style={{
-                      backgroundColor: "#1c4139",
-                      cursor: "pointer",
-                      marginLeft: "10px",
-                    }}
-                    icon={<UserOutlined />}
-                  />
-                </Popover>
-              </span>
-            </>
-          </Col>
-        </Row>
+                icon={<UserOutlined />}
+              />
+            </Popover>
+          </span>
+        </div>
       ) : (
+        //   </Col>
+        // </Row>
         <Button
           type="primary"
           onClick={handleShowLoginModal}

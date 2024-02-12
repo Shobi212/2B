@@ -122,7 +122,16 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
     }
   };
 
+  const validatePassword = (_, value) => {
+    const passwordRegex =
+      "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+    if (!value || value.match(passwordRegex)) {
+      return Promise.resolve();
+    }
+    return Promise.reject("Password must contain at least 8 characters.");
+  };
   const validateEmail = (_, value) => {
+    // Regular expression for email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!value || emailRegex.test(value)) {
@@ -130,16 +139,6 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
     }
 
     return Promise.reject("Please enter a valid email address");
-  };
-
-  const validatePassword = (_, value) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (!value || value.match(passwordRegex)) {
-      return Promise.resolve();
-    }
-    return Promise.reject(
-      "Password must contain at least 8 characters, including letters and numbers."
-    );
   };
 
   return (
