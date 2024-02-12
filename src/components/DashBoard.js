@@ -1,51 +1,244 @@
 // import { Bar } from "@ant-design/charts";
-import { Bar, Column } from "@ant-design/charts";
+import { Bar, Column, DualAxes, G2, Line } from "@ant-design/charts";
 import BarChart from "@ant-design/charts/es/bar";
 import PieChart from "@ant-design/charts/es/pie";
-import { Card, Col, DatePicker, Row, Space, Statistic } from "antd";
-import "../design/Styles.scss";
-import { useState } from "react";
+import { Card, Col, DatePicker, message, Row, Statistic } from "antd";
+import { useEffect, useState } from "react";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import LineChart from "@ant-design/charts/es/line";
+import { db, storage } from "../FireBase";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+// import { G2 } from "@ant-design/plots";
+
+const getStocksReport = (allStocks, allOrders, targetYear, targetMonth) => {
+  console.log("Orders Array");
+  console.log(allOrders);
+  const stocksIntakeReport = allStocks.reduce(
+    (accumulator, stock) => {
+      const stockYear = dayjs(stock.dateTime).year();
+      const stockMonth = dayjs(stock.dateTime).month() + 1;
+
+      if (stockYear === targetYear) {
+        accumulator.yearlyStocksIntake += stock.quantity;
+        accumulator.yearlyStocksIntakeCost += stock.totalCost;
+      }
+
+      if (stockYear === targetYear && stockMonth === targetMonth) {
+        accumulator.monthlyStocksIntake += stock.quantity;
+        accumulator.monthlyStocksIntakeCost += stock.totalCost;
+      }
+
+      return accumulator;
+    },
+    {
+      yearlyStocksIntake: 0,
+      yearlyStocksIntakeCost: 0,
+      monthlyStocksIntake: 0,
+      monthlyStocksIntakeCost: 0,
+    }
+  );
+
+  const stocksSoldOutReport = allOrders.reduce(
+    (accumulator, order) => {
+      const orderYear = dayjs(order.dateTime).year();
+      const orderMonth = dayjs(order.dateTime).month() + 1;
+
+      if (orderYear === targetYear) {
+        accumulator.yearlyStocksSoldOut += order.quantity;
+        accumulator.yearlyStocksSoldOutCost += order.totalAmount;
+      }
+
+      if (orderYear === targetYear && orderMonth === targetMonth) {
+        accumulator.monthlyStocksSoldout += order.quantity;
+        accumulator.monthlyStocksSoldoutCost += order.totalAmount;
+      }
+
+      return accumulator;
+    },
+    {
+      yearlyStocksSoldOut: 0,
+      monthlyStocksSoldout: 0,
+      yearlyStocksSoldOutCost: 0,
+      monthlyStocksSoldoutCost: 0,
+    }
+  );
+
+  const stocksSales = allOrders.map((item) => {
+    return {
+      category: item.stock.category,
+      type: item.stock.type,
+      quantity: item.quantity,
+    };
+  });
+
+  const result = {};
+  const categories = ["mens", "womens", "kids"];
+
+  for (const category of categories) {
+    const filteredData = Object.entries(
+      stocksSales
+        .filter((item) => item.category === category)
+        .reduce((acc, item) => {
+          acc[item.type] = (acc[item.type] || 0) + item.quantity;
+          return acc;
+        }, {})
+    ).map(([key, value]) => {
+      return {
+        type: key,
+        value: value,
+      };
+    });
+
+    result[category] = filteredData;
+  }
+
+  // const result = filteredData.reduce((acc, item) => {
+  //   acc[item.class] = (acc[item.class] || 0) + item.count;
+  //   return acc;
+  // }, {});
+
+  console.log("Stocks Sales");
+  console.log(stocksSales);
+
+  const currentDate = dayjs();
+  const tmpArr = Object.entries(
+    allOrders
+      .filter((item) => {
+        const diffInMonths = currentDate.diff(item.dateTime, "month");
+        return diffInMonths < 2;
+      })
+      .reduce((acc, item) => {
+        acc[item.stock.type] = (acc[item.stock.type] || 0) + item.quantity;
+        return acc;
+      }, {})
+  )
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+
+  console.log("Temp Array");
+  console.log(tmpArr.map(([key, value]) => value));
+
+  let maxValue = Math.max(...tmpArr.map(([key, value]) => value));
+  console.log("Max Value");
+  console.log(maxValue);
+
+  const pastTwoMonthsData = tmpArr.map(([key, value]) => {
+    return {
+      category: key,
+      value: value,
+      type: "Soldout",
+      percentage: (value / maxValue) * 100,
+    };
+  });
+
+  console.log("Past Two Months Data");
+  console.log(pastTwoMonthsData);
+
+  // const pastTwonMonthsStocks = pastTwoMonthsData.filter()
+  const totalStocks = {};
+  for (const item of pastTwoMonthsData) {
+    totalStocks[item.category] = allStocks.find(
+      (stock) => stock.type === item.category
+    )?.quantity;
+  }
+
+  const availableStocks = Object.entries(totalStocks).map(([key, value]) => {
+    return {
+      category: key,
+      value: value,
+      type: "Available",
+    };
+  });
+
+  // result.availableStocks = availableStocks;
+  // result.pastTwoMonthsData = pastTwoMonthsData;
+
+  const combinedStocks = [...availableStocks, ...pastTwoMonthsData];
+  const transformData = pastTwoMonthsData.map((item) => {
+    return {
+      category: item.category,
+      percentage: item.percentage,
+    };
+  });
+
+  result.combinedStocks = combinedStocks;
+  result.transformData = transformData;
+
+  console.log("Transformd Data");
+  console.log(transformData);
+
+  const pastSixMonthsData = Object.entries(
+    allOrders
+      .filter((item) => {
+        const diffInMonths = currentDate.diff(item.dateTime, "month");
+
+        return diffInMonths < 6;
+      })
+      .reduce((acc, item) => {
+        let monthName = dayjs(item.dateTime).format("MMM");
+        acc[monthName] = (acc[monthName] || 0) + item.quantity;
+        return acc;
+      }, {})
+  ).map(([key, value]) => {
+    return {
+      Date: key,
+      scales: value,
+    };
+  });
+
+  result.pastSixMonthsData = pastSixMonthsData;
+  console.log("Past Six Months Data");
+  console.log(pastSixMonthsData);
+
+  console.log("Total Stocks Trending");
+  console.log(combinedStocks);
+
+  // const values = [110, 65, 80];
+
+  // // Step 1: Find the highest value
+  // const maxValue = Math.max(...values);
+
+  // // Step 2: Calculate the percentage of each value relative to the highest value
+  // const percentages = values.map((value) => (value / maxValue) * 100);
+
+  // console.log("Percentage values:", percentages);
+
+  let tmpData = { ...stocksIntakeReport, ...stocksSoldOutReport, ...result };
+  console.log("Temp Data");
+  console.log(tmpData);
+  return tmpData;
+};
 
 const DashBoard = () => {
   const [selectedDate, setSelectedDate] = useState(null);
+  const userDetail = useSelector((state) => state.login.userDetail);
+  const [statsData, setStatsData] = useState({
+    yearlyStocksIntake: 0,
+    yearlyStocksIntakeCost: 0,
+    monthlyStocksIntake: 0,
+    monthlyStocksIntakeCost: 0,
+    yearlyStocksSoldOut: 0,
+    yearlyStocksSoldOutCost: 0,
+    monthlyStocksSoldout: 0,
+    monthlyStocksSoldoutCost: 0,
+    combinedStocks: [],
+    transformData: [],
+    pastSixMonthsData: [],
+    // availableStocks: [],
+    // pastTwoMonthsData: [],
+    trendingStocksReport: [],
+    growthReport: [],
+  });
 
   const handleDateChange = (date, dateString) => {
     setSelectedDate(date, dateString);
     console.log(dateString);
   };
-  const mensData = [
-    { type: "Casual-shirt", value: 35 },
-    { type: "t-shirt", value: 25 },
-    { type: "jeans", value: 20 },
-    { type: "formal-shirt", value: 20 },
-    { type: "slimfit", value: 20 },
-  ];
 
-  const womensData = [
-    { type: "Umberella-chudithar", value: 25 },
-    { type: "Embroid Design Kurtis", value: 35 },
-    { type: "Rounded Bottom Design", value: 25 },
-    { type: "Cotton Frog Modal", value: 10 },
-    { type: "Women Straight Kurti", value: 15 },
-  ];
-  const kidsData = [
-    { type: "Jeans", value: 30 },
-    { type: "shirt and Pants", value: 20 },
-    { type: "T-Shirt and Trouser", value: 25 },
-    { type: "Frog", value: 10 },
-    { type: "Top and Bottom sets ", value: 15 },
-  ];
-  const interestedProcess = [
-    { type: "Embroid Design Kurtis", value: 70 },
-    { type: "Casual-Shirt", value: 50 },
-    { type: "T-shirt", value: 90 },
-    { type: "Umberella-Chudithar", value: 60 },
-    { type: "jeans", value: 45 },
-  ];
   const mensConfigure = {
-    data: mensData,
+    // data: mensData,
     angleField: "value",
     colorField: "type",
     radius: 0.6,
@@ -58,7 +251,7 @@ const DashBoard = () => {
     // interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
   };
   const womensConfigure = {
-    data: womensData,
+    // data: womensData,
     angleField: "value",
     colorField: "type",
     radius: 0.6,
@@ -72,7 +265,7 @@ const DashBoard = () => {
     // interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
   };
   const kidsConfigure = {
-    data: kidsData,
+    // data: kidsData,
     angleField: "value",
     colorField: "type",
     radius: 0.6,
@@ -86,59 +279,279 @@ const DashBoard = () => {
     // },
     // interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
   };
-  const interestedConfigure = {
-    data: interestedProcess,
-    xField: "type",
-    yField: "value",
-    seriesField: "type",
-    label: {
-      position: "middle",
 
-      style: {
-        fill: "#FFFFFF",
-        opacity: 0.8,
-        width: "500px",
-      },
-    },
-    legend: { position: "top-left" },
+  const prePareStatsData = () => {
+    const stocksArray = [];
+    const ordersArray = [];
+
+    getDocs(collection(db, "stocks"))
+      .then((docSnap) => {
+        docSnap.forEach((doc) => {
+          stocksArray.push(doc.data());
+        });
+
+        getDocs(collection(db, "orders"))
+          .then((docSnap) => {
+            docSnap.forEach((doc) => {
+              ordersArray.push(doc.data());
+            });
+            console.log("All Stoks Array");
+            console.log(stocksArray);
+            console.log("All Orders Array");
+            console.log(ordersArray);
+            const statsData = getStocksReport(
+              stocksArray,
+              ordersArray,
+              dayjs().year(),
+              dayjs().month() + 1
+            );
+            setStatsData(statsData);
+          })
+          .catch((error) => {
+            console.log(error);
+            message.error("Something went wrong");
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        message.error("Something went wrong");
+      });
   };
 
-  const data = [
-    { month: "Jan", name: "a", gdp: 3 },
-    { month: "Feb", name: "a", gdp: 4 },
-    { month: "Mar", name: "a", gdp: 2 },
-    { month: "Apr", name: "a", gdp: 6 },
-    { month: "May", name: "a", gdp: 3 },
-    { month: "Jun", name: "a", gdp: 8 },
-    //
-    { month: "Jul", name: "b", gdp: 2 },
-    { month: "Aug", name: "b", gdp: 5 },
-    { month: "Sep", name: "b", gdp: 3 },
-    { month: "Oct", name: "b", gdp: 7 },
-    { month: "Nov", name: "b", gdp: 4 },
-    { month: "Dec", name: "b", gdp: 10 },
+  const { registerTheme } = G2;
+  registerTheme("custom-theme", {
+    colors10: [
+      "#FACDAA",
+      "#F4A49E",
+      "#EE7B91",
+      "#E85285",
+      "#BE408C",
+      "#BE408C",
+    ],
+
+    /** 20色板 */
+    colors20: [
+      "#FACDAA",
+      "#F4A49E",
+      "#EE7B91",
+      "#E85285",
+      "#BE408C",
+      "#BE408C",
+      "#942D93",
+    ],
+  });
+
+  const uvBillData = [
+    {
+      category: "Cheeno Pant",
+      value: 350,
+      type: "Available",
+    },
+    {
+      category: "Formal Shirt",
+      value: 900,
+      type: "Available",
+    },
+    {
+      category: "Cargo Pant",
+      value: 300,
+      type: "Available",
+    },
+    {
+      category: "2019-06",
+      value: 450,
+      type: "Available",
+    },
+    {
+      category: "2019-07",
+      value: 470,
+      type: "Available",
+    },
+    {
+      category: "Cheeno Pant",
+      value: 220,
+      type: "Soldout",
+    },
+    {
+      category: "Formal Shirt",
+      value: 300,
+      type: "Soldout",
+    },
+    {
+      category: "Cargo Pant",
+      value: 250,
+      type: "Soldout",
+    },
+    {
+      category: "2019-06",
+      value: 220,
+      type: "Soldout",
+    },
+    {
+      category: "2019-07",
+      value: 362,
+      type: "Soldout",
+    },
   ];
-  const config = {
-    data,
-    xField: "month",
-    yField: "gdp",
-    seriesField: "name",
-    yAxis: {
-      label: {
-        formatter: (v) => `${v} B`,
-      },
+  const transformData = [
+    {
+      category: "Cheeno Pant",
+      percentage: 45,
     },
+    {
+      category: "Formal Shirt",
+      percentage: 20,
+    },
+    {
+      category: "Cargo Pant",
+      percentage: 75,
+    },
+    {
+      category: "2019-06",
+      percentage: 30,
+    },
+    {
+      category: "2019-07",
+      percentage: 92,
+    },
+  ];
+
+  const dualconfig = {
+    // data: [uvBillData, transformData],
+    data: [statsData.combinedStocks, statsData.transformData],
+    xField: "category",
+    yField: ["value", "percentage"],
+    geometryOptions: [
+      {
+        geometry: "column",
+        isStack: true,
+        seriesField: "type",
+        columnWidthRatio: 0.4,
+        label: {},
+      },
+      {
+        geometry: "line",
+      },
+    ],
     legend: {
-      position: "top",
-    },
-    smooth: true,
-    animation: {
-      appear: {
-        animation: "path-in",
-        duration: 5000,
+      marker: {
+        symbol: "circle",
+        style: {
+          lineWidth: 2,
+          r: 6,
+          stroke: "#5AD8A6",
+          fill: "#fff",
+        },
+      },
+      layout: "vertical",
+      position: "right",
+      itemName: {
+        formatter: (val) => `${val}`,
+        style: {
+          fill: "#333",
+        },
       },
     },
+    interactions: [
+      {
+        type: "element-highlight",
+      },
+      {
+        type: "active-region",
+      },
+    ],
+    animation: false,
+    theme: "custom-theme",
   };
+
+  const lineData = [
+    {
+      Date: "Jan",
+      scales: 20000,
+    },
+    {
+      Date: "Feb",
+      scales: 30000,
+    },
+    {
+      Date: "Mar",
+      scales: 90000,
+    },
+    {
+      Date: "Apr",
+      scales: 45000,
+    },
+    {
+      Date: "May",
+      scales: 28000,
+    },
+    {
+      Date: "Jun",
+      scales: 50000,
+    },
+    {
+      Date: "Jul",
+      scales: 43000,
+    },
+    {
+      Date: "Aug",
+      scales: 32000,
+    },
+    {
+      Date: "Sep",
+      scales: 24000,
+    },
+    {
+      Date: "Oct",
+      scales: 48000,
+    },
+    {
+      Date: "Nov",
+      scales: 55000,
+    },
+    {
+      Date: "Dec",
+      scales: 60000,
+    },
+  ];
+
+  const lineconfig = {
+    // data: lineData,
+    data: statsData.pastSixMonthsData,
+    padding: "auto",
+    xField: "Date",
+    yField: "scales",
+    annotations: [
+      {
+        type: "regionFilter",
+        start: ["min", "median"],
+        end: ["max", "0"],
+        color: "#F4664A",
+      },
+      {
+        type: "text",
+        position: ["min", "median"],
+        content: "Revenue",
+        offsetY: -4,
+        style: {
+          textBaseline: "bottom",
+        },
+      },
+      {
+        type: "line",
+        start: ["min", "median"],
+        end: ["max", "median"],
+        style: {
+          stroke: "#F4664A",
+          lineDash: [2, 2],
+        },
+      },
+    ],
+  };
+
+  useEffect(() => {
+    prePareStatsData();
+  }, []);
 
   return (
     <>
@@ -150,7 +563,7 @@ const DashBoard = () => {
               onChange={handleDateChange}
               picker="month"
               format="MMM/YYYY"
-              placeholder="Filter by date"
+              placeholder="Filter by month"
             />
           </div>
           {/* </Card> */}
@@ -163,13 +576,17 @@ const DashBoard = () => {
               <Col span={12}>
                 <Card className="currentStock" title="Stocks">
                   <Row>
-                    <Col span={12}>
-                      <Row>Intack :</Row>
-                      <Row>Sold Out :</Row>
+                    <Col span={16}>
+                      <Row>Yearly Stocks Intake</Row>
+                      <Row>Yearly Stocks Sold out</Row>
                     </Col>
-                    <Col span={12}>
-                      <Row>1000</Row>
-                      <Row>560</Row>
+                    <Col span={2}>
+                      <Row>:</Row>
+                      <Row>:</Row>
+                    </Col>
+                    <Col span={6}>
+                      <Row>{statsData.yearlyStocksIntake}</Row>
+                      <Row>{statsData.yearlyStocksSoldOut}</Row>
                     </Col>
                   </Row>
                   {/* {selectedDate && (
@@ -180,13 +597,17 @@ const DashBoard = () => {
               <Col span={12}>
                 <Card className="febStock" title="Revenue">
                   <Row>
-                    <Col span={12}>
-                      <Row>Spent :</Row>
-                      <Row>Revenue :</Row>
+                    <Col span={16}>
+                      <Row>Yearly Intake Cost</Row>
+                      <Row>Yearly SoldOut Cost</Row>
                     </Col>
-                    <Col span={12}>
-                      <Row>1000</Row>
-                      <Row>560</Row>
+                    <Col span={2}>
+                      <Row>:</Row>
+                      <Row>:</Row>
+                    </Col>
+                    <Col span={6}>
+                      <Row>{`₹${statsData.yearlyStocksIntakeCost}`}</Row>
+                      <Row>{`₹${statsData.yearlyStocksSoldOutCost}`}</Row>
                     </Col>
                   </Row>
                 </Card>
@@ -201,13 +622,17 @@ const DashBoard = () => {
               <Col span={12}>
                 <Card className="revenue" title="Stocks">
                   <Row>
-                    <Col span={12}>
-                      <Row>Intack :</Row>
-                      <Row>Sold Out:</Row>
+                    <Col span={16}>
+                      <Row>Monthly Stoks Intake</Row>
+                      <Row>Monthly Stocks Sold out</Row>
                     </Col>
-                    <Col span={12}>
-                      <Row>18,000</Row>
-                      <Row>13,000</Row>
+                    <Col span={2}>
+                      <Row>:</Row>
+                      <Row>:</Row>
+                    </Col>
+                    <Col span={6}>
+                      <Row>{statsData.monthlyStocksIntake}</Row>
+                      <Row>{statsData.monthlyStocksSoldout}</Row>
                     </Col>
                   </Row>
                 </Card>
@@ -215,13 +640,17 @@ const DashBoard = () => {
               <Col span={12}>
                 <Card className="clothItems" title="Revenue">
                   <Row>
-                    <Col span={12}>
-                      <Row>spent :</Row>
-                      <Row>Income:</Row>
+                    <Col span={16}>
+                      <Row>Monthly Intake Cost</Row>
+                      <Row>Monthly SoldOut Cost</Row>
                     </Col>
-                    <Col span={12}>
-                      <Row>18,000</Row>
-                      <Row>13,000</Row>
+                    <Col span={2}>
+                      <Row>:</Row>
+                      <Row>:</Row>
+                    </Col>
+                    <Col span={6}>
+                      <Row>{`₹${statsData.monthlyStocksIntakeCost}`}</Row>
+                      <Row>{`₹${statsData.monthlyStocksSoldoutCost}`}</Row>
                     </Col>
                   </Row>
                 </Card>
@@ -234,7 +663,9 @@ const DashBoard = () => {
         <Col span={8}>
           <Card title="Mens Data">
             <PieChart
+              // data={statsData.Mens || []}
               {...mensConfigure}
+              data={statsData?.mens || []}
               style={{ width: "100%", height: "300px" }}
             />
           </Card>
@@ -242,7 +673,9 @@ const DashBoard = () => {
         <Col span={8}>
           <Card title="Womens Data">
             <PieChart
+              // data={statsData.womens || []}
               {...womensConfigure}
+              data={statsData?.womens || []}
               style={{ width: "100%", height: "300px" }}
             />
           </Card>
@@ -250,14 +683,16 @@ const DashBoard = () => {
         <Col span={8}>
           <Card title="Kids Data">
             <PieChart
+              // data={statsData.kids || []}
               {...kidsConfigure}
+              data={statsData?.kids || []}
               style={{ width: "100%", height: "300px" }}
             />
           </Card>
         </Col>
       </Row>
       <Row gutter={[8, 8]}>
-        <Col span={12}>
+        {/* <Col span={12}>
           <Card style={{ height: "450px" }}>
             <Column
               {...interestedConfigure}
@@ -270,25 +705,19 @@ const DashBoard = () => {
           <Card>
             <LineChart {...config} />
           </Card>
+        </Col> */}
+        <Col span={12}>
+          <Card title="Trending Analysis">
+            <DualAxes {...dualconfig} />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card title="Growth Analysis">
+            <Line {...lineconfig} />
+          </Card>
         </Col>
       </Row>
     </>
   );
 };
 export default DashBoard;
-{
-  /* <Col span={6}>   
-            <Card className="clothItems" title="Monthly Revenue">
-              <Row>
-                <Col span={12}>
-                  <Row>Spent:</Row>
-                  <Row>Income:</Row>
-                </Col>
-                <Col span={12}>
-                  <Row>1,50,000</Row>
-                  <Row>1,20,000</Row>
-                </Col>
-              </Row>
-            </Card>
-            <Col> */
-}

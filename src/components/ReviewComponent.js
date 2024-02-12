@@ -1,7 +1,7 @@
 import { Avatar, Rate } from "antd";
-import { REVIEWS } from "../common/Constants";
+// import { REVIEWS } from "../common/Constants";
 
-const ReviewComponent = () => {
+const ReviewComponent = ({ reviews }) => {
   const colors = (defaultValue) => {
     if (defaultValue >= 4) {
       return "#52c41a";
@@ -22,7 +22,7 @@ const ReviewComponent = () => {
       >
         Ratings & Reviews
       </div>
-      {REVIEWS.map((item, index) => (
+      {reviews.map((item, index) => (
         <>
           <div key={index} style={{ margin: "10px 0px 10px 10px" }}>
             <Avatar

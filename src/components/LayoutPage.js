@@ -19,7 +19,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import WomensCollections from "./WomensCollections";
-import MensCollections from "./MensCollections ";
+import MensCollections from "./MensCollections";
 import KidsCollections from "./KidsCollections ";
 // import HomePage from "./HomePage";
 import { useDispatch, useSelector } from "react-redux";

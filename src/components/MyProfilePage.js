@@ -19,7 +19,9 @@ import {
   UserOutlined,
   ArrowRightOutlined,
   LogoutOutlined,
+  CloseSquareFilled,
 } from "@ant-design/icons";
+
 import TextArea from "antd/es/input/TextArea";
 
 const MyProfilePage = () => {
@@ -135,17 +137,22 @@ const MyProfilePage = () => {
         onCancel={() => setShowLogoutModal(false)}
         closable={false}
         centered
-        width={300}
+        width={360}
         footer={null}
         maskClosable={false}
-        style={{ borderRadius: "15px" }}
+        // style={{ borderRadius: "15px" }}
       >
         <Result
-          icon={<ExclamationCircleOutlined style={{ color: "green" }} />}
+          status="warning"
+          icon={
+            <ExclamationCircleOutlined
+            // style={{ color: "green" }}
+            />
+          }
           title={
             <>
               <span style={{ fontSize: "15px" }}>
-                Hi,{loggedInUserInfo.username}
+                Hi, {loggedInUserInfo.username}
               </span>
               <br />
               <span style={{ fontSize: "15px" }}>
@@ -155,7 +162,7 @@ const MyProfilePage = () => {
           }
           extra={[
             <>
-              <Row justify="end">
+              <Row justify="end" style={{ paddingTop: "20px" }}>
                 <Space>
                   <Col span={4} offset={18}>
                     <Button
@@ -184,7 +191,12 @@ const MyProfilePage = () => {
         />
       </Modal>
       {showProfileModal && (
-        <Modal open onCancel={() => setShowProfileModal(false)} footer={null}>
+        <Modal
+          open
+          onCancel={() => setShowProfileModal(false)}
+          footer={null}
+          closeIcon={<CloseSquareFilled className="modal_close_icon" />}
+        >
           <Tabs defaultActiveKey="1">
             <TabPane tab="Profile" key="1" icon={<UserOutlined />}>
               <Form

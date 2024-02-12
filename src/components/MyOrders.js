@@ -1,10 +1,20 @@
-import { Button, Drawer, Image, message, Table, Tag, Timeline } from "antd";
+import {
+  Button,
+  Drawer,
+  Image,
+  message,
+  Row,
+  Table,
+  Tag,
+  Timeline,
+} from "antd";
 import { MY_ORDERS, DETAILS } from "../common/OrderDetails";
 import { useEffect, useState } from "react";
 import {
   ClockCircleOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
+  CloseSquareFilled,
 } from "@ant-design/icons";
 import { getMyOrdersCols } from "../common/Helpers";
 import { collection, getDocs } from "firebase/firestore";
@@ -13,7 +23,7 @@ import { useSelector } from "react-redux";
 
 const MyOrders = () => {
   const [loading, setLoading] = useState(false);
-  const [myOrders, setMyOrders] = useState(MY_ORDERS, DETAILS);
+  const [myOrders, setMyOrders] = useState([]);
   const [showTrackingDrawer, setShowTrackingDrawer] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -22,9 +32,23 @@ const MyOrders = () => {
 
   const handleTrackingOrder = (record) => {
     // setSelectedTrackingId(record.trackingId);
-    const details = DETAILS.filter((item) => item.order_id === record.order_id);
-    setTrackingDetails(details);
-    setShowTrackingDrawer(true);
+    let tmpOrderDetails = [];
+    getDocs(collection(db, "order_details"))
+      .then((docSnap) => {
+        docSnap.forEach((doc) => {
+          tmpOrderDetails.push(doc.data());
+        });
+        // const orders = tmpOrderDetails.filter(
+        //   (stock) => stock.user_id === userDetail.user_id
+        // );
+        setTrackingDetails(tmpOrderDetails);
+        setLoading(false);
+        setShowTrackingDrawer(true);
+      })
+      .catch((error) => {});
+    // const details = DETAILS.filter((item) => item.order_id === record.order_id);
+    // etTrackingDetails(details);
+    // setShowTrackingDrawer(true);
   };
 
   const closeTrackingDrawer = () => {
@@ -71,7 +95,11 @@ const MyOrders = () => {
         loading={loading}
         dataSource={myOrders}
         columns={getMyOrdersCols(handleTrackingOrder)}
-        title={() => "My Orders"}
+        title={() => (
+          <Row justify="start" style={{ marginTop: "0px 0px 10px 0px" }}>
+            <span style={{ color: "black", fontSize: "20px" }}>My Orders</span>
+          </Row>
+        )}
         pagination={false}
       />
 
@@ -80,6 +108,7 @@ const MyOrders = () => {
         onClose={closeTrackingDrawer}
         placement="right"
         title="Order Tracking"
+        closeIcon={<CloseSquareFilled className="modal_close_icon" />}
       >
         <Timeline>
           {trackingDetails.map((item, index) => (

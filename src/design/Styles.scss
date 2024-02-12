@@ -87,26 +87,30 @@
 }
 .currentStock {
   /* width: 200px; */
-  background-color: rgb(79, 184, 216);
-  height: 130px;
-  /* color: #ffffff; */
+  background: linear-gradient(to bottom, #be7cb4, #84168e);
+  height: 150px;
+  color: #ffffff;
 }
 .febStock {
   /* width: 200px; */
-  background-color: rgb(226, 94, 5);
-  height: 130px;
+  background: linear-gradient(to bottom, #cdb887, #c19009);
+  height: 150px;
+  color: #ffffff;
 }
 .revenue {
   /* width: 200px; */
-  background-color: rgb(17, 109, 40);
-  height: 130px;
-  /* color: #ffffff; */
+  background: linear-gradient(to bottom, #75bda6, #0c9277);
+  height: 150px;
+  color: #ffffff;
 }
 .clothItems {
   /* width: 200px; */
-  background-color: rgb(228, 50, 124);
-  height: 130px;
-  /* color: #ffffff; */
+  background: linear-gradient(to right, #e192b4, #b0095c);
+  height: 150px;
+  color: #ffffff;
+}
+.reportstyle {
+  font-size: 15px;
 }
 .ant-drawer-close {
   position: absolute;
@@ -167,13 +171,17 @@
   }
 }
 .logoutStyle {
-  background: linear-gradient(to right, #97ac3c, #06843f);
+  // background: linear-gradient(to right, #97ac3c, #06843f);
+  background: linear-gradient(to right, #ffc53d, #faad14);
   width: 80px;
+  // color: white;
 }
-// .logoutStyle:hover {
-//   color: white;
-//   background: linear-gradient(to right, #97ac3c, #0da27d);
-// }
+.logoutStyle:hover {
+  background: linear-gradient(to right, #ffc53d, #faad14) !important;
+  width: 80px;
+  color: black !important;
+  border: 1px solid #faad14 !important;
+}
 .logoutArrowStyle {
   animation-name: arrow;
   animation-iteration-count: infinite;
@@ -194,5 +202,45 @@
 }
 
 // ::-webkit-scrollbar {
-//   width: 15px;
+//   width: 12px; /* width of the scrollbar */
+// }
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f5f5f5;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #f5f5f5;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #bfbfbf;
+  overflow-x: auto;
+}
+
+.modal_close_icon {
+  font-size: 24px;
+  color: #ff4d4f;
+}
+.modal_close_icon :hover {
+  font-size: 26px;
+}
+
+.loader-cotainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+// .custom-dropdown {
+//   height: 120px;
 // }

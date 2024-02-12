@@ -1,79 +1,126 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KIDS_DETAILS } from "../common/KidsConstant";
-import { Badge, Card, Col, Rate, Row, Space } from "antd";
+import { Badge, Card, Col, message, Rate, Row, Space } from "antd";
 import CollectionModal from "./CollectionModal";
+import { KIDS_CATEGORY } from "../common/Constants";
+import Loader from "./Loader";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../FireBase";
 
 const KidsCollections = () => {
-  const [kidsDetails, setKidsDetails] = useState(KIDS_DETAILS);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showCollectionModal, setShowCollectionModal] = useState(null);
+  const [kidsStocks, setKidsStocks] = useState([]);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedStock, setSelectedStock] = useState(null);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(false);
 
   const showModal = (Item) => {
-    setShowCollectionModal(Item);
-    setIsModalOpen(true);
+    setSelectedStock(Item);
+    setShowDetailModal(true);
   };
+
+  const getKidsStocks = () => {
+    const tmpStocksArray = [];
+    setLoading(true);
+    getDocs(collection(db, "stocks"))
+      .then((docSnap) => {
+        docSnap.forEach((doc) => {
+          tmpStocksArray.push(doc.data());
+        });
+        const activeStocks = tmpStocksArray.filter(
+          (stock) => stock.isActive && stock.category == KIDS_CATEGORY
+        );
+        setKidsStocks(activeStocks);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.group(error);
+        messageApi.open({
+          type: "error",
+          key: "msg-key",
+          content: <div className="msg-container">Something went wrong</div>,
+          icon: <></>,
+          className: "custom-error-msg",
+          style: {
+            marginTop: "3vh",
+          },
+        });
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getKidsStocks();
+  }, []);
 
   return (
     <>
-      <Row gutter={[8, 8]} className="imagestyle">
-        {kidsDetails.map((item, index) => (
-          <Col span={6} key={index}>
-            <Badge.Ribbon
-              text={
-                item.deliveryCharge > 10
-                  ? `delivery ₹${item.deliveryCharge}`
-                  : "Free delivery"
-              }
-              color={item.deliveryCharge > 10 ? "#faad14" : " #a0d911"}
-            >
-              <Card
-                onClick={() => showModal(item)}
-                className="cardStyle"
-                style={{ cursor: "pointer" }}
+      {contextHolder}
+      {loading ? (
+        <Loader />
+      ) : (
+        <Row gutter={[8, 8]} className="imagestyle">
+          {kidsStocks.map((item, index) => (
+            <Col span={6} key={index}>
+              <Badge.Ribbon
+                text={
+                  item.deliveryCharge > 10
+                    ? `delivery ₹${item.deliveryCharge}`
+                    : "Free delivery"
+                }
+                color={item.deliveryCharge > 10 ? "#faad14" : " #a0d911"}
               >
-                <img src={item.src} width={250} height={250}></img>
-                <div>
-                  <p className="dressType">{item.type}</p>
-                </div>
-                <p>{`₹${item.price}`}</p>
-                <p
-                  style={{
-                    backgroundColor: "rgb(4, 101, 51)",
-                    width: "50px",
-                    padding: "5px",
-                    borderRadius: "5px",
-                  }}
+                <Card
+                  onClick={() => showModal(item)}
+                  className="cardStyle"
+                  style={{ cursor: "pointer" }}
                 >
-                  <span style={{ color: "white", fontSize: "13px" }}>4.2</span>
-                  <span>
-                    <Rate
-                      allowHalf
-                      count={1}
-                      style={{
-                        color: "white",
-                        fontSize: "16px",
-                        backgroundColor: "rgb(4, 101, 51)",
-                      }}
-                    />
-                  </span>
-                </p>
-                <p>{item.shop}</p>
-                <Space>
-                  <span>Sizes: </span>
-                  {item.sizes.map(({ size, value }) => (
-                    <span key={size}>{`${size} ,`}</span>
-                  ))}
-                </Space>
-              </Card>
-            </Badge.Ribbon>
-          </Col>
-        ))}
-      </Row>
-      {showCollectionModal && (
+                  <img src={item.src} width={250} height={250}></img>
+                  <div>
+                    <p className="dressType">{item.type}</p>
+                  </div>
+                  <p>{`₹${item.price}`}</p>
+                  <p
+                    style={{
+                      backgroundColor: "rgb(4, 101, 51)",
+                      width: "50px",
+                      padding: "5px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <span style={{ color: "white", fontSize: "13px" }}>
+                      4.2
+                    </span>
+                    <span>
+                      <Rate
+                        allowHalf
+                        count={1}
+                        style={{
+                          color: "white",
+                          fontSize: "16px",
+                          backgroundColor: "rgb(4, 101, 51)",
+                        }}
+                      />
+                    </span>
+                  </p>
+                  <p>{item.shop}</p>
+                  <Space>
+                    <span>Sizes: </span>
+                    {Object.entries(item.sizes || {}).map(([size, value]) => (
+                      <span key={size}>{`${size} ,`}</span>
+                    ))}
+                  </Space>
+                </Card>
+              </Badge.Ribbon>
+            </Col>
+          ))}
+        </Row>
+      )}
+      {selectedStock && (
         <CollectionModal
-          showCollectionModal={showCollectionModal}
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
+          selectedStock={selectedStock}
+          showDetailModal={showDetailModal}
+          setShowDetailModal={setShowDetailModal}
         />
       )}
     </>

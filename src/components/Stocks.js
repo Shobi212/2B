@@ -15,6 +15,7 @@ import {
   message,
   InputNumber,
   Result,
+  Image,
 } from "antd";
 import {
   EditOutlined,
@@ -23,6 +24,7 @@ import {
   InboxOutlined,
   PlusOutlined,
   CloudUploadOutlined,
+  CloseSquareFilled,
 } from "@ant-design/icons";
 import {
   ref,
@@ -42,12 +44,17 @@ import {
 import dayjs from "dayjs";
 import { getStocksCols } from "../common/Helpers";
 import {
+  REVIEWS,
   SHOP_OPTIONS,
   SIZES,
   STOCK_CATEGORY_OPTIONS,
   STOCK_COLOR_OPTIONS,
   STOCK_TYPE_OPTIONS,
 } from "../common/Constants";
+import { MENS_DETAILS } from "../common/MensConstant";
+import { WOMENS_DETAILS } from "../common/WomensConstant";
+import { KIDS_DETAILS } from "../common/KidsConstant";
+import { DETAILS, MY_ORDERS } from "../common/OrderDetails";
 
 const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
 
@@ -68,6 +75,9 @@ const Stocks = () => {
     setShowModal(true);
     setSelectedStock({ ...record });
   };
+
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const onValuesChange = (changedValues, values) => {
     const formItemsToCheck = ["price", "sizes"];
@@ -95,6 +105,7 @@ const Stocks = () => {
   const closeEditModal = () => {
     setShowModal(false);
     form.resetFields();
+    setFileURL(null);
   };
 
   const handleDelete = (record) => {
@@ -193,6 +204,7 @@ const Stocks = () => {
         shop: values.shop,
         isActive: true,
       };
+      console.log(stockDetail);
       const stocksDocPath = `stocks/${stockDetail.stockId}`;
       setDoc(doc(db, stocksDocPath), stockDetail)
         .then(() => {
@@ -209,7 +221,7 @@ const Stocks = () => {
             },
           });
           setLoading(false);
-          setShowModal(false);
+          // setShowModal(false);
           getStocks();
         })
         .catch((error) => {
@@ -353,8 +365,51 @@ const Stocks = () => {
       });
   };
 
+  const loadScript = async () => {
+    // for (const [index, item] of MENS_DETAILS.entries()) {
+    // for (const [index, item] of WOMENS_DETAILS.entries()) {
+    for (const [index, item] of KIDS_DETAILS.entries()) {
+      let tmpItem = {
+        ...item,
+        ...{
+          colors: ["Blue", "Grey", "Orange"],
+          sizes: {
+            S: 2,
+            M: 4,
+            L: 2,
+            XL: 2,
+            XXL: 2,
+          },
+          price: 750,
+          deliveryCharge: 0,
+          quantity: 30,
+          totalCost: 2000,
+        },
+        ...{
+          date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+          stockId: dayjs().valueOf() + index,
+          isActive: true,
+          reviews: REVIEWS,
+          shop: "2B Boutique",
+        },
+      };
+      console.log("Item : " + index);
+      console.log(tmpItem);
+      const stocksDocPath = `stocks/${tmpItem.stockId}`;
+      await setDoc(doc(db, stocksDocPath), tmpItem);
+    }
+  };
+
+  // const loadOrderDetails = async () => {
+  //   for (const order of DETAILS) {
+  //     const ordersPath = `order_details/${order.order_id}`;
+  //     await setDoc(doc(db, ordersPath), order);
+  //   }
+  // };
   useEffect(() => {
-    getStocks();
+    // getStocks();
+    // loadScript();
+    // loadOrderDetails();
   }, []);
 
   useEffect(() => {
@@ -409,7 +464,8 @@ const Stocks = () => {
         footer={null}
         width={750}
         style={{ top: 15 }}
-        closable="false"
+        closable={false}
+        closeIcon={<CloseSquareFilled className="modal_close_icon" />}
       >
         <Form
           form={form}
@@ -525,7 +581,9 @@ const Stocks = () => {
                 ]}
               >
                 <Select
+                  showSearch
                   placeholder="Select type"
+                  filterOption={filterOption}
                   options={STOCK_TYPE_OPTIONS}
                 />
               </Form.Item>
@@ -587,12 +645,11 @@ const Stocks = () => {
             </Col>
           </Row>
           <Row>
-            <Col span={20}>
+            <Col span={9}>
               <Form.Item
                 label="Upload"
-                // valuePropName="fileList"
-                labelCol={{ span: 5 }}
-                wrapperCol={{ span: 12 }}
+                labelCol={{ span: 11 }}
+                wrapperCol={{ span: 5 }}
                 rules={[
                   {
                     required: true,
@@ -624,6 +681,11 @@ const Stocks = () => {
                 </Upload>
               </Form.Item>
             </Col>
+            {fileURL && (
+              <Col span={4}>
+                <Image width={100} height={100} src={fileURL} />
+              </Col>
+            )}
           </Row>
           <Row justify="end">
             <Col>

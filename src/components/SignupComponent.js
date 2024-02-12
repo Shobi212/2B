@@ -2,9 +2,14 @@ import { Button, Col, Drawer, Form, Input, Row, message } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  MenuOutlined,
+  CloseOutlined,
+  CloseSquareFilled,
+} from "@ant-design/icons";
 import { db } from "../FireBase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+
 const SignupComponent = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [showSignUpDrawer, setShowSignUpDrawer] = useState(false);
@@ -136,7 +141,7 @@ const SignupComponent = () => {
           onClose={drawerClose}
           width={520}
           placement="right"
-          closeIcon={<CloseOutlined className="ant-drawer-close" />}
+          closeIcon={<CloseSquareFilled className="modal_close_icon" />}
         >
           <Form
             name="signupForm"

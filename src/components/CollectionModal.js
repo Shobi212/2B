@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { db } from "../FireBase";
 import { showLoginAlertModal } from "../store/slice/ModalSlice";
 import ReviewComponent from "./ReviewComponent";
+import { CloseSquareFilled } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -119,6 +120,7 @@ const CollectionModal = ({
         }}
         className="custom_scrollbar"
         maskClosable={false}
+        closeIcon={<CloseSquareFilled className="modal_close_icon" />}
       >
         {selectedStock && (
           <>
@@ -126,41 +128,21 @@ const CollectionModal = ({
               <Col span={12}>
                 <Image src={selectedStock.src} width={300} height={300}></Image>
               </Col>
-              <Col span={12}>
-                <Row className="rowpadding">
-                  <Col span={4}>
-                    <span>Type</span>
-                  </Col>
-                  <Col span={2}>
-                    <span>:</span>
-                  </Col>
-                  <Col span={18}>
-                    <span className="dressType">{selectedStock.type}</span>
-                  </Col>
-                </Row>
-                <Row className="rowpadding">
-                  {/* <Space> */}
-                  <Col span={4}>
-                    <span>Price</span>
-                  </Col>
-                  <Col span={2}>
-                    <span>:</span>
-                  </Col>
-                  <Col span={18}>
-                    <span className="dressPrice">
-                      {`₹${selectedStock.price}`}
-                    </span>
-                  </Col>
-                  {/* </Space> */}
-                </Row>
-                <Row className="rowpadding">
-                  <Col span={4}>
-                    <span>Colors</span>
-                  </Col>
-                  <Col span={2}>
-                    <span>:</span>
-                  </Col>
-                  <Col span={18}>
+
+              <Col span={11}>
+                <Descriptions
+                  column={1}
+                  bordered
+                  labelStyle={{ width: "30%" }}
+                  contentStyle={{ width: "70%" }}
+                >
+                  <Descriptions.Item label="Type">
+                    {selectedStock.type}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Price">
+                    ₹{selectedStock.price}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Colors">
                     <Radio.Group
                       defaultValue={selectedStock.colors[1]}
                       buttonStyle="solid"
@@ -175,18 +157,9 @@ const CollectionModal = ({
                         ))}
                       </Row>
                     </Radio.Group>
-                  </Col>
-                </Row>
-                <Row className="rowpadding">
-                  <Col span={4}>
-                    <span>Sizes</span>
-                  </Col>
-                  <Col span={2}>
-                    <span>:</span>
-                  </Col>
-                  <Col span={18}>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Sizes">
                     <Radio.Group
-                      // defaultValue={selectedStock.sizes[0].size}
                       onChange={handleSizeChange}
                       defaultValue={
                         Object.entries(selectedStock.sizes || {})[0][0]
@@ -204,29 +177,15 @@ const CollectionModal = ({
                         )}
                       </Row>
                     </Radio.Group>
-                  </Col>
-                </Row>
-                <Row className="rowpadding" justify="start">
-                  <Col span={4}>
-                    {/* <span>Total : ₹{selectedStock.price * quantity}</span> */}
-                    <span>Total </span>
-                  </Col>
-                  <Col span={2}>
-                    <span>:</span>
-                  </Col>
-                  <Col span={4}>
-                    <span>₹{totalAmount}</span>
-                  </Col>
-                  <Col span={4}>
-                    <span>Quantity</span>
-                  </Col>
-                  <Col span={2}>
-                    <span>:</span>
-                  </Col>
-                  <Col span={4}>
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Total">
+                    ₹{totalAmount}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Quantity">
                     <Select
+                      // dropdownClassName="custom-dropdown"
                       defaultValue={1}
-                      style={{ width: "80px", height: "20px" }}
+                      style={{ width: "80px", height: "30px" }}
                       onChange={handleQuantityChanges}
                     >
                       {[...Array(11).keys()].map((num) => (
@@ -235,9 +194,10 @@ const CollectionModal = ({
                         </Option>
                       ))}
                     </Select>
-                  </Col>
-                </Row>
+                  </Descriptions.Item>
+                </Descriptions>
               </Col>
+
               {/* </Space> */}
             </Row>
             <Card title="">
@@ -292,7 +252,7 @@ const CollectionModal = ({
                 </Col>
               </Row>
             </Card>
-            <ReviewComponent />
+            <ReviewComponent reviews={selectedStock.reviews} />
             <Row justify="end" style={{ marginTop: "40px" }}>
               <Space>
                 <Col>
@@ -322,6 +282,7 @@ const CollectionModal = ({
         style={{ top: 120 }}
         // width={350}
         footer={null}
+        closeIcon={<CloseSquareFilled className="modal_close_icon" />}
       >
         {/* <Result
           status="success"

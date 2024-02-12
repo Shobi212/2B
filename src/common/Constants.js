@@ -1,27 +1,102 @@
+export const MENS_CATEGORY = "mens";
+
+export const WOMENS_CATEGORY = "womens";
+
+// export const KIDS_CATEGORY = "kids";
+export const KIDS_CATEGORY = "Kids";
+
 export const STOCK_TYPE_OPTIONS = [
   {
-    value: "Formal shirt",
-    label: "Formal shirt",
+    value: "Shirts",
+    label: "Shirts",
   },
   {
-    value: "Casual shirt",
-    label: "Casual shirt",
+    value: "T-Shirts",
+    label: "T-Shirts",
+  },
+  {
+    value: "Polos",
+    label: "Polos",
+  },
+  {
+    value: "Crew Necks",
+    label: "Crew Necks",
+  },
+  {
+    value: "V Necks",
+    label: "V Necks",
   },
   {
     value: "Jeans",
     label: "Jeans",
   },
   {
-    value: "Skinny fit",
-    label: "Skinny fit ",
+    value: "Coats",
+    label: "Coats",
   },
   {
-    value: "Umberella chudithar",
-    label: "Umberella chudithar",
+    value: "Jackets",
+    label: "Jackets",
   },
   {
-    value: "Emberiod Kurtis",
-    label: "Emberiod Kurtis",
+    value: "Chinos",
+    label: "Chinos",
+  },
+  {
+    value: "Pants",
+    label: "Pants",
+  },
+  {
+    value: "Shorts",
+    label: "Shorts",
+  },
+  {
+    value: "Tailored Trousers",
+    label: "Tailored Trousers",
+  },
+  {
+    value: "Sweatshirts",
+    label: "Sweatshirts",
+  },
+  {
+    value: "Kurtis",
+    label: "Kurtis",
+  },
+  {
+    value: "Sarees",
+    label: "Sarees",
+  },
+  {
+    value: "Tops",
+    label: "Tops",
+  },
+  {
+    value: "leggins",
+    label: "leggins",
+  },
+  {
+    value: "Shawls",
+    label: "Shawls",
+  },
+  {
+    value: "Jumpsuits",
+    label: "Jumpsuits",
+  },
+  {
+    value: "Jeggings",
+    label: "Jeggings",
+  },
+  {
+    value: "Palazzos",
+    label: "Palazzos",
+  },
+  {
+    value: "Skirts",
+    label: "Skirts",
+  },
+  {
+    value: "Nightsuits",
+    label: "Nightsuits",
   },
 ];
 
@@ -36,9 +111,9 @@ export const STOCK_COLOR_OPTIONS = [
 ];
 
 export const STOCK_CATEGORY_OPTIONS = [
-  { value: "Mens", label: "Mens" },
-  { value: "Womens", label: "Womens" },
-  { value: "Kids", label: "Kids" },
+  { value: "mens", label: "Mens" },
+  { value: "womens", label: "Womens" },
+  { value: "kids", label: "Kids" },
 ];
 
 export const SIZES = ["S", "M", "L", "XL", "XXL"];
@@ -53,21 +128,22 @@ export const SHOP_OPTIONS = [
     label: "Stylerz",
   },
 ];
+
 export const REVIEWS = [
   {
     name: "Priya Murugan",
     ratings: 3.5,
     posted: "Posted on 12 dec 2023",
-    comment: "It was looking so good,nice product and good quality",
+    comment: "It was looking so good, nice product and good quality",
   },
   {
-    name: "Priya Murugan",
+    name: "Albert Ajay",
     ratings: 2.5,
     posted: "Posted on 12 dec 2023",
-    comment: "It was looking so good,nice product and good quality",
+    comment: "worth for money",
   },
   {
-    name: "Priya Murugan",
+    name: "Kalai Selvan",
     ratings: 3,
     posted: "Posted on 12 dec 2023",
     comment: "It was looking so good,nice product and good quality",
