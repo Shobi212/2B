@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { KIDS_DETAILS } from "../common/KidsConstant";
 import { Badge, Card, Col, message, Rate, Row, Space } from "antd";
 import CollectionModal from "./CollectionModal";
 import { KIDS_CATEGORY } from "../common/Constants";
@@ -28,7 +27,7 @@ const KidsCollections = () => {
           tmpStocksArray.push(doc.data());
         });
         const activeStocks = tmpStocksArray.filter(
-          (stock) => stock.isActive && stock.category == KIDS_CATEGORY
+          (stock) => stock.isActive && stock.category === KIDS_CATEGORY
         );
         setKidsStocks(activeStocks);
         setLoading(false);
@@ -51,6 +50,7 @@ const KidsCollections = () => {
 
   useEffect(() => {
     getKidsStocks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -75,7 +75,7 @@ const KidsCollections = () => {
                   className="cardStyle"
                   style={{ cursor: "pointer" }}
                 >
-                  <img src={item.src} width={250} height={250}></img>
+                  <img src={item.src} width={250} height={250} alt=""></img>
                   <div>
                     <p className="dressType">{item.type}</p>
                   </div>

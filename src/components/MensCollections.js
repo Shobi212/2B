@@ -1,5 +1,4 @@
 import { Badge, Card, Col, message, Rate, Row, Space } from "antd";
-import { MENS_DETAILS } from "../common/MensConstant";
 import { useEffect, useState } from "react";
 import CollectionModal from "./CollectionModal";
 import { collection, getDocs } from "firebase/firestore";
@@ -24,7 +23,7 @@ const MensCollections = () => {
           tmpStocksArray.push(doc.data());
         });
         const activeStocks = tmpStocksArray.filter(
-          (stock) => stock.isActive && stock.category == "mens"
+          (stock) => stock.isActive && stock.category === "mens"
         );
         setMensStocks(activeStocks);
       })
@@ -45,6 +44,7 @@ const MensCollections = () => {
 
   useEffect(() => {
     getMensStocks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -66,7 +66,7 @@ const MensCollections = () => {
                 className="cardStyle"
                 style={{ cursor: "pointer" }}
               >
-                <img src={item.src} width={250} height={250}></img>
+                <img src={item.src} alt="" width={250} height={250}></img>
                 <div>
                   <p className="dressType">{item.type}</p>
                 </div>

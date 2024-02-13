@@ -1,19 +1,12 @@
 import {
-  Button,
   Drawer,
-  Image,
   message,
   Row,
   Table,
-  Tag,
   Timeline,
 } from "antd";
-import { MY_ORDERS, DETAILS } from "../common/OrderDetails";
 import { useEffect, useState } from "react";
 import {
-  ClockCircleOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
   CloseSquareFilled,
 } from "@ant-design/icons";
 import { getMyOrdersCols } from "../common/Helpers";
@@ -86,6 +79,7 @@ const MyOrders = () => {
 
   useEffect(() => {
     getMyOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -118,7 +112,7 @@ const MyOrders = () => {
                   {shipment.shipments.map((step, stepIndex) => (
                     <div key={stepIndex}>
                       <p className="trackOrder">
-                        {step.children == "shipped"
+                        {step.children === "shipped"
                           ? `${step.children} expected by Tue`
                           : step.children}
                       </p>

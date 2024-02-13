@@ -1,12 +1,8 @@
 import { Button, Col, Drawer, Form, Input, Row, message } from "antd";
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  MenuOutlined,
-  CloseOutlined,
-  CloseSquareFilled,
-} from "@ant-design/icons";
+import { CloseSquareFilled } from "@ant-design/icons";
 import { db } from "../FireBase";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 

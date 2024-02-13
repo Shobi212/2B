@@ -3,10 +3,7 @@ import {
   Space,
   Tag,
   Button,
-  Drawer,
   Image,
-  Table,
-  Timeline,
 } from "antd";
 import {
   EditOutlined,
@@ -14,10 +11,6 @@ import {
   ClockCircleOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
-  UploadOutlined,
-  InboxOutlined,
-  PlusOutlined,
-  CloudUploadOutlined,
 } from "@ant-design/icons";
 
 export const getStocksCols = (handleEdit, handleDelete) => {

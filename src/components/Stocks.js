@@ -5,27 +5,16 @@ import {
   Form,
   Input,
   Modal,
-  Popconfirm,
   Row,
   Select,
   Space,
   Table,
-  Tag,
   Upload,
   message,
   InputNumber,
-  Result,
   Image,
 } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  UploadOutlined,
-  InboxOutlined,
-  PlusOutlined,
-  CloudUploadOutlined,
-  CloseSquareFilled,
-} from "@ant-design/icons";
+import { PlusOutlined, CloseSquareFilled } from "@ant-design/icons";
 import {
   ref,
   uploadBytes,
@@ -33,30 +22,16 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { db, storage } from "../FireBase";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import dayjs from "dayjs";
 import { getStocksCols } from "../common/Helpers";
 import {
-  REVIEWS,
   SHOP_OPTIONS,
   SIZES,
   STOCK_CATEGORY_OPTIONS,
   STOCK_COLOR_OPTIONS,
   STOCK_TYPE_OPTIONS,
 } from "../common/Constants";
-import { MENS_DETAILS } from "../common/MensConstant";
-import { WOMENS_DETAILS } from "../common/WomensConstant";
-import { KIDS_DETAILS } from "../common/KidsConstant";
-import { DETAILS, MY_ORDERS } from "../common/OrderDetails";
-
-const allowedImageTypes = ["image/jpeg", "image/png", "image/gif"];
 
 const Stocks = () => {
   const [mode, setMode] = useState("ADD");
@@ -365,40 +340,40 @@ const Stocks = () => {
       });
   };
 
-  const loadScript = async () => {
-    // for (const [index, item] of MENS_DETAILS.entries()) {
-    // for (const [index, item] of WOMENS_DETAILS.entries()) {
-    for (const [index, item] of KIDS_DETAILS.entries()) {
-      let tmpItem = {
-        ...item,
-        ...{
-          colors: ["Blue", "Grey", "Orange"],
-          sizes: {
-            S: 2,
-            M: 4,
-            L: 2,
-            XL: 2,
-            XXL: 2,
-          },
-          price: 750,
-          deliveryCharge: 0,
-          quantity: 30,
-          totalCost: 2000,
-        },
-        ...{
-          date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-          stockId: dayjs().valueOf() + index,
-          isActive: true,
-          reviews: REVIEWS,
-          shop: "2B Boutique",
-        },
-      };
-      console.log("Item : " + index);
-      console.log(tmpItem);
-      const stocksDocPath = `stocks/${tmpItem.stockId}`;
-      await setDoc(doc(db, stocksDocPath), tmpItem);
-    }
-  };
+  // const loadScript = async () => {
+  //   // for (const [index, item] of MENS_DETAILS.entries()) {
+  //   // for (const [index, item] of WOMENS_DETAILS.entries()) {
+  //   for (const [index, item] of KIDS_DETAILS.entries()) {
+  //     let tmpItem = {
+  //       ...item,
+  //       ...{
+  //         colors: ["Blue", "Grey", "Orange"],
+  //         sizes: {
+  //           S: 2,
+  //           M: 4,
+  //           L: 2,
+  //           XL: 2,
+  //           XXL: 2,
+  //         },
+  //         price: 750,
+  //         deliveryCharge: 0,
+  //         quantity: 30,
+  //         totalCost: 2000,
+  //       },
+  //       ...{
+  //         date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+  //         stockId: dayjs().valueOf() + index,
+  //         isActive: true,
+  //         reviews: REVIEWS,
+  //         shop: "2B Boutique",
+  //       },
+  //     };
+  //     console.log("Item : " + index);
+  //     console.log(tmpItem);
+  //     const stocksDocPath = `stocks/${tmpItem.stockId}`;
+  //     await setDoc(doc(db, stocksDocPath), tmpItem);
+  //   }
+  // };
 
   // const loadOrderDetails = async () => {
   //   for (const order of DETAILS) {
@@ -407,9 +382,10 @@ const Stocks = () => {
   //   }
   // };
   useEffect(() => {
-    // getStocks();
+    getStocks();
     // loadScript();
     // loadOrderDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -428,7 +404,7 @@ const Stocks = () => {
       });
       setFileURL(selectedStock.src);
     }
-  }, [selectedStock]);
+  }, [selectedStock, form]);
 
   return (
     <>

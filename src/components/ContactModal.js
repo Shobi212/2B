@@ -1,13 +1,4 @@
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  Modal,
-  Popconfirm,
-  Popover,
-  Row,
-} from "antd";
+import { Button, Col, Form, Input, Modal, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 
@@ -31,6 +22,7 @@ const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
         phoneNo: 8967452345,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showContactPopover]);
   return (
     <>

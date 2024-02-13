@@ -1,21 +1,7 @@
-import {
-  Button,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  Layout,
-  Menu,
-  Modal,
-  Popover,
-  Row,
-  Space,
-  message,
-} from "antd";
+import { Col, Layout, Menu, Popover, Row, Space } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import "../design/Styles.scss";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import WomensCollections from "./WomensCollections";
@@ -23,7 +9,7 @@ import MensCollections from "./MensCollections";
 import KidsCollections from "./KidsCollections ";
 // import HomePage from "./HomePage";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "../store/slice/LoginSlice";
+import { login } from "../store/slice/LoginSlice";
 import MyOrders from "./MyOrders";
 import Stocks from "./Stocks";
 import LoginComponent from "./LoginComponent";
@@ -34,7 +20,7 @@ import ContactModal from "./ContactModal";
 import LoginAlertModal from "../common/LoginAlertModal";
 
 const LayoutPage = () => {
-  const role = "customer";
+  // const role = "customer";
   const loggedInUserInfo = useSelector((state) => state.login.userDetail);
   const [showForgetPassword, setShowForgetPassword] = useState(false);
   const userDetails = JSON.parse(localStorage.getItem("user"));
@@ -55,6 +41,7 @@ const LayoutPage = () => {
     if (userDetails) {
       dispatch(login(userDetails));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (
@@ -131,7 +118,6 @@ const LayoutPage = () => {
                 Copyright-&copy; 2024 2B
               </span>
             </Col>
-
             <Col span={4}>
               <span style={{ alignItems: "center", fontWeight: "500" }}>
                 Follow :
@@ -147,6 +133,7 @@ const LayoutPage = () => {
                   src="https://static.dezeen.com/uploads/2023/07/x-logo-twitter-elon-musk_dezeen_2364_col_0.jpg"
                   width={13}
                   height={13}
+                  alt=""
                 ></img>
               </Link>
               {/* </span> */}
@@ -161,6 +148,7 @@ const LayoutPage = () => {
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png"
                   width={13}
                   height={13}
+                  alt=""
                 ></img>
               </Link>
 

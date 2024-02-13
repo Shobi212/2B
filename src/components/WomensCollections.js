@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { WOMENS_DETAILS } from "../common/WomensConstant";
 import { Badge, Card, Col, message, Rate, Row, Space } from "antd";
 // import "../design/HomePage.scss";
 import CollectionModal from "./CollectionModal";
-import Item from "antd/es/list/Item";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../FireBase";
 import { WOMENS_CATEGORY } from "../common/Constants";
@@ -30,7 +28,7 @@ const WomensCollections = () => {
           tmpStocksArray.push(doc.data());
         });
         const activeStocks = tmpStocksArray.filter(
-          (stock) => stock.isActive && stock.category == WOMENS_CATEGORY
+          (stock) => stock.isActive && stock.category === WOMENS_CATEGORY
         );
         setWomensStocks(activeStocks);
         setLoading(false);
@@ -53,6 +51,7 @@ const WomensCollections = () => {
 
   useEffect(() => {
     getWomensStocks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -73,7 +72,7 @@ const WomensCollections = () => {
                 color={Item.deliveryCharge > 10 ? "#faad14" : " #a0d911"}
               >
                 <Card onClick={() => showModal(Item)} className="imagecard">
-                  <img src={Item.src} width={250} height={250}></img>
+                  <img src={Item.src} alt="" width={250} height={250}></img>
                   <div>
                     <p className="dressName">{Item.title}</p>
                     <p className="dressType">{Item.type}</p>

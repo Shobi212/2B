@@ -12,9 +12,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "../store/slice/LoginSlice";
-import axios from "axios";
-import ForgetComponent from "./ForgetComponent";
+import { login} from "../store/slice/LoginSlice";
 import { UserOutlined } from "@ant-design/icons";
 import {
   hideLoginModal,
@@ -29,7 +27,7 @@ import "../design/Styles.scss";
 const LoginComponent = ({ setShowForgetPassword }) => {
   const [messageApi, contextHolder] = message.useMessage();
   // const [form] = Form.useForm();
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const loggedInUserInfo = useSelector((state) => state.login.userDetail);
@@ -122,7 +120,7 @@ const LoginComponent = ({ setShowForgetPassword }) => {
 
   const openForgetPassword = () => {
     setShowForgetPassword(true);
-    setIsLogin(false);
+    // setIsLogin(false);
   };
 
   return (

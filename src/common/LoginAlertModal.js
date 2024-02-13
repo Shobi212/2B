@@ -1,10 +1,5 @@
 import { Button, Modal, Result } from "antd";
-import LoginComponent from "../components/LoginComponent";
-import {
-  hideLoginAlertModal,
-  showLoginModal,
-  showLoginAlertModal,
-} from "../store/slice/ModalSlice";
+import { hideLoginAlertModal, showLoginModal } from "../store/slice/ModalSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const LoginAlertModal = () => {
@@ -16,7 +11,7 @@ const LoginAlertModal = () => {
   const handleCloseLoginAlertModal = () => {
     dispatch(hideLoginAlertModal());
   };
-  
+
   const handleShowLoginModal = () => {
     dispatch(showLoginModal());
     dispatch(hideLoginAlertModal());

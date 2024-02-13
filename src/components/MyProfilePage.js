@@ -5,7 +5,6 @@ import {
   Input,
   message,
   Modal,
-  Popover,
   Result,
   Row,
   Space,
@@ -23,19 +22,22 @@ import {
 } from "@ant-design/icons";
 
 import TextArea from "antd/es/input/TextArea";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { db } from "../FireBase";
 
 const MyProfilePage = () => {
   const [ShowLogoutModal, setShowLogoutModal] = useState(false);
   const dispatch = useDispatch();
   const loggedInUserInfo = useSelector((state) => state.login.userDetail);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [isOldPasswordVerified, setIsOldPasswordVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [userInfo, setUserInfo] = useState(null);
   const [profileForm] = Form.useForm();
   const { passwordForm } = Form.useForm();
-  const [logoutLoading, setLogoutLoading] = useState(false);
-
   const { TabPane } = Tabs;
+
   const handleLogout = () => {
     setShowLogoutModal(true);
   };
@@ -43,32 +45,247 @@ const MyProfilePage = () => {
   const handleOk = () => {
     localStorage.removeItem("user");
     setShowLogoutModal(false);
-
+    // window.location.href = "/WomensCollections";
     dispatch(logout());
   };
+
   const handleProfileChanges = (values) => {
-    const profileChanges = {
+    const profileChangedValue = {
       username: values.username,
       email: values.email,
       mobileno: values.mobileno,
       address: values.address,
     };
+
+    const userDetailsArray = [];
+
+    getDocs(collection(db, "users")).then((docSnap) => {
+      docSnap.forEach((doc) => {
+        userDetailsArray.push(doc.data());
+      });
+
+      const updatedUserDetailsArray = userDetailsArray.find((user) => {
+        if (user.email === values.email) {
+          return {
+            ...user,
+            ...profileChangedValue,
+          };
+        }
+        return user;
+      });
+
+      // Assuming setUserInfo is defined elsewhere in your code
+      setUserInfo(updatedUserDetailsArray);
+
+      const userData = {
+        ...updatedUserDetailsArray[0], // Assuming you want to use the first user's data
+        profileChangedValue,
+      };
+
+      const userDocPath = `users/${userData.user_id}`;
+      setDoc(doc(db, userDocPath), userData)
+        .then(() => {
+          messageApi.open({
+            type: "success",
+            key: "msg-key",
+            content: (
+              <div className="msg-container">
+                Your profile successfully changed
+              </div>
+            ),
+            icon: <></>,
+            className: "custom-success-msg",
+            style: {
+              marginTop: "3vh",
+            },
+          });
+          setLoading(false);
+        })
+        .catch((error) => {
+          messageApi.open({
+            type: "error",
+            key: "msg-key",
+            content: <div className="msg-container">Something went wrong</div>,
+            icon: <></>,
+            className: "custom-error-msg",
+            style: {
+              marginTop: "3vh",
+            },
+          });
+          setLoading(false);
+        });
+    });
   };
+
+  // const handleProfileChanges = (values) => {
+  //   const profileChangedValue = {
+  //     username: values.username,
+  //     email: values.email,
+  //     mobileno: values.mobileno,
+  //     address: values.address,
+  //   };
+  //   const userDetailsArray = [];
+  //   getDocs(collection(db, "users")).then((docSnap) => {
+  //     docSnap.forEach((doc) => {
+  //       userDetailsArray.push(doc.data());
+  //     });
+
+  //     const updatedUserDetailsArray = userDetailsArray.map((user) => {
+  //       if (user.email === values.email) {
+  //         return {
+  //           ...user,
+  //           ...profileChangedValue,
+  //         };
+  //       }
+  //       return user;
+  //     });
+
+  //     setUserInfo(updatedUserDetailsArray);
+  //   });
+  //   const userData = {
+  //     ...userInfo,
+  //     profileChangedValue,
+  //   };
+
+  //   const userDocPath = `users/${userData.user_id}`;
+  //   setDoc(doc(db, userDocPath), userData)
+  //     .then(() => {
+  //       messageApi.open({
+  //         type: "success",
+  //         key: "msg-key",
+  //         content: (
+  //           <div className="msg-container">
+  //             your profile successfully changed
+  //           </div>
+  //         ),
+  //         icon: <></>,
+  //         className: "custom-success-msg",
+  //         style: {
+  //           marginTop: "3vh",
+  //         },
+  //       });
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       messageApi.open({
+  //         type: "error",
+  //         key: "msg-key",
+  //         content: <div className="msg-container">Something went wrong</div>,
+  //         icon: <></>,
+  //         className: "custom-error-msg",
+  //         style: {
+  //           marginTop: "3vh",
+  //         },
+  //       });
+  //       setLoading(false);
+  //     });
+  // };
   const handleChangePassword = (values) => {
-    if (loggedInUserInfo.password === values.oldPassword) {
-      setShowChangePassword(true);
-    } else {
-      messageApi.open({
-        type: "error",
-        key: "msg-key",
-        content: <div className="msg-container">password Invalid</div>,
-        icon: <></>,
-        className: "custom-error-msg",
-        style: {
-          marginTop: "3vh",
-        },
+    if (values.oldPassword && !isOldPasswordVerified) {
+      setLoading(true);
+      const userDetailsArray = [];
+      getDocs(collection(db, "users")).then((docSnap) => {
+        docSnap.forEach((doc) => {
+          userDetailsArray.push(doc.data());
+        });
+
+        let userInfo = userDetailsArray.find(
+          (user) => user.password === values.oldPassword
+        );
+        if (userInfo) {
+          setIsOldPasswordVerified(true);
+          setUserInfo(userInfo);
+        } else {
+          messageApi.open({
+            type: "error",
+            key: "msg-key",
+            content: <div className="msg-container">Invalid password.</div>,
+            icon: <></>,
+            className: "custom-error-msg",
+            style: {
+              marginTop: "3vh",
+            },
+          });
+        }
+        setLoading(false);
       });
     }
+    if (values.newPassword) {
+      if (values.newPassword !== values.confirmPassword) {
+        messageApi.open({
+          type: "error",
+          key: "msg-key",
+          content: (
+            <div className="msg-container">
+              Password and confirm password do not match
+            </div>
+          ),
+          icon: <></>,
+          className: "custom-error-msg",
+          style: {
+            marginTop: "3vh",
+          },
+        });
+        setLoading(false);
+      } else {
+        const userData = {
+          ...userInfo,
+          password: values.newPassword,
+        };
+
+        const userDocPath = `users/${userData.user_id}`;
+        setDoc(doc(db, userDocPath), userData)
+          .then(() => {
+            messageApi.open({
+              type: "success",
+              key: "msg-key",
+              content: (
+                <div className="msg-container">
+                  Your password has been successfully changed
+                </div>
+              ),
+              icon: <></>,
+              className: "custom-success-msg",
+              style: {
+                marginTop: "3vh",
+              },
+            });
+            setLoading(false);
+            // setTimeout(() => {
+            //   (false);
+            // }, 3000);
+          })
+          .catch((error) => {
+            messageApi.open({
+              type: "error",
+              key: "msg-key",
+              content: (
+                <div className="msg-container">Something went wrong</div>
+              ),
+              icon: <></>,
+              className: "custom-error-msg",
+              style: {
+                marginTop: "3vh",
+              },
+            });
+            setLoading(false);
+          });
+      }
+    }
+    // if (loggedInUserInfo.password === values.oldPassword) {
+    //   setIsOldPasswordVerified(true);
+    // } else {
+    //   messageApi.open({
+    //     type: "error",
+    //     key: "msg-key",
+    //     content: <div className="msg-container">password Invalid</div>,
+    //     icon: <></>,
+    //     className: "custom-error-msg",
+    //     style: {
+    //       marginTop: "3vh",
+    //     },
+    //   });
+    // }
   };
 
   const handleProfilePage = () => {
@@ -109,7 +326,7 @@ const MyProfilePage = () => {
         address: "chennai",
       });
     }
-  }, [showProfileModal, profileForm]);
+  }, [showProfileModal, profileForm, loggedInUserInfo]);
   return (
     <>
       {contextHolder}
@@ -128,6 +345,7 @@ const MyProfilePage = () => {
             <span style={{ marginRight: "10px" }}>
               <LogoutOutlined />
             </span>
+            {/* <Link to="/WomensCollections">Logout</Link> */}
             Logout
           </p>
         )}
@@ -176,7 +394,7 @@ const MyProfilePage = () => {
                     <Button
                       className="logoutStyle"
                       onClick={handleOk}
-                      loading={logoutLoading}
+                      // loading={logoutLoading}
                     >
                       <span style={{ marginRight: "8px" }}>Yes</span>
                       <span>
@@ -280,20 +498,40 @@ const MyProfilePage = () => {
                   rules={[
                     {
                       required: true,
-                      message: " Please enter valid password",
+                      message: " Please enter password",
                     },
 
-                    { validator: validatePassword },
+                    // { validator: validatePassword },
                   ]}
                 >
-                  <Input.Password disabled={showChangePassword} />
+                  <Input.Password disabled={isOldPasswordVerified} />
                 </Form.Item>
-                {showChangePassword && (
+                {isOldPasswordVerified && (
                   <>
-                    <Form.Item label="New Password" name="newPassword">
+                    <Form.Item
+                      label="New Password"
+                      name="newPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: " Please enter password",
+                        },
+
+                        { validator: validatePassword },
+                      ]}
+                    >
                       <Input.Password />
                     </Form.Item>
-                    <Form.Item label="Confirm Password" name="confirmPassword">
+                    <Form.Item
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: " Please enter confirm password",
+                        },
+                      ]}
+                    >
                       <Input.Password />
                     </Form.Item>
                   </>
@@ -313,6 +551,7 @@ const MyProfilePage = () => {
                         type="primary"
                         className="allButtons"
                         htmlType="submit"
+                        loading={loading}
                       >
                         Save
                       </Button>

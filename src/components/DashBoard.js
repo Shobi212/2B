@@ -1,15 +1,11 @@
 // import { Bar } from "@ant-design/charts";
-import { Bar, Column, DualAxes, G2, Line } from "@ant-design/charts";
-import BarChart from "@ant-design/charts/es/bar";
+import { DualAxes, G2, Line } from "@ant-design/charts";
 import PieChart from "@ant-design/charts/es/pie";
-import { Card, Col, DatePicker, message, Row, Statistic } from "antd";
+import { Card, Col, DatePicker, message, Row } from "antd";
 import { useEffect, useState } from "react";
-import { ArrowUpOutlined } from "@ant-design/icons";
-import LineChart from "@ant-design/charts/es/line";
-import { db, storage } from "../FireBase";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { db } from "../FireBase";
+import { collection, getDocs } from "firebase/firestore";
 import dayjs from "dayjs";
-import { useSelector } from "react-redux";
 // import { G2 } from "@ant-design/plots";
 
 const getStocksReport = (allStocks, allOrders, targetYear, targetMonth) => {
@@ -213,7 +209,6 @@ const getStocksReport = (allStocks, allOrders, targetYear, targetMonth) => {
 
 const DashBoard = () => {
   const [selectedDate, setSelectedDate] = useState(null);
-  const userDetail = useSelector((state) => state.login.userDetail);
   const [statsData, setStatsData] = useState({
     yearlyStocksIntake: 0,
     yearlyStocksIntakeCost: 0,
@@ -234,7 +229,7 @@ const DashBoard = () => {
 
   const handleDateChange = (date, dateString) => {
     setSelectedDate(date, dateString);
-    console.log(dateString);
+    console.log(selectedDate);
   };
 
   const mensConfigure = {
@@ -341,81 +336,6 @@ const DashBoard = () => {
     ],
   });
 
-  const uvBillData = [
-    {
-      category: "Cheeno Pant",
-      value: 350,
-      type: "Available",
-    },
-    {
-      category: "Formal Shirt",
-      value: 900,
-      type: "Available",
-    },
-    {
-      category: "Cargo Pant",
-      value: 300,
-      type: "Available",
-    },
-    {
-      category: "2019-06",
-      value: 450,
-      type: "Available",
-    },
-    {
-      category: "2019-07",
-      value: 470,
-      type: "Available",
-    },
-    {
-      category: "Cheeno Pant",
-      value: 220,
-      type: "Soldout",
-    },
-    {
-      category: "Formal Shirt",
-      value: 300,
-      type: "Soldout",
-    },
-    {
-      category: "Cargo Pant",
-      value: 250,
-      type: "Soldout",
-    },
-    {
-      category: "2019-06",
-      value: 220,
-      type: "Soldout",
-    },
-    {
-      category: "2019-07",
-      value: 362,
-      type: "Soldout",
-    },
-  ];
-  const transformData = [
-    {
-      category: "Cheeno Pant",
-      percentage: 45,
-    },
-    {
-      category: "Formal Shirt",
-      percentage: 20,
-    },
-    {
-      category: "Cargo Pant",
-      percentage: 75,
-    },
-    {
-      category: "2019-06",
-      percentage: 30,
-    },
-    {
-      category: "2019-07",
-      percentage: 92,
-    },
-  ];
-
   const dualconfig = {
     // data: [uvBillData, transformData],
     data: [statsData.combinedStocks, statsData.transformData],
@@ -463,57 +383,6 @@ const DashBoard = () => {
     animation: false,
     theme: "custom-theme",
   };
-
-  const lineData = [
-    {
-      Date: "Jan",
-      scales: 20000,
-    },
-    {
-      Date: "Feb",
-      scales: 30000,
-    },
-    {
-      Date: "Mar",
-      scales: 90000,
-    },
-    {
-      Date: "Apr",
-      scales: 45000,
-    },
-    {
-      Date: "May",
-      scales: 28000,
-    },
-    {
-      Date: "Jun",
-      scales: 50000,
-    },
-    {
-      Date: "Jul",
-      scales: 43000,
-    },
-    {
-      Date: "Aug",
-      scales: 32000,
-    },
-    {
-      Date: "Sep",
-      scales: 24000,
-    },
-    {
-      Date: "Oct",
-      scales: 48000,
-    },
-    {
-      Date: "Nov",
-      scales: 55000,
-    },
-    {
-      Date: "Dec",
-      scales: 60000,
-    },
-  ];
 
   const lineconfig = {
     // data: lineData,
@@ -574,7 +443,10 @@ const DashBoard = () => {
           <Card title="Yearly Reports">
             <Row justify="space-between" gutter={[8]}>
               <Col span={12}>
-                <Card className="currentStock" title="Stocks">
+                <Card
+                  className="currentStock"
+                  title={<span style={{ color: "white" }}>Stocks</span>}
+                >
                   <Row>
                     <Col span={16}>
                       <Row>Yearly Stocks Intake</Row>
@@ -595,7 +467,10 @@ const DashBoard = () => {
                 </Card>
               </Col>
               <Col span={12}>
-                <Card className="febStock" title="Revenue">
+                <Card
+                  className="febStock"
+                  title={<span style={{ color: "white" }}>Revenue</span>}
+                >
                   <Row>
                     <Col span={16}>
                       <Row>Yearly Intake Cost</Row>
@@ -620,7 +495,10 @@ const DashBoard = () => {
           <Card title="Monthly Reports">
             <Row justify="space-between" gutter={[8]}>
               <Col span={12}>
-                <Card className="revenue" title="Stocks">
+                <Card
+                  className="revenue"
+                  title={<span style={{ color: "white" }}>Stocks</span>}
+                >
                   <Row>
                     <Col span={16}>
                       <Row>Monthly Stoks Intake</Row>
@@ -638,7 +516,10 @@ const DashBoard = () => {
                 </Card>
               </Col>
               <Col span={12}>
-                <Card className="clothItems" title="Revenue">
+                <Card
+                  className="clothItems"
+                  title={<span style={{ color: "white" }}>Revenue</span>}
+                >
                   <Row>
                     <Col span={16}>
                       <Row>Monthly Intake Cost</Row>

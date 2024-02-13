@@ -4,7 +4,6 @@ import {
   Image,
   Modal,
   Radio,
-  Result,
   Row,
   Select,
   Space,
@@ -12,11 +11,9 @@ import {
   Progress,
   Rate,
   Card,
-  Avatar,
   Descriptions,
   Typography,
 } from "antd";
-import axios from "axios";
 import dayjs from "dayjs";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
