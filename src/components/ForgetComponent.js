@@ -3,6 +3,7 @@ import { Button, Col, Drawer, Form, Input, Row, Space, message } from "antd";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../FireBase";
+import { CloseSquareFilled } from "@ant-design/icons";
 
 const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
   const { form } = Form.useForm();
@@ -12,9 +13,13 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const handleCloseForgetPassword = () => {
+    setShowForgetPassword(false);
+  };
+
   const handleForgetPassword = (values) => {
-    setLoading(true);
     if (values.email && !isEmailVerified) {
+      setLoading(true);
       const userDetailsArray = [];
       getDocs(collection(db, "users")).then((docSnap) => {
         docSnap.forEach((doc) => {
@@ -64,6 +69,7 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
         });
         setLoading(false);
       } else {
+        setLoading(true);
         const userData = {
           ...userInfo,
           password: values.password,
@@ -148,9 +154,10 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
         <Drawer
           open
           title="Forget Password"
-          closable={false}
+          onClose={handleCloseForgetPassword}
           footer={null}
           width={500}
+          closeIcon={<CloseSquareFilled className="modal_close_icon" />}
         >
           <Form
             form={form}
@@ -218,7 +225,7 @@ const ForgetComponent = ({ showForgetPassword, setShowForgetPassword }) => {
               <Space>
                 <Col span={4}>
                   <Button
-                    onClick={() => setShowForgetPassword(false)}
+                    onClick={handleCloseForgetPassword}
                     className="allButtons"
                   >
                     Cancel

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { db } from "../FireBase";
 import { collection, getDocs } from "firebase/firestore";
 import dayjs from "dayjs";
+import DashboardLoader from "./DashboardLoader";
 // import { G2 } from "@ant-design/plots";
 
 const getStocksReport = (allStocks, allOrders, targetYear, targetMonth) => {
@@ -180,7 +181,7 @@ const getStocksReport = (allStocks, allOrders, targetYear, targetMonth) => {
   ).map(([key, value]) => {
     return {
       Date: key,
-      scales: value,
+      Sales: value,
     };
   });
 
@@ -208,7 +209,7 @@ const getStocksReport = (allStocks, allOrders, targetYear, targetMonth) => {
 };
 
 const DashBoard = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [statsData, setStatsData] = useState({
     yearlyStocksIntake: 0,
     yearlyStocksIntakeCost: 0,
@@ -227,9 +228,12 @@ const DashBoard = () => {
     growthReport: [],
   });
 
-  const handleDateChange = (date, dateString) => {
-    setSelectedDate(date, dateString);
-    console.log(selectedDate);
+  const handleDateChange = (date) => {
+    // console.log(date);
+    // let tran = dayjs(date).format("YYYY-MM-DD");
+    // setSelectedDate(date, dateString);
+    prePareStatsData(dayjs(date).format("YYYY-MM-DD"));
+    // console.log(tmpDate);
   };
 
   const mensConfigure = {
@@ -275,10 +279,11 @@ const DashBoard = () => {
     // interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
   };
 
-  const prePareStatsData = () => {
+  const prePareStatsData = (filterDate = null) => {
     const stocksArray = [];
     const ordersArray = [];
 
+    setLoading(true);
     getDocs(collection(db, "stocks"))
       .then((docSnap) => {
         docSnap.forEach((doc) => {
@@ -294,13 +299,15 @@ const DashBoard = () => {
             console.log(stocksArray);
             console.log("All Orders Array");
             console.log(ordersArray);
+            let date = filterDate ?? dayjs().format("YYYY-MM-DD");
             const statsData = getStocksReport(
               stocksArray,
               ordersArray,
-              dayjs().year(),
-              dayjs().month() + 1
+              dayjs(date).year(),
+              dayjs(date).month() + 1
             );
             setStatsData(statsData);
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
@@ -389,7 +396,7 @@ const DashBoard = () => {
     data: statsData.pastSixMonthsData,
     padding: "auto",
     xField: "Date",
-    yField: "scales",
+    yField: "Sales",
     annotations: [
       {
         type: "regionFilter",
@@ -420,6 +427,7 @@ const DashBoard = () => {
 
   useEffect(() => {
     prePareStatsData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -429,6 +437,7 @@ const DashBoard = () => {
           {/* <Card title="Filter By Date" className="dateCard"> */}
           <div>
             <DatePicker
+              defaultValue={dayjs()}
               onChange={handleDateChange}
               picker="month"
               format="MMM/YYYY"
@@ -457,8 +466,20 @@ const DashBoard = () => {
                       <Row>:</Row>
                     </Col>
                     <Col span={6}>
-                      <Row>{statsData.yearlyStocksIntake}</Row>
-                      <Row>{statsData.yearlyStocksSoldOut}</Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          statsData.yearlyStocksIntake
+                        )}
+                      </Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          statsData.yearlyStocksSoldOut
+                        )}
+                      </Row>
                     </Col>
                   </Row>
                   {/* {selectedDate && (
@@ -481,8 +502,20 @@ const DashBoard = () => {
                       <Row>:</Row>
                     </Col>
                     <Col span={6}>
-                      <Row>{`₹${statsData.yearlyStocksIntakeCost}`}</Row>
-                      <Row>{`₹${statsData.yearlyStocksSoldOutCost}`}</Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          `₹${statsData.yearlyStocksIntakeCost}`
+                        )}
+                      </Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          `₹${statsData.yearlyStocksSoldOutCost}`
+                        )}
+                      </Row>
                     </Col>
                   </Row>
                 </Card>
@@ -509,8 +542,20 @@ const DashBoard = () => {
                       <Row>:</Row>
                     </Col>
                     <Col span={6}>
-                      <Row>{statsData.monthlyStocksIntake}</Row>
-                      <Row>{statsData.monthlyStocksSoldout}</Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          statsData.monthlyStocksIntake
+                        )}
+                      </Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          statsData.monthlyStocksSoldout
+                        )}
+                      </Row>
                     </Col>
                   </Row>
                 </Card>
@@ -530,8 +575,20 @@ const DashBoard = () => {
                       <Row>:</Row>
                     </Col>
                     <Col span={6}>
-                      <Row>{`₹${statsData.monthlyStocksIntakeCost}`}</Row>
-                      <Row>{`₹${statsData.monthlyStocksSoldoutCost}`}</Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          `₹${statsData.monthlyStocksIntakeCost}`
+                        )}
+                      </Row>
+                      <Row>
+                        {loading ? (
+                          <DashboardLoader />
+                        ) : (
+                          `₹${statsData.monthlyStocksSoldoutCost}`
+                        )}
+                      </Row>
                     </Col>
                   </Row>
                 </Card>
@@ -542,7 +599,7 @@ const DashBoard = () => {
       </Row>
       <Row gutter={[8, 8]} style={{ marginBottom: "8px" }}>
         <Col span={8}>
-          <Card title="Mens Data">
+          <Card title="Total mens stock sales">
             <PieChart
               // data={statsData.Mens || []}
               {...mensConfigure}
@@ -552,7 +609,7 @@ const DashBoard = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="Womens Data">
+          <Card title="Total womens stock sales">
             <PieChart
               // data={statsData.womens || []}
               {...womensConfigure}
@@ -562,7 +619,7 @@ const DashBoard = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="Kids Data">
+          <Card title="Total kids stock sales">
             <PieChart
               // data={statsData.kids || []}
               {...kidsConfigure}
@@ -588,12 +645,12 @@ const DashBoard = () => {
           </Card>
         </Col> */}
         <Col span={12}>
-          <Card title="Trending Analysis">
+          <Card title="Trending Stocks Analysis">
             <DualAxes {...dualconfig} />
           </Card>
         </Col>
         <Col span={12}>
-          <Card title="Growth Analysis">
+          <Card title="Growth Analysis(Past Months)">
             <Line {...lineconfig} />
           </Card>
         </Col>

@@ -26,6 +26,7 @@ import { CloseSquareFilled } from "@ant-design/icons";
 const { Option } = Select;
 
 const CollectionModal = ({
+  clearSelectedStock,
   selectedStock,
   showDetailModal,
   setShowDetailModal,
@@ -59,6 +60,7 @@ const CollectionModal = ({
   };
 
   const womensModalClose = () => {
+    clearSelectedStock();
     setShowDetailModal(false);
   };
 
@@ -185,9 +187,9 @@ const CollectionModal = ({
                       style={{ width: "80px", height: "30px" }}
                       onChange={handleQuantityChanges}
                     >
-                      {[...Array(11).keys()].map((num) => (
-                        <Option key={num} value={num}>
-                          {num}
+                      {[...Array(10).keys()].map((num) => (
+                        <Option key={num} value={num+1}>
+                          {num+1}
                         </Option>
                       ))}
                     </Select>
@@ -250,7 +252,7 @@ const CollectionModal = ({
               </Row>
             </Card>
             <ReviewComponent reviews={selectedStock.reviews} />
-            <Row justify="end" style={{ marginTop: "40px" }}>
+            <Row justify="end" style={{ margin: "40px 15px 0px 0px" }}>
               <Space>
                 <Col>
                   <Button onClick={womensModalClose} className="allButtons">

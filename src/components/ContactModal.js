@@ -1,15 +1,44 @@
-import { Button, Col, Form, Input, Modal, Row } from "antd";
+import { doc, setDoc } from "@firebase/firestore";
+import { Button, Col, Form, Input, Modal, Row, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
+import { db } from "../FireBase";
+import dayjs from "dayjs";
 
 const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
-  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
   const [showMsgResponseModal, setShowMsgResponseModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
 
-  const handleFormSubmit = () => {
-    setShowMsgResponseModal(true);
-    setShowContactPopover(false);
-    form.resetFields();
+  const handleFormSubmit = (values) => {
+    setLoading(true);
+    const contactUs = {
+      req_id: dayjs().valueOf(),
+      name: values.name,
+      email: values.email,
+      mobileNo: values.mobileNo,
+      message: values.message,
+    };
+    const contactDocPath = `contact_us/${contactUs.req_id}`;
+    setDoc(doc(db, contactDocPath), contactUs)
+      .then(() => {
+        setShowMsgResponseModal(true);
+        setShowContactPopover(false);
+      })
+      .catch((error) => {
+        messageApi.open({
+          type: "error",
+          key: "msg-key",
+          content: <div className="msg-container">Something went wrong</div>,
+          icon: <></>,
+          className: "custom-error-msg",
+          style: {
+            marginTop: "3vh",
+          },
+        });
+        setLoading(false);
+      });
   };
   const closeContactPopover = () => {
     setShowContactPopover(false);
@@ -26,7 +55,7 @@ const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
   }, [showContactPopover]);
   return (
     <>
-      <h3 align="center">Contact Us</h3>
+      {contextHolder}
       <Form
         form={form}
         layout="vertical"
@@ -58,12 +87,12 @@ const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
           <Input />
         </Form.Item>
         <Form.Item
-          name="phoneNo"
-          label="Phone No"
+          name="mobileNo"
+          label="Mobile No"
           rules={[
             {
               required: true,
-              message: "Please Enter phone number",
+              message: "Please Enter mobile number",
             },
           ]}
         >
@@ -86,7 +115,7 @@ const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
             <Button onClick={closeContactPopover}>Cancel</Button>
           </Col>
           <Col span={6}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Submit
             </Button>
           </Col>

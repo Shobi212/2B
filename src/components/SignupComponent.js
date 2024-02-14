@@ -1,10 +1,11 @@
-import { Button, Col, Drawer, Form, Input, Row, message } from "antd";
+import { Button, Col, Drawer, Form, Input, Row, Space, message } from "antd";
 // import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { CloseSquareFilled } from "@ant-design/icons";
 import { db } from "../FireBase";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+import dayjs from "dayjs";
 
 const SignupComponent = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -23,8 +24,8 @@ const SignupComponent = () => {
 
   const handleSignUp = (values) => {
     setIsSaving(true);
-    const allUsers = [];
     const userData = {
+      user_id: dayjs().valueOf(),
       username: values.username,
       email: values.email,
       mobileno: values.mobileno,
@@ -32,47 +33,25 @@ const SignupComponent = () => {
       role: "customer",
     };
 
-    getDocs(collection(db, "users"))
-      .then((docSnap) => {
-        docSnap.forEach((doc) => {
-          allUsers.push(doc.data());
+    const usersDocPath = `users/${userData.user_id}`;
+    setDoc(doc(db, usersDocPath), userData)
+      .then(() => {
+        messageApi.open({
+          type: "success",
+          key: "msg-key",
+          content: (
+            <div className="msg-container">
+              Hello {userData.username}, your signup was successful.
+            </div>
+          ),
+          icon: <></>,
+          className: "custom-success-msg",
+          style: {
+            marginTop: "3vh",
+          },
         });
-        userData.user_id = allUsers.length + 1;
-        const userDocPath = `users/${userData.user_id}`;
-        setDoc(doc(db, userDocPath), userData)
-          .then(() => {
-            messageApi.open({
-              type: "success",
-              key: "msg-key",
-              content: (
-                <div className="msg-container">
-                  Hello {userData.username}, your signup was successful.
-                </div>
-              ),
-              icon: <></>,
-              className: "custom-success-msg",
-              style: {
-                marginTop: "3vh",
-              },
-            });
-            setIsSaving(false);
-            setShowSignUpDrawer(false);
-          })
-          .catch((error) => {
-            messageApi.open({
-              type: "error",
-              key: "msg-key",
-              content: (
-                <div className="msg-container">Something went wrong</div>
-              ),
-              icon: <></>,
-              className: "custom-error-msg",
-              style: {
-                marginTop: "3vh",
-              },
-            });
-            setIsSaving(false);
-          });
+        setIsSaving(false);
+        setShowSignUpDrawer(false);
       })
       .catch((error) => {
         messageApi.open({
@@ -87,6 +66,62 @@ const SignupComponent = () => {
         });
         setIsSaving(false);
       });
+
+    // getDocs(collection(db, "users"))
+    //   .then((docSnap) => {
+    //     docSnap.forEach((doc) => {
+    //       allUsers.push(doc.data());
+    //     });
+    //     userData.user_id = allUsers.length + 1;
+    //     const userDocPath = `users/${userData.user_id}`;
+    //     setDoc(doc(db, userDocPath), userData)
+    //       .then(() => {
+    //         messageApi.open({
+    //           type: "success",
+    //           key: "msg-key",
+    //           content: (
+    //             <div className="msg-container">
+    //               Hello {userData.username}, your signup was successful.
+    //             </div>
+    //           ),
+    //           icon: <></>,
+    //           className: "custom-success-msg",
+    //           style: {
+    //             marginTop: "3vh",
+    //           },
+    //         });
+    //         setIsSaving(false);
+    //         setShowSignUpDrawer(false);
+    //       })
+    //       .catch((error) => {
+    //         messageApi.open({
+    //           type: "error",
+    //           key: "msg-key",
+    //           content: (
+    //             <div className="msg-container">Something went wrong</div>
+    //           ),
+    //           icon: <></>,
+    //           className: "custom-error-msg",
+    //           style: {
+    //             marginTop: "3vh",
+    //           },
+    //         });
+    //         setIsSaving(false);
+    //       });
+    //   })
+    //   .catch((error) => {
+    //     messageApi.open({
+    //       type: "error",
+    //       key: "msg-key",
+    //       content: <div className="msg-container">Something went wrong</div>,
+    //       icon: <></>,
+    //       className: "custom-error-msg",
+    //       style: {
+    //         marginTop: "3vh",
+    //       },
+    //     });
+    //     setIsSaving(false);
+    //   });
 
     // axios
     //   .post(
@@ -226,16 +261,23 @@ const SignupComponent = () => {
               <Input.Password />
             </Form.Item>
             <Row justify="end">
-              <Col span={6}>
-                <Button
-                  loading={isSaving}
-                  htmlType="submit"
-                  type="primary"
-                  className="allButtons"
-                >
-                  Sign Up
-                </Button>
-              </Col>
+              <Space>
+                <Col>
+                  <Button className="allButtons" onClick={drawerClose}>
+                    Cancel
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    loading={isSaving}
+                    htmlType="submit"
+                    type="primary"
+                    className="allButtons"
+                  >
+                    Sign Up
+                  </Button>
+                </Col>
+              </Space>
             </Row>
           </Form>
         </Drawer>

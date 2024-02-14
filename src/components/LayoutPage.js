@@ -1,8 +1,8 @@
-import { Col, Layout, Menu, Popover, Row, Space } from "antd";
+import { Col, Layout, Menu, Popover, Row } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import "../design/Styles.scss";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import WomensCollections from "./WomensCollections";
 import MensCollections from "./MensCollections";
@@ -33,6 +33,8 @@ const LayoutPage = () => {
   const twitterURL = "https://twitter.com/your_twitter_handle";
   const instagramURL = "https://www.instagram.com/your_instagram_handle";
 
+  const location = useLocation();
+
   const handlePopoverChange = (newVisible) => {
     setShowContactPopover(newVisible);
   };
@@ -48,42 +50,54 @@ const LayoutPage = () => {
     <>
       <Layout>
         <Header className="headerStyle">
-          <Row justify="space-between">
-            <Col span={20}>
-              <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
+          <Row justify="space-between" align="middle">
+            <Col span={16}>
+              <Menu
+                theme="dark"
+                mode="horizontal"
+                // defaultSelectedKeys={["1"]}
+                selectedKeys={[location.pathname]}
+              >
                 {/* <Menu.Item key="1">
                   <Link to="/HomePage">Home</Link>
                 </Menu.Item> */}
                 {loggedInUserInfo && true && (
-                  <Menu.Item key="2">
-                    <Link to="/DashBoard">Dash Board</Link>
+                  <Menu.Item key="/2B/DashBoard">
+                    <Link to="/2B/DashBoard">Dash Board</Link>
                   </Menu.Item>
                 )}
-                <Menu.Item key="3">
-                  <Link to="/WomensCollections">Womens Collections</Link>
+
+                <Menu.Item key="/2B/WomensCollections">
+                  <Link to="/2B/WomensCollections">Womens Collections</Link>
                 </Menu.Item>
 
-                <Menu.Item key="4">
-                  <Link to="/MensCollections">Mens Collections</Link>
+                <Menu.Item key="/2B/MensCollections">
+                  <Link to="/2B/MensCollections">Mens Collections</Link>
                 </Menu.Item>
 
-                <Menu.Item key="5">
-                  <Link to="/kidsCollections">Kids Collections</Link>
+                <Menu.Item key="/2B/kidsCollections">
+                  <Link to="/2B/kidsCollections">Kids Collections</Link>
                 </Menu.Item>
                 {loggedInUserInfo && true && (
-                  <Menu.Item key="6">
-                    <Link to="/MyOrders">My Orders</Link>
+                  <Menu.Item key="/2B/MyOrders">
+                    <Link to="/2B/MyOrders">My Orders</Link>
                   </Menu.Item>
                 )}
                 {loggedInUserInfo && true && (
-                  <Menu.Item key="7">
-                    <Link to="/Stocks">Stocks</Link>
+                  <Menu.Item key="/2B/Stocks">
+                    <Link to="/2B/Stocks">Stocks</Link>
                   </Menu.Item>
                 )}
               </Menu>
             </Col>
-            <Col span={4}>
-              <Space>
+            <Col span={8}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  gap: "10px",
+                }}
+              >
                 <LoginComponent
                   // setShowForgetComponent={setShowForgetComponent}
                   setShowForgetPassword={setShowForgetPassword}
@@ -95,20 +109,24 @@ const LayoutPage = () => {
                   />
                 )}
                 <SignupComponent />
-              </Space>
+              </div>
             </Col>
           </Row>
         </Header>
         <Content className="contentStyle" style={{ padding: "12px" }}>
           <Routes>
             {/* <Route path="/HomePage" element={<HomePage />} /> */}
-            <Route path="/" element={<WomensCollections />} />
-            <Route path="/DashBoard" element={<DashBoard />} />
-            <Route path="/WomensCollections" element={<WomensCollections />} />
-            <Route path="/MensCollections" element={<MensCollections />} />
-            <Route path="/kidsCollections" element={<KidsCollections />} />
-            <Route path="/MyOrders" element={<MyOrders />} />
-            <Route path="/Stocks" element={<Stocks />} />
+            {/* <Route path="/" element={<WomensCollections />} /> */}
+            <Route path="/2B/DashBoard" element={<DashBoard />} />
+            <Route
+              path="/2B/WomensCollections"
+              element={<WomensCollections />}
+            />
+            <Route path="/2B/MensCollections" element={<MensCollections />} />
+            <Route path="/2B/kidsCollections" element={<KidsCollections />} />
+            <Route path="/2B/MyOrders" element={<MyOrders />} />
+            <Route path="/2B/Stocks" element={<Stocks />} />
+            <Route path="*" element={<Navigate to="/2B/WomensCollections" />} />
           </Routes>
         </Content>
         <Footer className="footerStyle">
@@ -154,7 +172,17 @@ const LayoutPage = () => {
 
               <span style={{ margin: "0px 20px 0px 20px", fontWeight: "500" }}>
                 <Popover
-                  // title="Contact Us"
+                  title={
+                    <div
+                      style={{
+                        background: "#00b96b",
+                        padding: "14px",
+                        color: "white",
+                      }}
+                    >
+                      Contact Us
+                    </div>
+                  }
                   className="contactStyle"
                   overlayStyle={{ width: "400px" }}
                   content={

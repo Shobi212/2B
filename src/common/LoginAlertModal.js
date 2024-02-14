@@ -33,7 +33,6 @@ const LoginAlertModal = () => {
               <Button
                 onClick={handleCloseLoginAlertModal}
                 className="allButtons"
-                type="primary"
               >
                 Back
               </Button>

@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login} from "../store/slice/LoginSlice";
+import { login } from "../store/slice/LoginSlice";
 import { UserOutlined } from "@ant-design/icons";
 import {
   hideLoginModal,
@@ -129,33 +129,25 @@ const LoginComponent = ({ setShowForgetPassword }) => {
       {loggedInUserInfo ? (
         // <Row justify="end">
         //   <Col span={4}>
-        <div style={{ marginLeft: "130px" }}>
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              right: "0",
-            }}
+        <div>
+          {loggedInUserInfo.username && (
+            <span>{loggedInUserInfo.username}</span>
+          )}
+          <Popover
+            content={<MyProfilePage />}
+            trigger="hover"
+            placement="bottomRight"
           >
-            {loggedInUserInfo.username && (
-              <span>{loggedInUserInfo.username}</span>
-            )}
-            <Popover
-              content={<MyProfilePage />}
-              trigger="hover"
-              placement="bottomRight"
-            >
-              <Avatar
-                size="default"
-                style={{
-                  backgroundColor: "#1c4139",
-                  cursor: "pointer",
-                  marginLeft: "10px",
-                }}
-                icon={<UserOutlined />}
-              />
-            </Popover>
-          </span>
+            <Avatar
+              size="default"
+              style={{
+                backgroundColor: "#1c4139",
+                cursor: "pointer",
+                marginLeft: "10px",
+              }}
+              icon={<UserOutlined />}
+            />
+          </Popover>
         </div>
       ) : (
         //   </Col>

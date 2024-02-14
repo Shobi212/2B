@@ -121,6 +121,7 @@ const WomensCollections = () => {
           selectedStock={selectedStock}
           showDetailModal={showDetailModal}
           setShowDetailModal={setShowDetailModal}
+          clearSelectedStock={() => setSelectedStock(null)}
         />
       )}
     </>

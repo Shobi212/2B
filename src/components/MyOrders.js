@@ -1,14 +1,6 @@
-import {
-  Drawer,
-  message,
-  Row,
-  Table,
-  Timeline,
-} from "antd";
+import { Drawer, message, Row, Table, Timeline } from "antd";
 import { useEffect, useState } from "react";
-import {
-  CloseSquareFilled,
-} from "@ant-design/icons";
+import { CloseSquareFilled } from "@ant-design/icons";
 import { getMyOrdersCols } from "../common/Helpers";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../FireBase";
@@ -50,6 +42,7 @@ const MyOrders = () => {
 
   const getMyOrders = () => {
     const tmpOrdersArray = [];
+    setLoading(true);
     getDocs(collection(db, "orders"))
       .then((docSnap) => {
         docSnap.forEach((doc) => {

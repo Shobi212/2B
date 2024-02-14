@@ -24,6 +24,7 @@ import {
 import TextArea from "antd/es/input/TextArea";
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../FireBase";
+import { useNavigate } from "react-router-dom";
 
 const MyProfilePage = () => {
   const [ShowLogoutModal, setShowLogoutModal] = useState(false);
@@ -36,6 +37,8 @@ const MyProfilePage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [profileForm] = Form.useForm();
   const { passwordForm } = Form.useForm();
+  const navigate = useNavigate();
+
   const { TabPane } = Tabs;
 
   const handleLogout = () => {
@@ -47,6 +50,7 @@ const MyProfilePage = () => {
     setShowLogoutModal(false);
     // window.location.href = "/WomensCollections";
     dispatch(logout());
+    navigate("/2B/WomensCollection");
   };
 
   const handleProfileChanges = (values) => {
@@ -64,21 +68,13 @@ const MyProfilePage = () => {
         userDetailsArray.push(doc.data());
       });
 
-      const updatedUserDetailsArray = userDetailsArray.find((user) => {
-        if (user.email === values.email) {
-          return {
-            ...user,
-            ...profileChangedValue,
-          };
-        }
-        return user;
-      });
-
-      // Assuming setUserInfo is defined elsewhere in your code
-      setUserInfo(updatedUserDetailsArray);
+      const userDetail = userDetailsArray.filter(
+        (user) => user.email === values.email
+      );
+      setUserInfo(userDetail);
 
       const userData = {
-        ...updatedUserDetailsArray[0], // Assuming you want to use the first user's data
+        ...userDetail,
         profileChangedValue,
       };
 
@@ -323,7 +319,7 @@ const MyProfilePage = () => {
         username: loggedInUserInfo.username,
         email: loggedInUserInfo.email,
         mobileno: loggedInUserInfo.mobileno,
-        address: "chennai",
+        // address: "",
       });
     }
   }, [showProfileModal, profileForm, loggedInUserInfo]);

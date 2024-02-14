@@ -2,8 +2,7 @@ export const MENS_CATEGORY = "mens";
 
 export const WOMENS_CATEGORY = "womens";
 
-// export const KIDS_CATEGORY = "kids";
-export const KIDS_CATEGORY = "Kids";
+export const KIDS_CATEGORY = "kids";
 
 export const STOCK_TYPE_OPTIONS = [
   {
@@ -138,50 +137,50 @@ export const REVIEWS = [
   },
   {
     name: "Albert Ajay",
-    ratings: 2.5,
+    ratings: 2,
     posted: "Posted on 12 dec 2023",
-    comment: "worth for money",
+    comment: "Poor packaging, item arrived damaged",
   },
   {
     name: "Kalai Selvan",
     ratings: 3,
     posted: "Posted on 12 dec 2023",
-    comment: "It was looking so good,nice product and good quality",
+    comment: "Decent product, met my basic requirements",
   },
   {
     name: "Shobana Sankar",
     ratings: 4.5,
     posted: "Posted on 20 dec 2023",
-    comment: "Nice product and good quality",
+    comment: "Fantastic product, exceeded my expectations",
   },
   {
     name: "Thirisha Sankar",
-    ratings: 2.5,
+    ratings: 1,
     posted: "Posted on 31 dec 2023",
-    comment: "Very nice good product",
+    comment: "Very disappointing; the product arrived damaged",
   },
   {
     name: "Swetha Lakshmanan",
     ratings: 3.5,
     posted: "Posted on 05 jan 2024",
-    comment: "It was looking so good,nice product and good quality",
+    comment: "Excellent service, prompt delivery",
   },
   {
     name: "Gayathiri Mohan",
     ratings: 2,
     posted: "Posted on 12 dec 2023",
-    comment: "It was looking so good,nice product and good quality",
+    comment: "Average product, nothing special",
   },
   {
     name: "Sowmiya Manogar",
-    ratings: 3,
+    ratings: 3.5,
     posted: "Posted on 12 dec 2023",
-    comment: "It was looking so good,nice product and good quality",
+    comment: "Nice product and good quality",
   },
   {
     name: "Manjula Raj",
     ratings: 4,
     posted: "Posted on 12 dec 2023",
-    comment: "It was looking so good,nice product and good quality",
+    comment: "Very impressed with the fast delivery",
   },
 ];
