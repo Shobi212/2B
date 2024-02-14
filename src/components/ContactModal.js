@@ -1,11 +1,11 @@
 import { doc, setDoc } from "@firebase/firestore";
 import { Button, Col, Form, Input, Modal, Row, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { db } from "../FireBase";
 import dayjs from "dayjs";
 
-const ContactModal = ({ showContactPopover, setShowContactPopover }) => {
+const ContactModal = ({ setShowContactPopover }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [showMsgResponseModal, setShowMsgResponseModal] = useState(false);
   const [loading, setLoading] = useState(false);
