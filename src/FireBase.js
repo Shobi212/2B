@@ -1,8 +1,8 @@
-import firebase, { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
-import { getStorage, ref } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAVqFGep4Oa1pPt_h7YP_w02_PuPpzRyeg",
