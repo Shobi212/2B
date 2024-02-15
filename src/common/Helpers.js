@@ -10,6 +10,20 @@ import {
 export const getStocksCols = (handleEdit, handleDelete) => {
   const columns = [
     {
+      title: "Item",
+      dataIndex: "imageSrc",
+      key: "Item",
+      align: "center",
+      render: (text, record) => (
+        <Image
+          src={record.src}
+          alt=""
+          style={{ width: "70px", height: "70px" }}
+        ></Image>
+      ),
+    },
+
+    {
       title: "Name",
       dataIndex: "name",
       key: "Name",
@@ -170,7 +184,7 @@ export const getMyOrdersCols = (handleTrackingOrder) => {
               <span style={{ color: "green" }}>
                 <CheckCircleOutlined />
               </span>
-              <span style={{ marginLeft: "8px", color: "green" }}>
+              <span style={{ marginLeft: "5px", color: "green" }}>
                 {record.status}
               </span>
             </>
@@ -179,7 +193,7 @@ export const getMyOrdersCols = (handleTrackingOrder) => {
               <span style={{ color: "red" }}>
                 <CloseCircleOutlined />
               </span>
-              <span style={{ marginLeft: "8px", color: "red" }}>
+              <span style={{ marginLeft: "5px", color: "red" }}>
                 {record.status}
               </span>
             </>
@@ -188,7 +202,7 @@ export const getMyOrdersCols = (handleTrackingOrder) => {
               <span style={{ color: "orange" }}>
                 <ClockCircleOutlined />
               </span>
-              <span style={{ marginLeft: "8px", color: "orange" }}>
+              <span style={{ marginLeft: "5px", color: "orange" }}>
                 {record.status}
               </span>
             </>

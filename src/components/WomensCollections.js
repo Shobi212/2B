@@ -100,12 +100,12 @@ const WomensCollections = () => {
                       />
                     </span>
                   </p>
-                  <p style={{ fontWeight: "500px", fontStyle: "italic" }}>
-                    {Item.shop}
+                  <p style={{ fontWeight: "500", fontStyle: "italic" }}>
+                    {`@${Item.shop}`}
                   </p>
                   <div>
                     <Space size="small" style={{ columnGap: "3px" }}>
-                      <span>Size</span>
+                      <span style={{fontWeight:"500", opacity:"0.7"}}>Size</span>
                       {Object.entries(Item.sizes || {}).map(
                         ([size, value], index, array) => (
                           <>

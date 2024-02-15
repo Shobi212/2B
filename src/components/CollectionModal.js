@@ -278,7 +278,7 @@ const CollectionModal = ({
       <Modal
         open={showPurchaseSuccessMsg}
         onCancel={() => setShowPurchaseSuccessMsg(false)}
-        style={{ top: 120 }}
+        style={{ top: 80}}
         // width={350}
         footer={null}
         closeIcon={<CloseSquareFilled className="modal_close_icon" />}

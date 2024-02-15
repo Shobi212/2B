@@ -77,7 +77,7 @@ const MensCollections = () => {
                   <div>
                     <p className="dressType">{item.type}</p>
                   </div>
-                  <p style={{ fontWeight: "500px" }}>{`₹${item.price}`}</p>
+                  <p className="dressPrice">{`₹${item.price}`}</p>
                   <p
                     style={{
                       backgroundColor: "rgb(4, 101, 51)",
@@ -100,11 +100,13 @@ const MensCollections = () => {
                       />
                     </span>
                   </p>
-                  <p style={{ fontWeight: "500px", fontStyle: "italic" }}>
+                  <p style={{ fontWeight: "500", fontStyle: "italic" }}>
                     {`@${item.shop}`}
                   </p>
                   <Space size="small" style={{ columnGap: "3px" }}>
-                    <span style={{ opacity: "0.7" }}>Size</span>
+                    <span style={{ fontWeight: "500", opacity: "0.7" }}>
+                      Size
+                    </span>
                     {Object.entries(item.sizes || {}).map(
                       ([size, value], index, array) => (
                         <>
