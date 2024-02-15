@@ -14,8 +14,8 @@ const getStocksReport = (allStocks, allOrders, targetYear, targetMonth) => {
   console.log(allOrders);
   const stocksIntakeReport = allStocks.reduce(
     (accumulator, stock) => {
-      const stockYear = dayjs(stock.dateTime).year();
-      const stockMonth = dayjs(stock.dateTime).month() + 1;
+      const stockYear = dayjs(stock.date).year();
+      const stockMonth = dayjs(stock.date).month() + 1;
 
       if (stockYear === targetYear) {
         accumulator.yearlyStocksIntake += stock.quantity;
@@ -407,7 +407,7 @@ const DashBoard = () => {
       {
         type: "text",
         position: ["min", "median"],
-        content: "Revenue",
+        content: "Sales",
         offsetY: -4,
         style: {
           textBaseline: "bottom",

@@ -74,7 +74,7 @@ const WomensCollections = () => {
                 <Card onClick={() => showModal(Item)} className="imagecard">
                   <img src={Item.src} alt="" width={250} height={250}></img>
                   <div>
-                    <p className="dressType">{Item.type}</p>
+                    <p className="dressType">{Item.name}</p>
                   </div>
 
                   <p className="dressPrice">{`₹${Item.price}`}</p>

@@ -75,7 +75,7 @@ const MensCollections = () => {
                 >
                   <img src={item.src} alt="" width={250} height={250}></img>
                   <div>
-                    <p className="dressType">{item.type}</p>
+                    <p className="dressType">{item.name}</p>
                   </div>
                   <p className="dressPrice">{`₹${item.price}`}</p>
                   <p

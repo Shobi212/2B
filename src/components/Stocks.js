@@ -176,7 +176,7 @@ const Stocks = () => {
         deliveryCharge: values.deliveryCharge,
         quantity: values.quantity,
         totalCost: values.totalCost,
-        rating: selectedStock ? selectedStock.rating : "3.5",
+        rating: selectedStock ? selectedStock.rating :3.5,
         reviews: selectedStock ? selectedStock.reviews : REVIEWS,
         date: selectedStock
           ? selectedStock.date
@@ -451,6 +451,7 @@ const Stocks = () => {
         style={{ top: 15 }}
         closable={false}
         closeIcon={<CloseSquareFilled className="modal_close_icon" />}
+        maskClosable={false}
       >
         <Form
           form={form}

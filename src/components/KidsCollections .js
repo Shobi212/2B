@@ -108,7 +108,9 @@ const KidsCollections = () => {
                     style={{ fontWeight: "500", fontStyle: "italic" }}
                   >{`@${item.shop}`}</p>
                   <Space size="small" style={{ columnGap: "3px" }}>
-                    <span style={{ fontWeight:"500",opacity: "0.7" }}>Size</span>
+                    <span style={{ fontWeight: "500", opacity: "0.7" }}>
+                      Size
+                    </span>
                     {Object.entries(item.sizes || {}).map(
                       ([size, value], index, array) => (
                         <>

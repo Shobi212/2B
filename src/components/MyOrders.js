@@ -1,4 +1,4 @@
-import { Drawer, message, Row, Table, Timeline } from "antd";
+import { Col, Drawer, message, Row, Table, Timeline, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { CloseSquareFilled } from "@ant-design/icons";
 import { getMyOrdersCols } from "../common/Helpers";
@@ -17,21 +17,23 @@ const MyOrders = () => {
   const userDetail = useSelector((state) => state.login.userDetail);
 
   const handleTrackingOrder = (record) => {
+    setTrackingDetails(record.trackingDetails);
+    setShowTrackingDrawer(true);
     // setSelectedTrackingId(record.trackingId);
-    let tmpOrderDetails = [];
-    getDocs(collection(db, "order_details"))
-      .then((docSnap) => {
-        docSnap.forEach((doc) => {
-          tmpOrderDetails.push(doc.data());
-        });
-        // const orders = tmpOrderDetails.filter(
-        //   (stock) => stock.user_id === userDetail.user_id
-        // );
-        setTrackingDetails(tmpOrderDetails);
-        setLoading(false);
-        setShowTrackingDrawer(true);
-      })
-      .catch((error) => {});
+    // let tmpOrderDetails = [];
+    // getDocs(collection(db, "order_details"))
+    //   .then((docSnap) => {
+    //     docSnap.forEach((doc) => {
+    //       tmpOrderDetails.push(doc.data());
+    //     });
+    //     // const orders = tmpOrderDetails.filter(
+    //     //   (stock) => stock.user_id === userDetail.user_id
+    //     // );
+    //     setTrackingDetails(tmpOrderDetails);
+    //     setLoading(false);
+    //     setShowTrackingDrawer(true);
+    //   })
+    //   .catch((error) => {});
     // const details = DETAILS.filter((item) => item.order_id === record.order_id);
     // etTrackingDetails(details);
     // setShowTrackingDrawer(true);
@@ -99,29 +101,67 @@ const MyOrders = () => {
         open={showTrackingDrawer}
         onClose={closeTrackingDrawer}
         placement="right"
-        title="Order Tracking"
+        title={
+          <>
+            <Row>
+              <Col>Order Tracking</Col>
+            </Row>
+            <Row
+              gutter={8}
+              style={{
+                fontStyle: "italic",
+                fontWeight: 400,
+                paddingTop: "4px",
+              }}
+            >
+              <Col>Order ID: </Col>
+              <Col>
+                <Typography.Paragraph copyable>
+                  {trackingDetails.order_id}
+                </Typography.Paragraph>
+              </Col>
+            </Row>
+            {/* <p>Order Tracking</p># */}
+            {/* <Typography.Paragraph copyable>
+              {trackingDetails.order_id}
+            </Typography.Paragraph> */}
+          </>
+        }
+        // title="Order Tracking"
         closeIcon={<CloseSquareFilled className="modal_close_icon" />}
       >
         <Timeline>
-          {trackingDetails.map((item, index) => (
-            <>
-              {item.shipmentDetails.map((shipment, index) => (
-                <Timeline.Item key={index} color="green">
-                  {shipment.shipments.map((step, stepIndex) => (
-                    <div key={stepIndex}>
-                      <p className="trackOrder">
-                        {step.children === "shipped"
-                          ? `${step.children} expected by Tue`
-                          : step.children}
-                      </p>
-                      <p>{`${step.label} . ${step.time}`}</p>
-                    </div>
-                  ))}
-                </Timeline.Item>
+          {/* {(myOrders.shipments || []).map((item, index) => (
+            <> */}
+          {(trackingDetails.shipmentDetails || []).map((item, index) => (
+            <Timeline.Item key={index} color={item.shipment[0].color}>
+              {item.shipment.map((step, stepIndex) => (
+                <div key={stepIndex}>
+                  {/* <p className="trackOrder">
+                    {step.children === "shipped"
+                      ? `${step.children} expected by Tue`
+                      : step.children}
+                  </p> */}
+                  <div className="trackOrder">{step.children}</div>
+
+                  <div style={{ fontStyle: "italic" }}>{step.subLabel}</div>
+                  <div
+                    style={{ fontStyle: "italic", opacity: 0.9 }}
+                  >{`${step.label}`}</div>
+                  {/* <p>{`${step.label} . ${step.time}`}</p> */}
+                  {/* <p className="trackOrder">
+                    {step.children === "shipped"
+                      ? `${step.children} expected by Tue`
+                      : step.children}
+                  </p>
+                  <p>{`${step.label} . ${step.time}`}</p> */}
+                </div>
               ))}
-            </>
-            // </div>
+            </Timeline.Item>
           ))}
+          {/* </>
+            // </div>
+          ))} */}
         </Timeline>
       </Drawer>
     </>

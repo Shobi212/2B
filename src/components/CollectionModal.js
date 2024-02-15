@@ -32,7 +32,7 @@ const CollectionModal = ({
   setShowDetailModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState(selectedStock.colors[0]);
   const [size, setSize] = useState(
     Object.entries(selectedStock.sizes || {})[0][0]
@@ -106,7 +106,7 @@ const CollectionModal = ({
   return (
     <>
       <Modal
-        title="WOMEN'S KURTIS"
+        title={selectedStock.type}
         open={showDetailModal}
         onCancel={womensModalClose}
         footer={null}
@@ -135,8 +135,8 @@ const CollectionModal = ({
                   labelStyle={{ width: "30%" }}
                   contentStyle={{ width: "70%" }}
                 >
-                  <Descriptions.Item label="Type">
-                    {selectedStock.type}
+                  <Descriptions.Item label="Name">
+                    {selectedStock.name}
                   </Descriptions.Item>
                   <Descriptions.Item label="Price">
                     ₹{selectedStock.price}
@@ -278,7 +278,7 @@ const CollectionModal = ({
       <Modal
         open={showPurchaseSuccessMsg}
         onCancel={() => setShowPurchaseSuccessMsg(false)}
-        style={{ top: 80}}
+        style={{ top: 80 }}
         // width={350}
         footer={null}
         closeIcon={<CloseSquareFilled className="modal_close_icon" />}
@@ -308,6 +308,9 @@ const CollectionModal = ({
             </Descriptions.Item>
             <Descriptions.Item label="Size">
               {purchaseDetail.size}
+            </Descriptions.Item>
+            <Descriptions.Item label="Quantity">
+              {purchaseDetail.quantity}
             </Descriptions.Item>
             <Descriptions.Item label="Order ID">
               <Typography.Paragraph copyable>
