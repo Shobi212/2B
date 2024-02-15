@@ -75,7 +75,7 @@ const CollectionModal = ({
         quantity: quantity,
         size: size,
         stock: selectedStock,
-        status: "ordered",
+        status: "Ordered",
         dateTime: dayjs().format("YYYY-MM-DD HH:mm:ss"),
       };
       const ordersPath = `orders/${purchaseData.order_id}`;
@@ -188,8 +188,8 @@ const CollectionModal = ({
                       onChange={handleQuantityChanges}
                     >
                       {[...Array(10).keys()].map((num) => (
-                        <Option key={num} value={num+1}>
-                          {num+1}
+                        <Option key={num} value={num + 1}>
+                          {num + 1}
                         </Option>
                       ))}
                     </Select>
@@ -297,11 +297,17 @@ const CollectionModal = ({
             }
             column={1}
             bordered
-            labelStyle={{ width: "60%" }}
-            contentStyle={{ width: "40%" }}
+            labelStyle={{ width: "50%" }}
+            contentStyle={{ width: "50%" }}
           >
             <Descriptions.Item label="Item">
               {purchaseDetail.stock.name}
+            </Descriptions.Item>
+            <Descriptions.Item label="Color">
+              {purchaseDetail.color}
+            </Descriptions.Item>
+            <Descriptions.Item label="Size">
+              {purchaseDetail.size}
             </Descriptions.Item>
             <Descriptions.Item label="Order ID">
               <Typography.Paragraph copyable>

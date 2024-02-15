@@ -26,6 +26,7 @@ import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import dayjs from "dayjs";
 import { getStocksCols } from "../common/Helpers";
 import {
+  REVIEWS,
   SHOP_OPTIONS,
   SIZES,
   STOCK_CATEGORY_OPTIONS,
@@ -34,7 +35,7 @@ import {
 } from "../common/Constants";
 
 const Stocks = () => {
-  const [mode, setMode] = useState("ADD");
+  const [mode, setMode] = useState("Add");
   const [stocks, setStocks] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedStock, setSelectedStock] = useState(null);
@@ -46,7 +47,7 @@ const Stocks = () => {
   const [form] = Form.useForm();
 
   const handleEdit = (record) => {
-    setMode("EDIT");
+    setMode("Edit");
     setShowModal(true);
     setSelectedStock({ ...record });
   };
@@ -72,7 +73,7 @@ const Stocks = () => {
   };
 
   const handleAdd = () => {
-    setMode("ADD");
+    setMode("Add");
     setShowModal(true);
     // setSelectedStock(null);
   };
@@ -175,7 +176,11 @@ const Stocks = () => {
         deliveryCharge: values.deliveryCharge,
         quantity: values.quantity,
         totalCost: values.totalCost,
-        date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+        rating: selectedStock ? selectedStock.rating : "3.5",
+        reviews: selectedStock ? selectedStock.reviews : REVIEWS,
+        date: selectedStock
+          ? selectedStock.date
+          : dayjs().format("YYYY-MM-DD HH:mm:ss"),
         shop: values.shop,
         isActive: true,
       };
@@ -381,6 +386,10 @@ const Stocks = () => {
   //     await setDoc(doc(db, ordersPath), order);
   //   }
   // };
+  const sortedOptions = STOCK_COLOR_OPTIONS.sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
+
   useEffect(() => {
     getStocks();
     // loadScript();
@@ -577,7 +586,7 @@ const Stocks = () => {
                 <Select
                   mode="multiple"
                   placeholder="Select color"
-                  options={STOCK_COLOR_OPTIONS}
+                  options={sortedOptions}
                 />
               </Form.Item>
             </Col>

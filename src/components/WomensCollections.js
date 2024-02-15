@@ -74,7 +74,6 @@ const WomensCollections = () => {
                 <Card onClick={() => showModal(Item)} className="imagecard">
                   <img src={Item.src} alt="" width={250} height={250}></img>
                   <div>
-                    <p className="dressName">{Item.title}</p>
                     <p className="dressType">{Item.type}</p>
                   </div>
 
@@ -88,7 +87,7 @@ const WomensCollections = () => {
                     }}
                   >
                     <span style={{ color: "white", fontSize: "13px" }}>
-                      4.2
+                      {Item.rating}
                     </span>
                     <span>
                       <Rate
@@ -101,13 +100,20 @@ const WomensCollections = () => {
                       />
                     </span>
                   </p>
-                  <p style={{ fontWeight: "bold" }}>{Item.shop}</p>
+                  <p style={{ fontWeight: "500px", fontStyle: "italic" }}>
+                    {Item.shop}
+                  </p>
                   <div>
-                    <Space>
-                      <span>Size:</span>
-                      {Object.entries(Item.sizes || {}).map(([size, value]) => (
-                        <span key={size}>{`${size} ,`}</span>
-                      ))}
+                    <Space size="small" style={{ columnGap: "3px" }}>
+                      <span>Size</span>
+                      {Object.entries(Item.sizes || {}).map(
+                        ([size, value], index, array) => (
+                          <>
+                            <span key={size}>{`${size}`}</span>
+                            {index < array.length - 1 && <span>,</span>}
+                          </>
+                        )
+                      )}
                     </Space>
                   </div>
                 </Card>

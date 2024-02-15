@@ -79,7 +79,7 @@ const KidsCollections = () => {
                   <div>
                     <p className="dressType">{item.type}</p>
                   </div>
-                  <p>{`₹${item.price}`}</p>
+                  <p style={{ fontWeight: "500px" }}>{`₹${item.price}`}</p>
                   <p
                     style={{
                       backgroundColor: "rgb(4, 101, 51)",
@@ -89,12 +89,13 @@ const KidsCollections = () => {
                     }}
                   >
                     <span style={{ color: "white", fontSize: "13px" }}>
-                      4.2
+                      {item.rating}
                     </span>
                     <span>
                       <Rate
                         allowHalf
                         count={1}
+                        defaultValue={1}
                         style={{
                           color: "white",
                           fontSize: "16px",
@@ -103,12 +104,19 @@ const KidsCollections = () => {
                       />
                     </span>
                   </p>
-                  <p>{item.shop}</p>
-                  <Space>
-                    <span>Sizes: </span>
-                    {Object.entries(item.sizes || {}).map(([size, value]) => (
-                      <span key={size}>{`${size} ,`}</span>
-                    ))}
+                  <p
+                    style={{ fontWeight: "500px", fontStyle: "italic" }}
+                  >{`@${item.shop}`}</p>
+                  <Space size="small" style={{ columnGap: "3px" }}>
+                    <span style={{ opacity: "0.7" }}>Size</span>
+                    {Object.entries(item.sizes || {}).map(
+                      ([size, value], index, array) => (
+                        <>
+                          <span key={size}>{`${size}`}</span>
+                          {index < array.length - 1 && <span>,</span>}
+                        </>
+                      )
+                    )}
                   </Space>
                 </Card>
               </Badge.Ribbon>

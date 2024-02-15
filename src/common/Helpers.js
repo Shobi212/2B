@@ -1,10 +1,4 @@
-import {
-  Popconfirm,
-  Space,
-  Tag,
-  Button,
-  Image,
-} from "antd";
+import { Popconfirm, Space, Tag, Button, Image } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -144,6 +138,7 @@ export const getMyOrdersCols = (handleTrackingOrder) => {
       dataIndex: "totalAmount",
       key: "Amount",
       align: "center",
+      render: (text) => <span>₹{text}</span>,
     },
     {
       title: "Quantity",

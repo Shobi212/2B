@@ -97,6 +97,18 @@ export const STOCK_TYPE_OPTIONS = [
     value: "Nightsuits",
     label: "Nightsuits",
   },
+  {
+    value: "Shirt and Pants",
+    label: "Shirt and Pants",
+  },
+  {
+    value: "Trouser",
+    label: "Trouser",
+  },
+  {
+    value: "Frogs",
+    label: "Frogs",
+  },
 ];
 
 export const STOCK_COLOR_OPTIONS = [
@@ -107,6 +119,14 @@ export const STOCK_COLOR_OPTIONS = [
   { value: "Blue", label: "Blue" },
   { value: "Yellow", label: "Yellow" },
   { value: "Skyblue", label: "Skyblue" },
+  { value: "Black", label: "Black" },
+  { value: "Pink", label: "Pink" },
+  { value: "Cyan", label: "Cyan" },
+  { value: "Deeppink", label: "Deeppink" },
+  { value: "violet", label: "violet" },
+  { value: "Purple", label: "Purple" },
+  { value: "Maroon", label: "Maroon" },
+  { value: "DarkCyan", label: "DarkCyan" },
 ];
 
 export const STOCK_CATEGORY_OPTIONS = [
@@ -138,49 +158,49 @@ export const REVIEWS = [
   {
     name: "Albert Ajay",
     ratings: 2,
-    posted: "Posted on 12 dec 2023",
+    posted: "Posted on 15 dec 2023",
     comment: "Poor packaging, item arrived damaged",
   },
   {
     name: "Kalai Selvan",
     ratings: 3,
-    posted: "Posted on 12 dec 2023",
+    posted: "Posted on 26 dec 2023",
     comment: "Decent product, met my basic requirements",
   },
   {
     name: "Shobana Sankar",
     ratings: 4.5,
-    posted: "Posted on 20 dec 2023",
+    posted: "Posted on 05 Jan 2024",
     comment: "Fantastic product, exceeded my expectations",
   },
   {
     name: "Thirisha Sankar",
     ratings: 1,
-    posted: "Posted on 31 dec 2023",
+    posted: "Posted on 16 Jan 2024",
     comment: "Very disappointing; the product arrived damaged",
   },
   {
     name: "Swetha Lakshmanan",
     ratings: 3.5,
-    posted: "Posted on 05 jan 2024",
+    posted: "Posted on 17 Jan 2024",
     comment: "Excellent service, prompt delivery",
   },
   {
     name: "Gayathiri Mohan",
     ratings: 2,
-    posted: "Posted on 12 dec 2023",
+    posted: "Posted on 24 Jan 2024",
     comment: "Average product, nothing special",
   },
   {
     name: "Sowmiya Manogar",
     ratings: 3.5,
-    posted: "Posted on 12 dec 2023",
+    posted: "Posted on 02 Feb 2024",
     comment: "Nice product and good quality",
   },
   {
     name: "Manjula Raj",
     ratings: 4,
-    posted: "Posted on 12 dec 2023",
+    posted: "Posted on 10 Feb 2024",
     comment: "Very impressed with the fast delivery",
   },
 ];

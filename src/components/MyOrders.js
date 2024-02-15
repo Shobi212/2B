@@ -5,6 +5,7 @@ import { getMyOrdersCols } from "../common/Helpers";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../FireBase";
 import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 const MyOrders = () => {
   const [loading, setLoading] = useState(false);
@@ -51,7 +52,12 @@ const MyOrders = () => {
         const orders = tmpOrdersArray.filter(
           (stock) => stock.user_id === userDetail.user_id
         );
-        setMyOrders(orders);
+        const sortedOrders = orders.sort((a, b) =>
+          dayjs(b.dateTime).diff(dayjs(a.dateTime))
+        );
+
+        // setMyOrders(orders);
+        setMyOrders(sortedOrders);
         setLoading(false);
       })
       .catch((error) => {
@@ -87,7 +93,6 @@ const MyOrders = () => {
             <span style={{ color: "black", fontSize: "20px" }}>My Orders</span>
           </Row>
         )}
-        pagination={false}
       />
 
       <Drawer

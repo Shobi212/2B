@@ -27,7 +27,7 @@ const LoginAlertModal = () => {
       >
         <Result
           status="warning"
-          title="you are continue the process please login first!"
+          title="Please log in to continue with your purchase"
           extra={
             <>
               <Button

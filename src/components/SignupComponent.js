@@ -181,7 +181,7 @@ const SignupComponent = () => {
               span: 8,
             }}
             wrapperCol={{
-              span: 15,
+              span: 16,
             }}
             autoComplete="off"
           >
