@@ -170,7 +170,7 @@ const LayoutPage = () => {
                 ></img>
               </Link>
 
-              <span style={{ margin: "0px 20px 0px 20px", fontWeight: "500" }}>
+              <span style={{ margin: "15px", fontWeight: "500" }}>
                 <Popover
                   title={
                     <div

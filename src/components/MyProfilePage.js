@@ -16,7 +16,6 @@ import { logout } from "../store/slice/LoginSlice";
 import {
   ExclamationCircleOutlined,
   UserOutlined,
-  ArrowRightOutlined,
   LogoutOutlined,
   CloseSquareFilled,
 } from "@ant-design/icons";
@@ -376,9 +375,9 @@ const MyProfilePage = () => {
           }
           extra={[
             <>
-              <Row justify="end" style={{ paddingTop: "20px" }}>
+              <Row justify="center" style={{ paddingTop: "20px" }}>
                 <Space>
-                  <Col span={4} offset={18}>
+                  <Col span={4}>
                     <Button
                       style={{ width: "80px" }}
                       onClick={() => setShowLogoutModal(false)}
@@ -386,16 +385,13 @@ const MyProfilePage = () => {
                       No
                     </Button>
                   </Col>
-                  <Col span={4} offset={22}>
+                  <Col span={4}>
                     <Button
                       className="logoutStyle"
                       onClick={handleOk}
                       // loading={logoutLoading}
                     >
-                      <span style={{ marginRight: "8px" }}>Yes</span>
-                      <span>
-                        <ArrowRightOutlined className="logoutArrowStyle" />
-                      </span>
+                      <span>Yes</span>
                     </Button>
                   </Col>
                 </Space>
