@@ -136,7 +136,7 @@ const LayoutPage = () => {
                 Copyright-&copy; 2024 2B
               </span>
             </Col>
-            <Col span={4}>
+            <Col span={5}>
               <span style={{ alignItems: "center", fontWeight: "500" }}>
                 Follow :
               </span>
